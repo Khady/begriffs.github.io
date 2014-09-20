@@ -1,0 +1,9 @@
+---
+title: Spam is Dead, long live email forwarding
+---
+
+{% raw %}
+<div class="css-full-post-content js-full-post-content">
+<br />I used to be wary of providing my email address to websites. Either I would do it and bear the spammy consequences, or I would use a&nbsp;<a href="http://mailinator.com/">disposable</a>&nbsp;email service. Neither is optimal, because I often want to allow a site to continue contacting me, but I want to feel confident I can block its messages at any time. What's more, I'd like to be able to prevent the site from selling my address to other spammers.<br /><br />One solution is to use lots of email accounts and use certain accounts for certain types of website. That's almost as much trouble as dealing with spam. Another solution is&nbsp;<a href="http://www.techiecorner.com/22/create-gmail-with-plus-addressing-to-prevent-spam/">plus addressing</a>&nbsp;but it exposes the underlying email address before the plus symbol.<br /><br />The true solution uses your own domain, so it may not work for everyone.<br /><ul><li>Create your primary email address as [long random string]@yourdomain.com</li><li>When you sign up on a website, say Twitter, use a new email address like twitter@yourdomain.com which forwards to your secret address.</li><li>(optional, paranoid) Add&nbsp;<a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">salt</a>&nbsp;to these addresses, e.g. twitter-[random string]@yourdomain.com so others can neither guess them, nor probe which services you use.</li><li>If you start getting spam, check its to-address and delete the forwarding.</li></ul>Many hosts provide an easy way to create email forwards through cPanel, but I set up some scripts to make life easier. Adding, deleting, and listing my forwards are just a command away in the shell.<br /><div><br /></div>
+</div>
+{% endraw %}

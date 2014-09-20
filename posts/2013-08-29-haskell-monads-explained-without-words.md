@@ -1,0 +1,9 @@
+---
+title: Haskell Monads Explained Without Words
+---
+
+{% raw %}
+<div class="css-full-post-content js-full-post-content">
+<span style="background-color: white; color: #666666; font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; font-size: 13.333333015441895px; line-height: 12px;">Shh! Words get in your way. Let's play functional charades, where you will understand a function by watching it in silence. This is part two of the "without words" series. It will help you to observe <a href="http://blog.begriffs.com/2013/08/weird-symbols-in-their-native-tongue_27.html">part one</a> first.</span><br /><span style="background-color: white; color: #666666; font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; font-size: 13.333333015441895px; line-height: 12px;"><br /></span><span style="background-color: white; color: #666666; font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; font-size: 13.333333015441895px; line-height: 12px;">Note you'll need to run in&nbsp;</span><span style="color: #666666;"><span style="font-size: 13.333333015441895px; line-height: 12px;"><span style="font-family: Courier New, Courier, monospace;">ghci -XNoMonomorphismRestriction</span><span style="font-family: Trebuchet MS, Trebuchet, Verdana, sans-serif;"> for it to allow some of this without you needing to specify type signatures.</span></span></span><br /><span style="background-color: white; color: #666666; font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; font-size: 13.333333015441895px; line-height: 12px;"><br /></span><br /><h2><span style="background-color: white; color: #666666; font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; line-height: 12px;"><span style="font-size: x-large;">return, empty, join, &gt;&gt;=</span></span></h2><br /><code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="6374604"></code>
+</div>
+{% endraw %}
