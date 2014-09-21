@@ -2,8 +2,43 @@
 title: API versioning best practices
 ---
 
-{% raw %}
-<div class="css-full-post-content js-full-post-content">
-While preparing to create the next version of the <a href="http://bountysource.com/" target="_blank">Bountysource</a> API, I've been reading articles about versioning. There are many contradicting opinions online.<br /><br />Many articles argue that APIs should be easy for developers to explore in a web browser, so API versions should be specified in the url, like <span style="font-family: Courier New, Courier, monospace;">https://api.site.com/v23/foo</span>&nbsp;rather than being negotiated in the HTTP headers. How else could you explore the API through a web browser? However I'd argue that we have&nbsp;browser extensions for this [<a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo?hl=en-US" target="_blank">1</a>],&nbsp;[<a href="https://chrome.google.com/webstore/detail/rest-console/cokgbflfommojglbmbpenpphppikmonn?hl=en" target="_blank">2</a>],&nbsp;[<a href="https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb" target="_blank">3</a>]&nbsp;[<a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en" target="_blank">4</a>]&nbsp;. Also no end user needs to make direct old-school bookmarks of an API resource.<br /><br />I think versioning in the URL is not the right choice, and it stems from a historical constraint. Developers had to resort to JSONP to make cross-origin requests in old browsers, and you can't specify headers with JSONP. Nowadays CORS support is widespread. If you really have to support IE &lt;10 you can actually encode headers over JSONP as a query parameter if the client and server cooperate.<br /><br />I think that versioning in the URL ignores how the web already works. When I want <span style="font-family: Courier New, Courier, monospace;">/foo</span> in Spanish I don't request <span style="font-family: Courier New, Courier, monospace;">/es/foo</span>, I send an <span style="font-family: Courier New, Courier, monospace;">Accept-Language</span> header. In fact many representational details are negotiable, like the charset, the encoding, and the mime type of a resource. We don't put them in the URL because their position is irrelevant. It gets absurd: <span style="font-family: Courier New, Courier, monospace;">/es/utf8/application-json/foo</span>. Ultimately we are just requesting different representations of a single resource.<br /><br />So what's the right way? I propose using the <span style="font-family: Courier New, Courier, monospace;">Accept</span> header with type&nbsp;<span style="font-family: Courier New, Courier, monospace;">application/vnd.you.com+<i>format;&nbsp;</i>version=<i>n</i></span>&nbsp;where format is e.g. <span style="font-family: Courier New, Courier, monospace;">json</span>. Rather than using&nbsp;<a href="http://semver.org/" target="_blank">semantic versioning</a> conventions, we specify major version only, since only breaking changes matter. Give clients backward-compatible changes for free; they can handle it.
-</div>
-{% endraw %}
+While preparing to create the next version of the
+[Bountysource](http://bountysource.com/) API, I've been reading
+articles about versioning. There are many contradicting opinions
+online.
+
+Many articles argue that APIs should be easy for developers to
+explore in a web browser, so API versions should be specified in
+the url, like `https://api.site.com/v23/foo` rather than being
+negotiated in the HTTP headers. How else could you explore the API
+through a web browser? However I'd argue that we have browser
+extensions for this
+([1](https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo?hl=en-US)),
+9[2](https://chrome.google.com/webstore/detail/rest-console/cokgbflfommojglbmbpenpphppikmonn?hl=en)),
+([3](https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb))
+([4](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en)).
+Also no end user needs to make direct old-school bookmarks of an
+API resource.
+
+I think versioning in the URL is not the right choice, and it stems
+from a historical constraint. Developers had to resort to JSONP to
+make cross-origin requests in old browsers, and you can't specify
+headers with JSONP. Nowadays CORS support is widespread. If you
+really have to support IE <10 you can actually encode headers
+over JSONP as a query parameter if the client and server cooperate.
+
+I think that versioning in the URL ignores how the web already
+works. When I want `/foo` in Spanish I don't request `/es/foo`, I
+send an `Accept-Language` header. In fact many representational
+details are negotiable, like the charset, the encoding, and the
+mime type of a resource. We don't put them in the URL because their
+position is irrelevant. It gets absurd: `/es/utf8/application-json/foo`.
+Ultimately we are just requesting different representations of a
+single resource.
+
+So what's the right way? I propose using the `Accept` header with
+type `application/vnd.you.com+format; version=n` where format
+is e.g. `json`. Rather than using [semantic versioning](http://semver.org/)
+conventions, we specify major version only, since only breaking
+changes matter. Give clients backward-compatible changes for free;
+they can handle it.
