@@ -124,7 +124,7 @@ post-build deployment to S3.
 
 ```yaml
 language: haskell
-ghc: 7.8.2
+ghc: 7.8
 branches:
   only:
   - source
@@ -135,18 +135,20 @@ before_install:
   - export PATH=/opt/alex/3.1.3/bin:/opt/happy/1.19.3/bin:$PATH
 install:
   - cabal sandbox init
+  - cabal install -j --disable-documentation -fhttps pandoc
   - cabal install -j --disable-documentation --disable-tests --reorder-goals
 deploy:
   provider: s3
-  access_key_id: xxxxx
-  secret_access_key:
-    secure: xxxxx
-  bucket: your-choice
+  access_key_id: AKIAIYJJY5B5UWSU3CFQ
+  bucket: YOUR_BUCKET
+  region: us-west-1
   skip_cleanup: true
-  local-dir: .cabal-sandbox
+  local-dir: ".cabal-sandbox"
   upload-dir: hakyll
   acl: !ruby/string:HighLine::String public_read
   on:
     repo: myorg/myorg.github.io
     branch: source
+  secret_access_key:
+    secure: YOUR_SECURE_KEY
 ```
