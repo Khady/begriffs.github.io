@@ -21,3 +21,5 @@ after_script:
   - git status
   - git commit -m "Built by Travis ( build $TRAVIS_BUILD_NUMBER )"
   - git push github master:master | grep -v http
+GH_NAME=Travis:
+  secure: N4yGsxg4OSa8/71Snae72zlepdnZLlq1D4ymSzzAidgHz7DvggumvnWhT/92X/WReNwMItjLrf2KGl2TllZNvZkLt95wRFukeX8AvHlPDVS0Smf/UqosFCrDNi50kSQLllcZwWzXiJbnIrlK9aILPSEXAuMsxDpy3k5o1bHt5cE=
