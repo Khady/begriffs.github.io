@@ -65,3 +65,13 @@ pre.sourceCode, .figure {
 .figure img {
   max-width: 100%;
 }
+
+img.left {
+  float: left;
+  margin-right: 1em;
+}
+
+img.right {
+  float: right;
+  margin-right: 1em;
+}
