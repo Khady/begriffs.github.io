@@ -2,8 +2,151 @@
 title: Create a static site with Hakyll, Github and Travis CI
 ---
 
-{% raw %}
-<div class="css-full-post-content js-full-post-content">
-"Static sites are fast, secure, easy to deploy, and manageable using version control." So states the webpage for&nbsp;<a href="http://jaspervdj.be/hakyll/">Hakyll</a>, a great way to set up a static site or blog. It allows you to write blog posts by simply editing markdown in git, all the while having access to delicious Haskell for deeper customizations.<br /><br />You can configure things to let you write blog posts directly on Github's interface and use Travis CI to deploy your changes. Most day-to-day blogging will not require using Haskell at all or even having the Haskell environment installed on the blogger's machine.<br /><br />I'll show you how to set everything up, including an optimized Travis config that can deploy changes in less than a minute. There is some existing information online about doing this sort of thing, but it's all outdated in one way or another.<br /><br />We'll be using Github Pages to serve the final assets. I'll assume you're making a static site for a Github organization called <span style="font-family: Courier New, Courier, monospace;">myorg</span> and want it to live at <span style="font-family: Courier New, Courier, monospace;">myorg.io</span>.<br /><br /><h3>Installation</h3><ol><li>Create a Github organization. E.g. <span style="font-family: Courier New, Courier, monospace;">myorg</span></li><li>Create a project <span style="font-family: Courier New, Courier, monospace;">myorg/myorg.github.io</span></li><li>The master branch will be repeatedly overwritten and committed later on by Travis, so you won't make any edits there directly. For now add a file to the root of the master branch called <span style="font-family: Courier New, Courier, monospace;">CNAME</span> containing the string&nbsp;<span style="font-family: Courier New, Courier, monospace;">myorg.io</span></li><li>Create two <span style="font-family: Courier New, Courier, monospace;">A</span> records in the DNS for <span style="font-family: Courier New, Courier, monospace;">myorg.io</span> pointing at&nbsp;192.30.252.153 and&nbsp;192.30.252.154 respectively.</li><li>Generate the base Hakyll project. <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="4a26235ed5c8909ed3c5"></code></li><li>Create an orphan source branch in your git repo and copy the generated files there. <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="c9329c2ff08d665ef159"></code></li><li>You (and Travis) will use cabal to run the site builder, so create a myorg.cabal: <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="cf36e07bc372285b4df0"></code></li><li>Reuse the cabal sandbox you created earlier: <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="4580c7ca8669d4cad972"></code></li><li>Keep build artifacts out of git by adding these lines to <span style="font-family: Courier New, Courier, monospace;">.gitignore</span> <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="956df17b297cde4b663c"></code></li><li>Run your new site locally to see that it works! <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="ba78bb1c486837b9c81b"></code></li><li>Create <span style="font-family: Courier New, Courier, monospace;">.travis.yml</span> and add the following boilerplate: <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="e03b6e716dd9bd2f1640"></code></li><li>Generate a Github <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use">auth token</a>.</li><li>Set encrypted environment variables to allow Travis to commit to the master branch <code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="22de8aaf9ad60285c1bb"></code></li><li>Commit all the files.</li><li>Enable Travis for your repo. <a href="http://docs.travis-ci.com/user/getting-started/#Step-one%3A-Sign-in">Instructions here</a>.</li><li>Push the&nbsp;<span style="font-family: Courier New, Courier, monospace;">source</span> branch to Github.</li><li>Watch the deploy progress at&nbsp;https://travis-ci.org/myorg/myorg.github.io</li></ol>Now you can <a href="https://help.github.com/articles/editing-files-in-your-repository">create and edit</a> blog posts right in Github and your changes get deployed automatically.<br /><br /><h3>(optional) Generating a custom cabal sandbox for Travis</h3><div><br /></div>You can use my <a href="http://bin.begriffs.com/hakyll/cabal-sandbox.tar.xz">shared cabal sandbox</a>&nbsp;on Travis as done above, or you can build your own. It's a little trickier. Use this Travis config as a start. It takes advantage of post-build deployment to S3.<br /><br /><code data-gist-hide-footer="true" data-gist-hide-line-numbers="true" data-gist-id="1715e7e94e42ebb07528"></code>
-</div>
-{% endraw %}
+"Static sites are fast, secure, easy to deploy, and manageable using
+version control." So states the webpage for <a
+href="http://jaspervdj.be/hakyll/">Hakyll</a>, a great way to set
+up a static site or blog. It allows you to write blog posts by
+simply editing markdown in git, all the while having access to
+delicious Haskell for deeper customizations.
+
+You can configure things to let you write blog posts directly on
+Github's interface and use Travis CI to deploy your changes. Most
+day-to-day blogging will not require using Haskell at all or even
+having the Haskell environment installed on the blogger's machine.
+
+I'll show you how to set everything up, including an optimized
+Travis config that can deploy changes in less than a minute. There
+is some existing information online about doing this sort of thing,
+but it's all outdated in one way or another.
+
+We'll be using Github Pages to serve the final assets. I'll assume
+you're making a static site for a Github organization called `myorg`
+and want it to live at `myorg.io`.
+
+### Installation
+
+1. Create a Github organization. E.g. `myorg`
+1. Create a project `myorg/myorg.github.io`
+1. The master branch will be repeatedly overwritten and committed
+   later on by Travis, so you won't make any edits there directly. For
+   now add a file to the root of the master branch called `CNAME`
+   containing the string `myorg.io`
+1. Create two `A` records in the DNS for `myorg.io` pointing at
+   192.30.252.153 and 192.30.252.154 respectively.
+1. Generate the base Hakyll project.
+    ```bash
+    # in an empty directory of your choice
+    # NOT in the git repo you've been using
+
+    cabal sandbox init
+    cabal install -j --disable-documentation hakyll
+    cabal exec hakyll-init myorg.github.io
+    ```
+1. Create an orphan source branch in your git repo and copy the
+   generated files there.
+    ```bash
+    git checkout --orphan source
+    git rm CNAME
+    cp -r /path/to/generated/myorg/* .
+    git add .
+    ```
+1. Reuse the cabal sandbox you created earlier:
+    ```bash
+    cp -r /where/you/ran/cabal/install/.cabal-sandbox .
+    ```
+1. Keep build artifacts out of git by adding these lines to `.gitignore`
+    ```
+    .cabal-sandbox
+    cabal.sandbox.config
+    dist/
+    _cache
+    _site
+    ```
+1. Run your new site locally to see that it works!
+    ```bash
+    cabal sandbox init
+    cabal run rebuild
+    cabal watch
+
+    # now load http://localhost:8000
+    ```
+1. Create `.travis.yml` and add the following boilerplate:
+    ```yaml
+    language: haskell
+    ghc: 7.8
+    branches:
+      only:
+      - source
+    before_install:
+      - git submodule foreach --recursive 'git checkout master; git ls-files | grep -v README | grep -v CNAME | xargs -r git rm'
+    install:
+      - curl http://bin.begriffs.com/hakyll/cabal-sandbox.tar.xz | tar xJ
+      - cabal sandbox init
+      - cabal configure --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-split-objs
+    before_script:
+      - git config --global user.email "$GIT_EMAIL"
+      - git config --global user.name "$GIT_NAME"
+    script: cabal run -j build
+    after_script:
+      - cd _site
+      - export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
+      - git remote add github https://${GH_TOKEN}@${REMOTE}
+      - git add --all
+      - git status
+      - git commit -m "Built by Travis ( build $TRAVIS_BUILD_NUMBER )"
+      - git push github master:master | grep -v http
+    ```
+1. Generate a Github [auth
+token](https://help.github.com/articles/creating-an-access-token-for-command-line-use).
+1. Set encrypted environment variables to allow Travis to commit
+   to the master branch
+    ```bash
+    gem install travis
+    travis encrypt -r myorg/myorg.github.io --add GH_NAME="J. Doe" GH_EMAIL=jdoe@myorg.io GH_TOKEN=xxxxxxxx
+    ```
+1. Commit all the files.
+1. Enable Travis for your repo. [Instructions
+here](http://docs.travis-ci.com/user/getting-started/#Step-one%3A-Sign-in).
+1. Push the `source` branch to Github.
+1. Watch the deploy progress at https://travis-ci.org/myorg/myorg.github.io
+
+Now you can [create and
+edit](https://help.github.com/articles/editing-files-in-your-repository)
+blog posts right in Github and your changes get deployed automatically.
+
+#### (optional) Generating a custom cabal sandbox for Travis
+
+You can use my [shared cabal
+sandbox](http://bin.begriffs.com/hakyll/cabal-sandbox.tar.xz) on
+Travis as done above, or you can build your own. It's a little
+trickier. Use this Travis config as a start. It takes advantage of
+post-build deployment to S3.
+
+```yaml
+language: haskell
+ghc: 7.8.2
+branches:
+  only:
+  - source
+before_install:
+  - travis_retry sudo add-apt-repository -y ppa:hvr/ghc
+  - travis_retry sudo apt-get update
+  - travis_retry sudo apt-get install --force-yes happy-1.19.3 alex-3.1.3
+  - export PATH=/opt/alex/3.1.3/bin:/opt/happy/1.19.3/bin:$PATH
+install:
+  - cabal sandbox init
+  - cabal install -j --disable-documentation --disable-tests --reorder-goals
+deploy:
+  provider: s3
+  access_key_id: xxxxx
+  secret_access_key:
+    secure: xxxxx
+  bucket: your-choice
+  skip_cleanup: true
+  local-dir: .cabal-sandbox
+  upload-dir: hakyll
+  acl: !ruby/string:HighLine::String public_read
+  on:
+    repo: myorg/myorg.github.io
+    branch: source
+```
