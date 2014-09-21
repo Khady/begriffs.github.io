@@ -1,7 +1,8 @@
-<ul>
-    $for(posts)$
-        <li>
-            <a href="$url$">$title$</a> - $date$
-        </li>
-    $endfor$
+<ul class="list-unstyled">
+  $for(posts)$
+  <li class="row post">
+    <a class="col-sm-9" href="$url$">$title$</a>
+    <span class="col-sm-3">$date$</span>
+  </li>
+  $endfor$
 </ul>
