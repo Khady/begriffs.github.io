@@ -2,7 +2,7 @@
 title: API embedded resources considered harmful
 ---
 
-<div class="alert">
+<div class="alert alert-warning" role="alert">
   <h4>Update!</h4>
 
   Another way to handle embedded resources is by including

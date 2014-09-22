@@ -2,7 +2,7 @@
 title: Unlocking Deep HTTP with JavaScript, pt 2
 ---
 
-<div class="alert">
+<div class="alert alert-warning" role="alert">
   <h4>Update!</h4>
 
   I believe my suggestion for using of Link headers for next, prev,
