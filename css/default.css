@@ -69,9 +69,11 @@ pre.sourceCode, .figure {
 img.left {
   float: left;
   margin-right: 1em;
+  max-width: 25%;
 }
 
 img.right {
   float: right;
   margin-right: 1em;
+  max-width: 25%;
 }

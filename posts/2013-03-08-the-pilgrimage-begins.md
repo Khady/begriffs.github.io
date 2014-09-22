@@ -2,8 +2,58 @@
 title: The Pilgrimage Begins
 ---
 
-{% raw %}
-<div class="css-full-post-content js-full-post-content">
-<div class="separator" style="clear: both; text-align: center;"><img border="0" height="320" src="http://2.bp.blogspot.com/-Ik61LKrNCf4/UTpFnCQnacI/AAAAAAAAAAw/UCKodHrcWks/s320/jpilgrim.png" style="border: none; box-shadow: none; clear: left; float: left; margin-bottom: 1em; margin-right: 1em;" width="191" /></div>I leave this weekend to begin my <a href="http://blog.begriffs.com/2013/02/programming-pilgrimage.html">programming pilgrimage</a> in San Francisco. It will be two weeks of high-intensity OSS hacking at twelve companies. This trip has been a longstanding dream of mine, and it's a little surreal that it's actually happening.<br /><br />A big part of what makes this possible is the encouragement, connections, and financial sponsorship of the company where I work, the Madison Wisconsin-based Rails consultancy <a href="http://bendyworks.com/">Bendyworks</a>. From code retreats, to craftsman swaps, to hosting meetups to organizing conferences, Bendyworks is constantly raising the bar for community involvement and software quality in the midwest. Now they're helping me with my pilgrimage to contribute to the companies and open source that we love.<br /><br />I'll be filming a documentary about the trip. I'd like to interview fascinating people and learn about their dreams. I'd like to learn about what's happening in software and how it will be changing. Finally, I want to get a peek inside the companies that are building the web and capture some of their energy and direction.<br /><br />Here are the places I'll be visiting. Thanks to the companies and individuals who have offered to host me for a day during my trip.<br /><br /><table style="margin: 0 auto;"><tbody><tr><td style="padding: 10px;"><a href="http://basho.com/"><img border="0" height="60" src="http://1.bp.blogspot.com/-tmrFYN1NJrw/UTzuIZyMhpI/AAAAAAAAABA/okpyLd83y9w/s200/basho.jpeg" width="200" /></a></td><td style="padding: 10px;"><a href="http://www.atlassian.com/"><img border="0" height="62" src="http://www.atlassian.com/dms/wac/images/press/Atlassian-logos/logoAtlassianPNG.png" width="200" /></a></td></tr><tr><td style="padding: 10px;"><a href="https://squareup.com/"><img border="0" height="85" src="http://professorjosh.files.wordpress.com/2011/06/square_logo_landscape.png" width="200" /></a></td><td style="padding: 10px;"><a href="https://github.com/"><img border="0" height="80" src="http://4.bp.blogspot.com/-R7XxX_HzoK8/Uat6dawr7fI/AAAAAAAAACE/FxQRL8T0J6M/s200/githuboctocat.jpeg" width="200" /></a></td></tr><tr><td style="padding: 10px;"><a href="http://www.heroku.com/"><img border="0" height="66" src="http://logos.heroku.com/images/heroku-logo-light.png" width="200" /></a></td><td style="padding: 10px;"><a href="http://www.csua.berkeley.edu/"><img border="0" height="62" src="http://www.degreedriven.com/images/logo/Q9GTHUX563.jpg" width="200" /></a></td></tr><tr><td style="padding: 10px;"><a href="http://www.botndolly.com/about"><img border="0" height="116" src="http://s3.amazonaws.com/engine-advocacy/images/logos/bot-n-dolly.png" width="200" /></a></td><td style="padding: 10px;"><a href="http://corporate.livingsocial.com/home"><img border="0" height="87" src="http://1.bp.blogspot.com/-WaL2H23BRBU/Uat6s-dNvfI/AAAAAAAAACM/zZOYbSFg7x4/s200/livingsocial.jpg" width="200" /></a></td></tr><tr><td style="padding: 10px;"><a href="http://www.twilio.com/"><img border="0" height="66" src="http://2.bp.blogspot.com/-b-7EMNd1j7U/TYOctqAhvwI/AAAAAAAAaXE/3xLsYqAJmeI/s200/twilio-logo-300x98.png" width="200" /></a></td><td style="padding: 10px;"><a href="https://saucelabs.com/"><img border="0" height="75" src="https://github-jobs.s3.amazonaws.com/f08288d8-e5b7-11e1-84d7-9f3216852c95.png" width="200" /></a></td></tr><tr><td style="padding: 10px;"><a href="http://pivotallabs.com/"><img border="0" height="82" src="http://mtnwestrubyconf.org/2008/images/pivotal-labs-logo-440.png" width="200" /></a></td><td style="padding: 10px;"><a href="http://www.moovweb.com/"><img border="0" height="37" src="http://media.marketwire.com/attachments/201111/35199_MoovwebLogo.jpg" width="200" /></a></td></tr></tbody></table>
-</div>
-{% endraw %}
+<img src="/images/pilgrim.png" class="left" />
+I leave this weekend to begin my [programming
+pilgrimage](2013-02-04-programming-pilgrimage.html) in San Francisco.
+It will be two weeks of high-intensity OSS hacking at twelve
+companies. This trip has been a longstanding dream of mine, and
+it's a little surreal that it's actually happening.
+
+A big part of what makes this possible is the encouragement,
+connections, and financial sponsorship of the company where I work,
+the Madison Wisconsin-based Rails consultancy
+[Bendyworks](http://bendyworks.com/). From code retreats, to craftsman
+swaps, to hosting meetups to organizing conferences, Bendyworks is
+constantly raising the bar for community involvement and software
+quality in the midwest. Now they're helping me with my pilgrimage
+to contribute to the companies and open source that we love.
+
+I'll be filming a documentary about the trip. I'd like to interview
+fascinating people and learn about their dreams. I'd like to learn
+about what's happening in software and how it will be changing.
+Finally, I want to get a peek inside the companies that are building
+the web and capture some of their energy and direction.
+
+Here are the places I'll be visiting. Thanks to the companies and
+individuals who have offered to host me for a day during my trip.
+
+###
+
+<table style="width: 100%; text-align:center">
+<tbody>
+<tr>
+  <td><img src="/images/pilgrimage-basho.jpeg" /></td>
+  <td><img src="/images/pilgrimage-atlassian.png" /></td>
+</tr>
+<tr>
+  <td><img src="/images/pilgrimage-square.png" /></td>
+  <td><img src="/images/pilgrimage-github.jpeg" /></td>
+</tr>
+<tr>
+  <td><img src="/images/pilgrimage-heroku.png" /></td>
+  <td><img src="/images/pilgrimage-berkeley.jpg" /></td>
+</tr>
+<tr>
+  <td><img src="/images/pilgrimage-botdolly.png" /></td>
+  <td><img src="/images/pilgrimage-livingsocial.jpg" /></td>
+</tr>
+<tr>
+  <td><img src="/images/pilgrimage-twilio.png" /></td>
+  <td><img src="/images/pilgrimage-saucelabs.png" /></td>
+</tr>
+<tr>
+  <td><img src="/images/pilgrimage-pivotal.png" /></td>
+  <td><img src="/images/pilgrimage-moovweb.jpg" /></td>
+</tr>
+</tbody>
+</table>

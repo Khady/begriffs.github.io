@@ -2,8 +2,59 @@
 title: A New Kind of Learning and Coworking
 ---
 
-{% raw %}
-<div class="css-full-post-content js-full-post-content">
-I'm happy to announce that a new experiment in collaboration and learning has begun. My friends <a href="https://twitter.com/ajbraus">Adam Braus</a>, <a href="https://twitter.com/mfenchel">Michael Fenchel</a>, and&nbsp;<a href="https://wni.herokuapp.com/www.linkedin.com/pub/niko-skievaski/13/b76/b67">Niko Skievaski</a> are creating what I am confident will be Madison's premier coworking space. They have gotten space on the fourth floor of the beautiful building at 100 State Street and have invited me to use part of it to create what I've been calling a "<a href="http://blog.begriffs.com/2013/03/feedback-on-thinkerspace.html">thinkerspace</a>," a bookish mixture of blackboards, comfortable reading chairs, tea and classics.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://distilleryimage5.ak.instagram.com/8431fcf8ab8311e2996722000a9f18fe_7.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://distilleryimage5.ak.instagram.com/8431fcf8ab8311e2996722000a9f18fe_7.jpg" width="320" /></a></div><br />However the thinkerspace will be more than antiques and chalk, it will be an experiment in a new kind of learning and teaching. The idea is that learning happens best when it's collaborative, exploratory, and hands-on. Small groups of people will work together to solve small well-defined problems. They then emerge as "guides" able to pass the knowledge along to other groups.<br /><br />Whereas schools traditionally design long-running courses covering broad subjects with passive lessons, the thinkerspace will immerse small groups in exactly the questions and techniques that interest them.<br /><br />For instance, someone might want to<br /><br /><ul><li>play the <i>Trois Gymnopédies</i>&nbsp;on the piano</li><li>prove the&nbsp;Pythagorean theorem</li><li>paint a realistic apple</li><li>learn Spencerian penmanship</li><li>bind a book</li></ul><div>They could work in a group and compare results. When someone feels they have succeeded, they can advertise themselves in a thinkerspace directory as a guide for that skill. New groups of people wanting to learn the skill can look guides up and coordinate a lesson. The opportunity to pass your skill along helps you learn it even better.</div><div><br /></div><div>Because the thinkerspace is part of a broader coworking scene, members can venture out of the old-fashioned reading-chair corner and over to the technological side to practice and teach programming and entrepreneurship. I am personally happy to act as a guide for programming topics such as those I studied in my <a href="http://1up.begriffs.com/">1up project</a>.</div><div><br /></div><div>The thinkerspace approach to teaching fits well within the philosophy of the coworking space as a whole. Michael Fenchel explained to me that, "This coworking space is different than many. We want it to be more than individuals who happen to be working in the same room on solo projects. We want to help actively connect people to build strong teams with complimentary strengths."</div><div><br /></div><div>This week we'll be moving in and furnishing the building. It's definitely exciting, and I'll post pictures and updates as things progress.</div>
-</div>
-{% endraw %}
+I'm happy to announce that a new experiment in collaboration and
+learning has begun. My friends [Adam Braus](https://twitter.com/ajbraus),
+[Michael Fenchel](https://twitter.com/mfenchel), and [Niko
+Skievaski](https://wni.herokuapp.com/www.linkedin.com/pub/niko-skievaski/13/b76/b67)
+are creating what I am confident will be Madison's premier coworking
+space. They have gotten space on the fourth floor of the beautiful
+building at 100 State Street and have invited me to use part of it
+to create what I've been calling a
+"[thinkerspace](2013-03-28-feedback-on-thinkerspace.html)," a bookish
+mixture of blackboards, comfortable reading chairs, tea and classics.
+
+![100state](/images/100state.jpg)
+
+However the thinkerspace will be more than antiques and chalk, it
+will be an experiment in a new kind of learning and teaching. The
+idea is that learning happens best when it's collaborative,
+exploratory, and hands-on. Small groups of people will work together
+to solve small well-defined problems. They then emerge as "guides"
+able to pass the knowledge along to other groups.
+
+Whereas schools traditionally design long-running courses covering
+broad subjects with passive lessons, the thinkerspace will immerse
+small groups in exactly the questions and techniques that interest
+them.
+
+For instance, someone might want to
+
+* play the *Trois Gymnopédies* on the piano
+* prove the Pythagorean theorem
+* paint a realistic apple
+* learn Spencerian penmanship
+* bind a book
+
+They could work in a group and compare results. When someone feels
+they have succeeded, they can advertise themselves in a thinkerspace
+directory as a guide for that skill. New groups of people wanting
+to learn the skill can look guides up and coordinate a lesson. The
+opportunity to pass your skill along helps you learn it even better.
+
+Because the thinkerspace is part of a broader coworking scene,
+members can venture out of the old-fashioned reading-chair corner
+and over to the technological side to practice and teach programming
+and entrepreneurship. I am personally happy to act as a guide for
+programming topics such as those I studied in my [1up
+project](http://1up.begriffs.com/).
+
+The thinkerspace approach to teaching fits well within the philosophy
+of the coworking space as a whole. Michael Fenchel explained to me
+that, "This coworking space is different than many. We want it to
+be more than individuals who happen to be working in the same room
+on solo projects. We want to help actively connect people to build
+strong teams with complimentary strengths."
+
+This week we'll be moving in and furnishing the building. It's
+definitely exciting, and I'll post pictures and updates as things
+progress.
