@@ -10,8 +10,8 @@ install:
   - cabal install -j --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-split-objs -fhttps pandoc
   - cabal install -j --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-split-objs --reorder-goals
 before_script:
-  - git config --global user.email "$GIT_EMAIL"
-  - git config --global user.name "$GIT_NAME"
+  - git config --global user.email "$GH_EMAIL"
+  - git config --global user.name "$GH_NAME"
 script: cabal run -j build
 after_script:
   - cd _site
@@ -21,5 +21,6 @@ after_script:
   - git status
   - git commit -m "Built by Travis ( build $TRAVIS_BUILD_NUMBER )"
   - git push github master:master | grep -v http
-GH_NAME=Travis:
-  secure: N4yGsxg4OSa8/71Snae72zlepdnZLlq1D4ymSzzAidgHz7DvggumvnWhT/92X/WReNwMItjLrf2KGl2TllZNvZkLt95wRFukeX8AvHlPDVS0Smf/UqosFCrDNi50kSQLllcZwWzXiJbnIrlK9aILPSEXAuMsxDpy3k5o1bHt5cE=
+env:
+  global:
+  - secure: "ZeR1rb9KL3obii4clDhuZhFvLwBK1j8v7g3sIZAFWm7jLWYEM/oxvaEETaFmjcZopiSlxc4XEk7zHuoUS8WjSr3ffeUBCPRxaLdi2KjLoZFTH5FCUndtHllyVa7Hg429I2zWxfWI7F9na4EN4o1qUVHiID7W74n88RZ7I4vNIV4="
