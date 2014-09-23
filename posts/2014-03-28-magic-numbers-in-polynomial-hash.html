@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Magic numbers in polynomial hash functions</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Magic numbers in polynomial hash functions</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">March 28, 2014</h5>
+</div>
+
+<div>
+  <p>Every time I see copypasta polynomial string hash functions on the internet I am mystified by the arcane and magical numbers they contain. Today it’s time to find out which numbers are acceptable and why. Scanning stack overflow discussions and spending some time at the blackboard has revealed the beginning of the secret.</p>
+<p>Polynomial hashes are computed from a base number and the character codes of an input string. Let \(s_0 \ldots s_{k-1}\) be the codes of each input character in string \(s\). It’s our job to choose constants \(b\) and \(n\) to minimize collisions in the hash function \(h(s) = \sum b^i s_i\ \text{mod}\ n\), where \(b\) is an arbitrary number and \(n\) is the number of buckets in our hash table.</p>
+<p>Increasing \(n\) certainly helps. If \(n=1\) then everything will collide and we needn’t worry about \(b\). So fix \(n\) as large as sensible for application memory. We’ll see that certain choices of \(b\) are statistically better than others. Certain choices are really bad.</p>
+<p>Let’s get to our conclusion the roundabout way and see what happens when we pick bad values. Assume \(n \mid b\), that is \(b = nm\) for some \(m\). In this case \(h(s) = \sum b^i s_i = s_0 + nmX \equiv s_0\ \text{mod}\ n\). Hence only the first character of the string affects the hash value. This is terrible performance.</p>
+<p>More generally if \(i \mid b\) and \(i \mid n\) for \(i &gt; 1\) then \(b = ij\), \(n = ik\) for some \(j\) and \(k\). Thus each \(\sum b^i s_i\) can be written \(s_0 + ijX\). As in the previous case the \(s_0\) term turns out to be more important than the others. Notice \(s_0 + ijX \equiv s_0 + ijY\ \text{mod}\ ik\) iff \(ij(X-Y) \equiv 0\ \text{mod}\ ik\) iff \(j(X-Y) \equiv 0\ \text{mod}\ k\). That’s not good – the final terms, whatever they may be, are modded by \(k\) which is \(i\) times smaller than \(n\). Smaller modding means fewer bucket choices which makes collisions more likely.</p>
+<p>Which brings us to the first conclusion: choose \(b\) and \(n\) to be relatively prime. Beware that integer arithmetic is already modular, so \(h(s)\) is really \(h(s)\ \text{mod}\ 2^{32}\). Don’t choose \(b\) as a power of two (in fact choose it to be odd) or else \(\gcd{(b, 2^{32})} &gt; 1\).</p>
+<p>This is why the typical hash function snippet on stack overflow uses a prime for \(b\). The author doesn’t know what you’ll pick for \(n\) so they play it safe. However there is still an interesting question about which prime to pick. Sadly coprimality, while necessary, is not sufficient to guard against collisions. I wrote some code to test various strings and constants.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Control.Monad</span> (replicateM)
+<span class="kw">import </span><span class="dt">Data.Char</span> (ord)
+<span class="kw">import </span><span class="dt">Data.List</span> (group, sort)
+
+<span class="ot">allStrings ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Char</span>] <span class="ot">-&gt;</span> [ [<span class="dt">Char</span>] ]
+allStrings from to alphabet <span class="fu">=</span> [from<span class="fu">..</span>to] <span class="fu">&gt;&gt;=</span> (<span class="ot">`replicateM`</span> alphabet)
+
+<span class="ot">numCollisions ::</span> <span class="dt">Ord</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+numCollisions <span class="fu">=</span> sum <span class="fu">.</span> (filter (<span class="fu">&gt;</span> <span class="dv">1</span>)) <span class="fu">.</span> (map length) <span class="fu">.</span> group <span class="fu">.</span> sort
+
+<span class="ot">coprimes ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+coprimes n <span class="fu">=</span> [m <span class="fu">|</span> m <span class="ot">&lt;-</span> [<span class="dv">2</span><span class="fu">..</span>n], (gcd m n) <span class="fu">==</span> <span class="dv">1</span>]
+
+<span class="co">-- Horner's method for polynomial evaluation</span>
+<span class="ot">horner ::</span> (<span class="dt">Num</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> a
+horner x <span class="fu">=</span> foldr (\a b <span class="ot">-&gt;</span> a <span class="fu">+</span> b<span class="fu">*</span>x) <span class="dv">0</span>
+
+<span class="ot">hash ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Char</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+hash n b s <span class="fu">=</span> (horner b (map ord s)) <span class="ot">`mod`</span> n
+
+<span class="ot">len3collisions ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
+len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</span> map (hash n b) <span class="fu">$</span> allStrings <span class="dv">3</span> <span class="dv">3</span> [<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>]</code></pre>
+<p>There are \(26^3 = 17576\) length three strings of lowercase letters. If we let \(n = 17576\) and run through all relatively prime choices of \(b &lt; n\) there are plenty of bad values. To get a feel for how the performance varies, I sorted the number of keys that collide with any other keys as \(b\) varies. (The x-axis below is <strong>not</strong> \(b\).) The graph gives a feeling for the range of success.</p>
+<div class="figure">
+<img src="../images/hash-chart.png" alt="Hash collisions" /><p class="caption">Hash collisions</p>
+</div>
+<p>For the best \(b\) a whole 89% of keys are collision-free. At the worst end all but six collide. Apparently there is some deeper stuff going on. That’s as far as I’m going to take it for now.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

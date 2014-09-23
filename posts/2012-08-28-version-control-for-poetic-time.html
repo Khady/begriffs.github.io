@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Version control for poetic time travelers</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Version control for poetic time travelers</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 28, 2012</h5>
+</div>
+
+<div>
+  <p>Matthew McCullough (<span class="citation">[@matthewmccull]</span>(http://twitter.com/matthewmccull)) leads Git workshops across the world. He recently visited Madison, Wisconsin to discuss and demonstrate advanced topics such as rerere merging, the reflog, interactive rebase, cherry-pick, show-branch, branch filtering, submodules, querying the log, refspecs, and path aliases.</p>
+<p>However, to me, Matthew’s most fascinating observation is that Git excels at representing changes independently of time. It allows developers to tell a story that is somehow outside of time and space. Git intentionally separates the bureaucracy of time from the narrative of code.</p>
+<p>The mechanism of this time travel is known as rebasing and like any time travel story one must be aware of paradox. We’ll see later how Git paradoxes arise and how to prevent them.</p>
+<p>First a little background. When developers change code simultaneously and want to reconcile their changes they have two options: merging and rebasing. Merging preserves a record of actual time. Parallel branches show the passage of time, and come together at a merge commit. The graph-order of commits along each branch remain faithful to the order they happened.</p>
+<p>If we think of code changes as telling a real story, a story like any we would read or tell in English, then why not analyze it as such? For instance, we can apply ideas from Aristotle’s <u>Poetics</u> when thinking about our code. Literate programming indeed.</p>
+<p>Let’s examine how a big merge functions in our “story.” Often the differences to be merged are substantial, and conflicts occur. One person often resolves all conflicts in a single commit. This should be familiar from literature – it’s called <em>deus ex machina</em>! A deeply troubled plot suddenly ends aright due to unexplained mysterious actions (in this case of a single individual). Aristotle criticizes this kind of plot device because the plot’s unraveling should arise from the plot itself.</p>
+<p>In fact a big merge is worse than its literary counterpart. A merge can be opaque, encompassing so many aspects that only the person doing the merge knows how it all works. This is not good documentation.</p>
+<p>By contrast, a rebase rewrites the history of a branch into similar, but entirely different commits. Some people criticize rebasing as being a lie. The order and even the changes between commits are just not what they were before. But this is nothing new; it’s called fiction. The story, while false, still instructs us. Aristotle wrote that “poetry is finer and more philosophical than history; for poetry expresses the universal, and history only the particular.” Ultimately our code is historical and specific, but Git doesn’t impede a graceful retelling.</p>
+<p>As mentioned, rebasing is like time travel because if done carelessly it will create paradox. Specifically you shouldn’t rebase code that other people might have pulled. Git history is exact and discrete and your rebase will sever common history and lead to painful reconstruction.</p>
+<p>There are some exceptions to this rule, but they’re best left to master Git magicians. For instance, the developers of Git itself share a branch called “pu” (for Proposed Updates) which they allow to be rebased at any time. Also, the employees of Github have a convention that a shared branch prefixed with someone’s initials should be left alone by others, free for that person to rebase. It serves as a backup to their local repo and as a place to share code ideas.</p>
+<p>Merging can be seductive. For one thing, it makes the Git log look like a lot of work has occurred. Lots of criss-crossing lines look like serious progress. You can proudly show a manager the teeming edifice. Although branches provide an artifact of how and when people were doing things, Matthew believes in “value over metadata.” He just wants the software to work at the end of the day and feels that rebasing allows a clear way to trace through the changes. A straight line tells a better story.</p>
+<p>But there’s an art to the commits themselves. Matthew suggests committing <strong>every five to fifteen minutes</strong>, even if your code is ugly. You can deal with the ugliness later by squashing the mindless little commits. Fundamentally, squashing frees creativity from continuous housekeeping. Typically Matthew makes twenty to twenty-five commits before lunch and then squashes them to three or four.</p>
+<p>To code like a time traveler, you’ll want to change the way you pull changes. One thing to remember is that there is no central repository coordinating a team so nobody can tell for sure who is changing code at any specific time. Hence one person will surely “lose” when two people push to a single repo. The loser must pull before they push, and the default behavior of a pull followed by a push creates ugly trapezoids in graph history.</p>
+<p>You can fix this merge behavior by using <code>git pull --rebase</code>. In effect you are subordinating your changes to ensure a fluid, cohesive story. You’re allowing your commits to appear last in the graph even if they were created earlier.</p>
+<p>Rebased pulling is great until you get halfway through and run into a conflict. As you resolve changes and stage them you may be tempted to commit them, which is the incorrect thing to do. What you need to do is <code>git rebase --continue</code> or things will go terribly wrong. Another note: a confusing safety net will kick in if you choose to commit your local version of files without modification during the rebase. Git considers your commit vacuous and refuses to apply it. You can get out of this situation using <code>git rebase --skip</code>. That forgets the commit and continues the rebase.</p>
+<p>To enjoy rebasing by default during pulls on an existing branch, run <code>git config branch.branch-name.rebase true</code>. To set it as default for all branches created in future, run <code>git config branch.autosetuprebase always</code>. Add a <code>--global</code> flag to affect all local repos.</p>
+<p>Tell a good story. Reshape your commits. Change the past. Be a poet.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

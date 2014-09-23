@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Give Yourself a Security Makeover</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Give Yourself a Security Makeover</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">April  9, 2013</h5>
+</div>
+
+<div>
+  <p>While visiting Twilio for a day on my two-week <a href="2013-03-08-the-pilgrimage-begins.html">programming pilgrimage</a> I learned that I’ve been pretty insecure. Joël Franusic (<span class="citation">[@jf]</span>(https://twitter.com/jf)) explained that I needed a security makeover. You probably do too! So let’s get started. Follow the suggestions as you read this article and by the end you can be pretty comfortable about your everyday security.</p>
+<h4 id="step-one-lock-down-your-email">Step One: Lock down your email</h4>
+<p>You probably check mail from several machines and in many places. If somebody breaks into your email account then they can reset your password on all kinds of other accounts. Take some time to secure this vital foundation of your online security.</p>
+<ul>
+<li>Enable two-step authentication for web mail. This will text you an additional unique code every time you try logging into your email online. You will need to respond with the code after using your password. Gmail users can enable two-step auth <a href="http://www.google.com/landing/2step/">here</a>.</li>
+<li><a href="https://accounts.google.com/IssuedAuthSubTokens?hide_authsub=1">Create</a> an application-specific single-use password for your mail client. You can later revoke access if you believe your computer has been compromised.</li>
+<li>Create and write down a spare single-use password as well just in case.</li>
+</ul>
+<h4 id="step-two-manage-your-passwords">Step Two: Manage your passwords</h4>
+<p>It’s time you make crazy unrelated passwords for all sites. It’s also time to keep track of them in a secure and orderly manner.</p>
+<ul>
+<li>Think of two passwords, one of them very long and difficult. These are the only two you will need to remember. Use <a href="http://world.std.com/~reinhold/diceware.html">a system</a> to overcome your biases and make strong passphrases.</li>
+<li>Buy <a href="https://agilebits.com/onepassword/mac">1Password</a> ($50) or <a href="https://lastpass.com/">Lastpass</a> ($0) and use your difficult password to secure its vault.</li>
+<li>Use your other password for a new <a href="https://www.dropbox.com/">Dropbox</a> account. Link 1Password to the Dropbox account so you can sync all your computers/phones to the same password vault. Linking to Dropbox is a simple setting within 1Password.</li>
+<li>Now change your password on all sites you use. You can get good auto-generated random passwords from 1Password.</li>
+</ul>
+<h4 id="step-three-protect-your-computer">Step Three: Protect your computer</h4>
+<ul>
+<li>Clear your browser’s password cache, and never allow it to remember passwords.</li>
+<li>Install the <a href="https://chrome.google.com/webstore/detail/https-everywhere/gcbommkclmclpchllfjekcdonpmejbdp?hl=en">HTTPS Everywhere</a> extension for Chrome, to use a secure connection whenever possible.</li>
+<li>Enable a password-protected screensaver and have it turn on after five minutes.</li>
+<li>Add a mouse hot-corner to the screen that starts the screensaver. When you walk away from your computer, use the hot corner.</li>
+<li>Ensure your mac firewall is turned on.</li>
+<li>Turn on filevault encryption for your hard drive. Do this before you go to bed because it takes a while to encrypt the first time it runs.</li>
+</ul>
+<h4 id="step-four-physically-secure-documents">Step Four: Physically secure documents</h4>
+<p>All your schemes eventually end at physical security. You probably want to store your master password somewhere your next of kin can access, along with instructions for how to use it to unlock your password file. Put this stuff in a safe deposit box at your bank.</p>
+<p>Items to store in a safe deposit box:</p>
+<ul>
+<li>social security card</li>
+<li>marriage license</li>
+<li>car title</li>
+<li>birth certificate</li>
+<li>insurance policies</li>
+<li>1password master key</li>
+<li>backup of 1password filevault on a usb drive</li>
+<li>your spare single-use email password</li>
+</ul>
+<p>Do all the above and you’re in a pretty secure position. Does anyone know some tricks I have left out?</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

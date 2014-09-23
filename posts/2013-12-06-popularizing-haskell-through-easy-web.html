@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Popularizing Haskell through easy web deployment</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Popularizing Haskell through easy web deployment</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">December  6, 2013</h5>
+</div>
+
+<div>
+  <p>I want to see Haskell become “just another language,” one that people pick to solve ordinary tasks. One that becomes common on the job. Wouldn’t professional programming be nicer if we could walk into more companies and expect to find nicely structured codebases whose language helped prevent a jumbled undocumented mess?</p>
+<p>Popularizing the Haskell platform requires making certain tasks really easy. Someone once told me about the <strong>Five Minute Rule</strong>: If you want people to keep using your product or library they need to be able to go from the README to some small success in under five minutes. The product may have lots of features – that’s fine – but it needs a solid quickstart.</p>
+<p>Many people are interested in learning web development these days. Code schools in San Francisco are overflowing with people learning to crank out Rails and Node apps. This is in part because these platforms have a smooth infrastructure to scaffold and deploy apps. Students type a few magic incantations and, behold, their site is live. It’s heartening for a beginner.</p>
+<p>Think if deploying a modest Yesod app was this quick. A seasoned devops engineer might flippantly reply, “Deployment? Just install nginx/apache, upload your app, run it as a daemon and proxy requests to it.” Sorry, that fails the five minute rule.</p>
+<p><a href="https://www.heroku.com/">Heroku</a> is a popular hosting “platform as a service” in the Ruby world. You deploy by setting a git remote and pushing to it. After <a href="2013-08-22-haskell-on-heroku-omg-lets-get-this.html">reviewing</a> existing solutions for using Haskell with Heroku, I decided to try updating the process with the new features of Cabal and a modern GHC version.</p>
+<p>Here is the result: <a href="https://github.com/begriffs/heroku-buildpack-ghc">begriffs/heroku-buildpack-ghc</a></p>
+<p>It works pretty well. If you’re interested in promoting Haskell for everyday coding, consider contributing to the project. Check out the github issues for ways you can help.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

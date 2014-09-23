@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Using cabal-dev exclusively</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Using cabal-dev exclusively</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">September  5, 2013</h5>
+</div>
+
+<div>
+  <div class="alert alert-warning" role="alert">
+<h4>
+Update
+</h4>
+Don’t do this! Cabal version 1.18 now has built-in <a href="http://coldwa.st/e/blog/2013-08-20-Cabal-sandbox.html">sandboxing</a>.
+</div>
+<p>Ever since I erased and reinstalled my whole Haskell Platform and began installing packages using nothing but cabal-dev I discovered there is an extra step to compile programs in their own sandbox. I must have earlier been inadvertently leaning on globally installed libraries with using GHC to compile programs. Today when I cabal-dev installed a package I got an error during compilation that said the package couldn’t be found.</p>
+<p>The solution is to set your <code>GHC_PACKAGE_PATH</code> so it includes the places cabal-dev installs libraries. First look where all your libraries live now by doing <code>ghc-pkg list</code>. Remember these paths and edit your shell’s init scripts to set the environment variable. I use bash, so I add this line <code>~/.bashrc</code></p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">export</span> <span class="ot">GHC_PACKAGE_PATH=</span>./cabal-dev/packages-7.6.3.conf:<span class="ot">$HOME</span>/.ghc/x86_64-darwin-7.6.3/package.conf.d:/Library/Frameworks/GHC.framework/Versions/7.6.3-x86_64/usr/lib/ghc-7.6.3/package.conf.d</code></pre>
+<p>Your paths will likely differ, but you see the pattern. The paths are separated by colons, and are searched in the order listed.</p>
+<p>Be sure the first place you have it check is the packages directory inside <code>./cabal-dev</code>. This is because I run <code>cabal-dev install</code> from the directory that contains my code. Now when I run ghc in this directory it will be able to find the cabal-dev sandboxed packages.</p>
+<p>Using search paths is a common pattern among compilers, but it confused me for a little while tonight. Makes a good topic for an off-night blog post too. :)</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

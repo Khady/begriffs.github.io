@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Haskell postgresql-simple examples, part 2</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Haskell postgresql-simple examples, part 2</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">September 14, 2013</h5>
+</div>
+
+<div>
+  <p><a href="2013-09-10-haskell-postgresql-simple-examples-part.html">Part 1</a> described how to do queries and read results. Refer to it to learn how to connect to Postgres and all that.</p>
+<p>I thought I was just getting into the good stuff with this library. I thought you could create algebraic data types and then read them in and out of table rows. The reality is frankly not that cool. The way you associate a data type with a SQL statement is very positional. You have to match your data structure with the SQL expression argument by argument. Different parts of your code need to know and implicitly share this order. And the compiler can’t detect the order being flipped, so you can get runtime errors.</p>
+<p>My verdict: this is not Haskell at its best, but it is nice and simple. Use the <code>postgresql-simple</code> library if you need to throw together a direct ad-hoc query. It’s great for that, but not good for much more.</p>
+<p>Here’s how to read rows into a data structure and print out the results. Seems pretty smooth. Since the <code>Dictionary</code> derives <code>Show</code> I didn’t have to write any logic to format the output. The SQL needed to know that you construct a <code>Dictionary</code> by specifying <code>word</code> first and <code>definition</code> second, so that’s kind of annoying.</p>
+<p>Writing rows feels even more awkward. Notice that how I’ve written this, I might as well have dispensed with writing a Dictionary per-se, and could have just written the values I used to construct the Dictionary.</p>
+<p>But there you have it. If you’d like to do simple things with queries, that’s how this library does it.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

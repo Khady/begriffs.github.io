@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Onion Testing</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Onion Testing</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 14, 2011</h5>
+</div>
+
+<div>
+  <p>I am experimenting with layered code tests. Each layer is more specific and strict. The <strong>layers test continuously</strong>, watching the behavior of the code. Beware, <strong>the tests are relentless</strong> and can hurt your feelings.</p>
+<p>Let me illustrate in the Coffeescript interpreter with an example from algebra. You can grab the code <a href="https://github.com/begriffs/mother-structures/tree/develop">here</a> and play along. Let’s define some sets and operations. First we’ll include the Coffeecup structures library.</p>
+<pre class="coffeescript"><code>coffee&gt; s = require './Structure.coffee'
+{ Set: [Function: Set],
+  Magma: [Function: Magma],
+  Monoid:
+   { [Function: Monoid]
+     __super__: { op: [Function], pow: [Function], cross: [Function] } } }</code></pre>
+<p>Sets add <strong>extra type checks</strong> to the language and are the first layer of the onion. Let’s create the sets of all integers and odd integers.</p>
+<pre class="coffeescript"><code>coffee&gt; Z = new s.Set (x) -&gt; x == (Math.floor x) and x &lt; Infinity
+{ char: [Function] }
+coffee&gt; Odd = Z.where (x) -&gt; x%2 in [1,-1]
+{ char: [Function] }</code></pre>
+<p>Note that the “[1,-1]” thing corrects a <a href="http://javascript.about.com/od/problemsolving/a/modulobug.htm">bug</a> in the underlying JavaScript modulo operator. Here is what these sets report.</p>
+<pre class="coffeescript"><code>coffee&gt; Odd.contains -1
+true
+coffee&gt; Odd.contains 2
+false
+coffee&gt; Odd.contains 3.14
+false</code></pre>
+<p>Now let’s <strong>add a layer</strong> to the onion. We’ll associate a binary operation with Z and Odd and assert that they form <a href="http://bit.ly/pMsgVz">magmas</a>. This means the sets are closed under the operation. We will use ordinary addition as our operation.</p>
+<pre class="coffeescript"><code>coffee&gt; Z = new s.Magma Z, ((x,y) -&gt; x+y)
+{ s: { char: [Function] }, o: [Function] }
+coffee&gt; Odd = new s.Magma Odd, ((x,y) -&gt; x+y)
+{ s: { char: [Function] }, o: [Function] }</code></pre>
+<p>Take them for a test drive.</p>
+<pre class="coffeescript"><code>coffee&gt; Z.op 2, 2
+4
+coffee&gt; Odd.op 2, 2
+AssertionError: values outside of magma</code></pre>
+<p>The magma adds a check to protect us from elements outside its domain. Furthermore,</p>
+<pre class="coffeescript"><code>coffee&gt; Odd.op 1, 3
+AssertionError: magma operation not closed</code></pre>
+<p>This response highlights that the operation we chose (simple addition) is not suitable for making a magma out of odd numbers. <strong>Onion testing always watches</strong> what we do and compares it to what we assert.</p>
+<p>Now let’s see how onion testing can <strong>have a memory</strong>. We want to assert that strings form a <a href="http://en.wikipedia.org/wiki/Monoid">monoid</a> under concatenation. This means, in part, that concatenation is associative. A failure of associativity only manifests after several uses of an operation so this layer of the onion must compare previous operation results to uncover it.</p>
+<p>We will define two operations on strings, <strong>normal</strong> concatenation and <strong>weird</strong> concatenation. We will assert they are both monoids. Monoids add another layer of testing to magmas.</p>
+<pre class="coffeescript"><code>coffee&gt; Str = new s.Monoid (new s.Set (x) -&gt; typeof(x) == 'string'), ((x,y) -&gt; (x+y)), ''
+{ s: { char: [Function] },
+  o: [Function],
+  i: '',
+  log: [] }
+coffee&gt; WeirdStr = new s.Monoid (new s.Set (x) -&gt; typeof(x) == 'string'), ((x,y) -&gt; (x+x+y)), ''
+{ s: { char: [Function] },
+  o: [Function],
+  i: '',
+  log: [] }</code></pre>
+<p>First try using Str.</p>
+<pre class="coffeescript"><code>coffee&gt; Str.op 'a', 'b'
+'ab'
+coffee&gt; Str.op 'ab', 'c'
+'abc'</code></pre>
+<p>Now try the same on WeirdStr.</p>
+<pre class="coffeescript"><code>coffee&gt; WeirdStr.op 'a', 'b'
+'aab'</code></pre>
+<p><strong>So far so good</strong> in its own weird way. But is it associative?</p>
+<pre class="coffeescript"><code>coffee&gt; WeirdStr.op 'aab', 'c'
+AssertionError: monoid not left-associative</code></pre>
+<p><strong>No.</strong> The testing uncovered the fact that in this weird concatenation <code>('a' + 'b') + 'c' = 'aabaabc'</code> whereas <code>'a' + ('b' + 'c') = 'aabbc'</code>. It tried things both ways behind the scenes. Written more concisely, these are the errors we get from WeirdStr.</p>
+<pre class="coffeescript"><code>coffee&gt; WeirdStr.op (WeirdStr.op 'a', 'b'), 'c'
+AssertionError: monoid not left-associative
+coffee&gt; WeirdStr.op 'a', (WeirdStr.op 'b', 'c')
+AssertionError: monoid not right-associative</code></pre>
+<p>I’ll be adding more structures to Coffeecup and will continue developing this layered testing approach.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

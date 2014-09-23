@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tricking Haskell into being dynamic</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Tricking Haskell into being dynamic</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 16, 2013</h5>
+</div>
+
+<div>
+  <p>Day 1. What do outsiders think of this language? Speaking for myself, I’ve always heard it has a strict type system that people learn to love. Today I want to use a simple example to bend the rules and get to the bottom of it.</p>
+<p>I began <a href="http://learnyouahaskell.com/">Learn You a Haskell</a>, and started typing in mundane stuff.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">ghci<span class="fu">&gt;</span> <span class="co">-- yawn</span>
+ghci<span class="fu">&gt;</span> <span class="dv">5</span> <span class="fu">==</span> <span class="dv">5</span>
+true
+ghci<span class="fu">&gt;</span> <span class="dv">5</span> <span class="fu">==</span> <span class="st">&quot;a string&quot;</span>
+ 
+<span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">3</span><span class="fu">:</span><span class="dv">1</span><span class="fu">:</span>
+    <span class="dt">No</span> <span class="kw">instance</span> for (<span class="dt">Num</span> [<span class="dt">Char</span>]) arising from the literal <span class="ot">`5'</span>
+<span class="ot">    Possible fix: add an instance declaration for (Num [Char])</span>
+<span class="ot">    In the first argument of `</span>(<span class="fu">==</span>)<span class="ch">', namely `5'</span>
+    <span class="dt">In</span> the expression<span class="fu">:</span> <span class="dv">5</span> <span class="fu">==</span> <span class="st">&quot;a string&quot;</span>
+    <span class="dt">In</span> an equation for <span class="ot">`it': it = 5 == &quot;a string&quot;</span></code></pre>
+<p>The language of course gently steps in and protects me. Comparing <code>Num</code>s and a list of <code>Char</code>s is nonsense. Yet…what if we wanted Haskell to evaluate this comparison and return false? I’m fully aware this is a bad idea, but it might teach us about how Haskell’s type system really works.</p>
+<p>So let’s unwind how the type error above originates. What does the operator <code>==</code> expect?</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">ghci<span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">==</span>)
+<span class="ot">(==) ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></code></pre>
+<p>This is really the crux of the problem, it grabs onto a type (which incidentally must be an instance of the <code>Eq</code> type class) and expects it for both arguments. I guess we have to give up, because a number and a string simply cannot be simultaneously substituted for <code>a</code> in the type signature above unless we can somehow make a new type which tricks Haskell. That would be magical, wouldn’t it? Something like</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">ghci<span class="fu">&gt;</span> <span class="co">-- our goal</span>
+ghci<span class="fu">&gt;</span> <span class="dt">Magic</span> <span class="dv">5</span> <span class="fu">==</span> <span class="dt">Magic</span> <span class="st">&quot;a string&quot;</span>
+false</code></pre>
+<p>Luckily most types are instances of <code>Show</code>, and provide a <code>show</code> function to represent themselves as strings. Turns out this is what the repl does when it prints values back. So we could compare <code>Show</code> instances by comparing their string representation.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">ghci<span class="fu">&gt;</span> show <span class="dv">5</span> <span class="fu">==</span> show <span class="st">&quot;a string&quot;</span>
+false</code></pre>
+<p>Maybe this is good enough. But maybe we can put it inside a magical type and partially obscure the implementation. We could make different data constructors and write all kinds of messy combinations for implementing equality tests.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Magic</span> <span class="fu">=</span> <span class="dt">MagicString</span> <span class="dt">String</span> <span class="fu">|</span> <span class="dt">MagicInt</span> <span class="dt">Int</span>
+
+<span class="kw">instance</span> <span class="dt">Eq</span> <span class="dt">Magic</span> <span class="kw">where</span>
+    (<span class="dt">MagicString</span> x) <span class="fu">==</span> (<span class="dt">MagicString</span> y) <span class="fu">=</span> x <span class="fu">==</span> y
+    (<span class="dt">MagicInt</span> x) <span class="fu">==</span> (<span class="dt">MagicInt</span> y) <span class="fu">=</span> x <span class="fu">==</span> y
+    (<span class="dt">MagicInt</span> x) <span class="fu">==</span> (<span class="dt">MagicString</span> y) <span class="fu">=</span> (show x) <span class="fu">==</span> y
+    (<span class="dt">MagicString</span> x) <span class="fu">==</span> (<span class="dt">MagicInt</span> y) <span class="fu">=</span> x <span class="fu">==</span> (show y)</code></pre>
+<p>I’m sorry to inflict that code on you. Let’s erase it from our minds using <em>existential types</em>. In quest of the <code>Magic</code> recipe, I jumped on #haskell and things got crazy. It’s filled with friendly and alarmingly smart people.</p>
+<p>Here’s what I learned. If we leave the <code>Haskell98</code> standard behind, we can open up a trap door in GHCI by starting it with the <code>-XExistentialQuantification</code> option. This enables existential type extensions.</p>
+<p>We can define a constructor for Magic which accepts anything that can be shown, then define equality by comparing string values.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">hci<span class="fu">&gt;</span> <span class="kw">data</span> <span class="dt">Magic</span> <span class="fu">=</span> forall a<span class="fu">.</span> (<span class="dt">Show</span> a) <span class="ot">=&gt;</span> <span class="dt">Magic</span> a
+ghci<span class="fu">&gt;</span> <span class="kw">instance</span> <span class="dt">Eq</span> <span class="dt">Magic</span> <span class="kw">where</span> (<span class="dt">Magic</span> x) <span class="fu">==</span> (<span class="dt">Magic</span> y) <span class="fu">=</span> show x <span class="fu">==</span> show y
+ghci<span class="fu">&gt;</span> <span class="dt">Magic</span> <span class="dv">5</span> <span class="fu">==</span> <span class="dt">Magic</span> <span class="dv">5</span>
+true
+ghci<span class="fu">&gt;</span> <span class="dt">Magic</span> <span class="dv">5</span> <span class="fu">==</span> <span class="dt">Magic</span> <span class="st">&quot;a string&quot;</span>
+false
+ghci<span class="fu">&gt;</span> <span class="dt">Magic</span> <span class="dv">5</span> <span class="fu">==</span> <span class="dt">Magic</span> <span class="st">&quot;5&quot;</span>
+false</code></pre>
+<p>The last one is false because show 5 is “5” whereas show “5” is “&quot;5&quot;”. Nonetheless it’s what we wanted.</p>
+<p>This really is my first day learning Haskell, so please comment and set me straight if I’m doing things wrong. Also, what is a more realistic use of forall?</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

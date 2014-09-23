@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Styleguide soufflé</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Styleguide soufflé</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">July 15, 2012</h5>
+</div>
+
+<div>
+  <p>Adam Braus (<span class="citation">[@ajbraus]</span>(https://twitter.com/ajbraus)) designs software with a clear vision of what he wants to accomplish, and especially what real value he will create for users. He was immediately interested in the ideas presented <a href="2012-07-12-dont-play-css-tetris.html">here</a> but still yearned for something a little simpler, a little lighter…a styleguide soufflé.</p>
+<p>Recently he has been immersed in Rails development with Mike Fenchel (<span class="citation">[@mfenchel]</span>(https://twitter.com/mfenchel)) creating a social scheduling web app. They are beginning to define its CSS styles and want to try doing inside-out design with a styleguide.</p>
+<p>Adam and I searched for a simple Rails-specific styleguide template, but didn’t find any. Wouldn’t it be natural and nice to have a Rails generator for this?</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">rails</span> generate styleguide</code></pre>
+<p>We certainly thought so, and we made a gem called <code>styleguide_rails</code>. It is now <a href="https://rubygems.org/gems/styleguide_rails">released on RubyGems</a> and provides a generator to scaffold a controller, a view, and routes for your guide. To add a style module, create a partial in <code>app/views/styleguide/</code> and visit <code>http://your_app/styleguide</code>. You’ll see the rendered element and its raw HTML next to one another. It’s a convenient way to document your preferred HTML snippet to create various modules like login forms.</p>
+<p>The basic functionality is there, but there are some obvious ways to improve the gem. Among other things, it could use these features:</p>
+<ul>
+<li>syntax highlighting for the HTML snippets</li>
+<li>hiding the /styleguide route in production</li>
+<li>handsome style for the guide itself</li>
+<li>ERB evaluation to include one module in another</li>
+</ul>
+<p>I’ll work on addressing these issues, but feel free to fork the code <a href="https://github.com/begriffs/styleguide_rails">on GitHub</a> and send a pull request.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

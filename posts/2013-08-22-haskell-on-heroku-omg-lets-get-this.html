@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Haskell on Heroku, let's simplify</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Haskell on Heroku, let's simplify</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 22, 2013</h5>
+</div>
+
+<div>
+  <p>Since Haskell is my new favorite language I’d like to deploy it on my favorite hosting platform – Heroku. Luckily some kind folks have created a Heroku buildpack to make this as easy as doing a git push.</p>
+<p>I happily began using <a href="https://github.com/puffnfresh/haskell-buildpack-demo">puffnfresh/heroku-buildpack-haskell</a> to deploy my app, but noticed that it is referencing some slightly outdated versions of GHC and Cabal. So I forked the code and got my pull request ready and then noticed something odd…</p>
+<p><strong>There are twenty forks of this project and they all differ!</strong> People are not sending pull requests, and there is no clear project maintainer. Come on, guys, let’s fix this.</p>
+<p>Question 1: who wants to maintain this project? The original author is <a href="https://github.com/luciferous">luciferous</a>, but his repo hasn’t seen a commit in a year, and has fewer stars than some of its forks. Let’s get ownership of the root repo transferred to whoever is motivated to maintain it.</p>
+<p>Question 2: what is lacking about this buildpack and are its forks trying to solve the same or different problems? To answer this I reviewed everyone’s commits. Everything mostly agreed up through December 2012. Puffnfresh and mwotton made tons of commits to improve logging, cleanup, and caching. After that point it diverges. Here is what everyone has been doing.</p>
+<ul>
+<li>mwotton
+<ul>
+<li>multi-threaded compilation</li>
+<li>remove a “criterion” dependency</li>
+</ul></li>
+<li>RevCBH
+<ul>
+<li>clear cabal cache during compilation</li>
+<li>install node.js and coffeescript for some reason</li>
+<li>many variations on cabal options</li>
+</ul></li>
+<li>tcrayford
+<ul>
+<li>adjust cabal caching and cleaning</li>
+<li>copy buildpack files from brianmckenna.org onto s3</li>
+</ul></li>
+<li>samstokes
+<ul>
+<li>include yesod, postgres, and other goodies</li>
+</ul></li>
+<li>eightyeight
+<ul>
+<li>include yesod</li>
+<li>upgrade cabal and ghc</li>
+<li>adjust caching</li>
+</ul></li>
+<li>dmjio
+<ul>
+<li>include snap</li>
+</ul></li>
+<li>ameingast
+<ul>
+<li>strip symbols from installed binaries to save space</li>
+<li>gitignore swp files</li>
+</ul></li>
+<li>matt2224
+<ul>
+<li>make cabal install more verbose</li>
+</ul></li>
+<li>egonSchiele
+<ul>
+<li>copy buildpack files from brianmckenna.org into git</li>
+</ul></li>
+<li>BrianMMcClain
+<ul>
+<li>adjust buildpack to work on Cloud Foundry</li>
+<li>http://catdevrandom.me/blog/2013/05/16/buildpacks-in-cloud-foundry-v2/</li>
+</ul></li>
+<li>EdgarGames
+<ul>
+<li>include postgres snaplet</li>
+</ul></li>
+<li>Tener
+<ul>
+<li>include cabal-dev</li>
+<li>lots of other fixes, perhaps relating to cabal-dev</li>
+</ul></li>
+<li>benhirsch24
+<ul>
+<li>experimenting with parallel cabal install and happy</li>
+<li>trying force-reinstalls</li>
+<li>include language-c</li>
+</ul></li>
+<li>jogrms
+<ul>
+<li>upgrade cabal and ghc</li>
+<li>went back and forth on caching and force-reinstall</li>
+</ul></li>
+<li>agocorona
+<ul>
+<li>include monadloc-pp</li>
+</ul></li>
+<li>nmk
+<ul>
+<li>copy buildpack files to grozdova.com</li>
+<li>copy them again to dropbox and host them there</li>
+</ul></li>
+</ul>
+<p>OK there are patterns here.</p>
+<p>First people are wanting to include extra software like postgres and web frameworks. My personal opinion is to not include this kind of thing in the basic buildpack. You can actually combine more than one buildpack in your deployment using <a href="https://github.com/ddollar/heroku-buildpack-multi">ddollar/heroku-buildpack-multi</a> and I would advise keeping separate things separate.</p>
+<p>Second is where to host the big GHC and Cabal binaries. Many people are hosting them in all kinds of places, from personal domains to s3 to dropbox. What is the best practice here? I wonder if Heroku itself could host them?</p>
+<p>Third is caching between deployments. This one has got to be tricky because more than one person has gone back and forth, enabling and disabling it. So for those of you who know, what is the final verdict? Is it a good idea to do caching, and what are the right settings? In this category I include the <code>force-reinstall</code> option that people go back and forth on too.</p>
+<p>Fourth is cleanup and minification. This category includes deleting parts of cabal, like docs. It includes stripping symbols from binaries. There are just all kinds of commits trying to shave space off the final result. What makes this a big deal? Are there disk limits on Heroku?</p>
+<p>Finally some of these dependencies seem to have a multi-threaded build mode, and it seems to cause problems sometimes. Should it be enabled?</p>
+<p>I’ll email everyone involved and we can discuss and make the Haskell deployment process everything we want it to be.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

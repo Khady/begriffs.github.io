@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A Problem with the Infinite</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>A Problem with the Infinite</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 19, 2011</h5>
+</div>
+
+<div>
+  <p>I am having a problem adding symmetry groups to <a href="https://github.com/begriffs/coffeecup">Coffeecup</a>. It is possible to assert that two functions are extensionally equal. The assertion wraps the functions so that as they are called they will check what the other says and make sure they agree. This can identify that functions differ, but there is really no way to know if they are the same, no finite number of tests.</p>
+<p>A new programming paradigm comes to mind. Any time a conditional asks if functions are equal, just assume they are, and add an assertion to that effect. If the assertion is invalidated later, rewind to the conditional and take the path that says they aren’t. Computation is in this way like a flashlight which illuminates small portions of the infinite. A computation path makes assumptions and continues to operate on them until it discovers an inconsistency.</p>
+<p>For instance, suppose we have a Group class and want to know the order of one of its elements. The internal code would raise the element to various powers until it found that the result is equal to the group identity, then return that power. So imagine how it might work in the “backtracking flashlight” paradigm. Our first test will be if the argument itself (raised to the first power) is the idenity. The equality comparison will happily say it is, and onion testing code will be added to watch out for inconsistencies later. So the order function will return 1. The calling code will operate under this assumption. If an inconsistency arises (such as that this element doesn’t act like the idenity in a future multiplication), the code will stop and restore itself to its previous state inside the order method. It will be back in the order function testing if the element to the first power equals the group identity, and this test will fail. It will then raise the power, make the equality test, and return that the order is two. The calling code will try this scenario.</p>
+<p>The execution path of a successfully terminated program written this way can be considered a “model” of its constraints. Perhaps this approach would allow a program to be written in terms of actual completed infinities, to operate exactly and symbolically on infinite data structures.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

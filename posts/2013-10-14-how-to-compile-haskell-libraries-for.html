@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How to compile Haskell libraries for Heroku</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>How to compile Haskell libraries for Heroku</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 14, 2013</h5>
+</div>
+
+<div>
+  <p>I noticed that all forks of the Haskell buildpack for Heroku are using outdated binaries. So I began what turned out to be a long journey to create Heroku-compatible binaries for the the newest versions of GHC and Cabal. It ultimately succeeded and you can use my method to build whatever Haskell binaries you want and they will be ready to run in a Heroku instance.</p>
+<p><strong>Step 1.</strong> Clone, patch, and deploy a Vulcan build server.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> clone https://github.com/heroku/vulcan.git
+<span class="kw">cd</span> vulcan
+<span class="kw">curl</span> https://gist.github.com/begriffs/6980915/raw/2b1cb9ba4d4dc8b6c896eae14bbc7804d2e11f29/vulcan-haskell.patch <span class="kw">|</span> <span class="kw">git</span> apply
+<span class="kw">bundle</span>
+<span class="kw">vulcan</span> create [YOUR-SERVER-NAME]</code></pre>
+<p><strong>Step 2.</strong> Download and extract the Haskell source code of the package you want to build. (It should include a <code>Setup.hs</code> file.) Then submit it to your build server.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># in your Haskell package's source directory</span>
+ 
+<span class="kw">vulcan</span> build --verbose -c <span class="st">&quot;export PATH=</span><span class="dt">\$</span><span class="st">PATH:/app/vendor/ghc-7.6.3/bin &amp;&amp; export LD_LIBRARY_PATH=/app/vendor/ghc-libs:/usr/lib &amp;&amp; ghc -L/app/vendor/ghc-libs --make Setup &amp;&amp; ./Setup configure --prefix=/tmp/built &amp;&amp; ./Setup build &amp;&amp; ./Setup install&quot;</span> -p /tmp/built</code></pre>
+<p><strong>Step 3.</strong> Download the binaries. The build process will output a link for you to follow to get a tarball of the results.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

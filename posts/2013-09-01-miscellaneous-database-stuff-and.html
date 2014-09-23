@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Miscellaneous database stuff and an interesting book</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Miscellaneous database stuff and an interesting book</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">September  1, 2013</h5>
+</div>
+
+<div>
+  <p>I was wrong when I said before that the Groundhog ORM lacks documentation. It’s on Hackage, although the docs for the migration DSL are in the <code>groundhog-th</code> package. So tonight I sent a pull request to the Groundhog repo to add a readme with my simple usage example and links to the other docs. Might be helpful for people who stumble on the project through Github rather than Hackage.</p>
+<p>Given the extensive docs for Groundhog, I really don’t need to detour to make tutorials. I should probably keep focusing on following the Yesod book. The Yesod section on persistence actually mentions Groundhog,</p>
+<blockquote>
+<p>“Earlier versions of Persistent made much heavier usage of Template Haskell. Starting with 0.6, there is a new architecture inspired by the groundhog package. This approach uses phantom types to carry a lot of the burden.”</p>
+</blockquote>
+<p>Apparently much of the Groundhog goodness is now incorporated into Yesod’s persistence library. Tonight I started playing with the models in <code>config/models</code> but I have nothing interesting to report. It’s just the stuff you will find in the Yesod book.</p>
+<p>However, speaking of books, somebody recommended one to me in my earlier post about using mathematical structures in code. It’s called <a href="http://amzn.com/032163537X">Elements of Programming</a> and now it’s being shipped to my house. The authors discuss general algorithms with actions and orbits (you might remember these from group theory). ordered structures, rearrangements, partitioning, “coordinate” structures…general ideas that use the taxonomy of abstract algebra. The examples in the book are written in C++, but think how smoothly they will work implemented in Haskell. It’s going to be beautiful.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

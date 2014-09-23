@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Don't be partial to partial functions</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Don't be partial to partial functions</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 18, 2013</h5>
+</div>
+
+<div>
+  <p>Day 2. To be honest, today I tried basic stuff like implementing fizzbuzz in Haskell. I’ll probably learn most by writing as many actual programs as I can. I’m sure all this typesystem stuff will fade into the background as I concentrate on writing useful things.</p>
+<p>However, who really wants to read a blog post showing a fizzbuzz implementation? I’m guessing you want something more thought-provoking as you wait for my basic language skills to get a little stronger.</p>
+<p>So here’s one observation: I was reading about lists in <u>Learn You a Haskell</u> and I came across this example</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">h<span class="fu">&gt;</span> head []
+<span class="fu">***</span> <span class="dt">Exception</span><span class="fu">:</span> Prelude.head<span class="fu">:</span> empty list</code></pre>
+<p>This is an example of one of the <em>partial functions</em> defined in the standard library. It’s called partial because it cannot handle all the values in its domain.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">h<span class="fu">&gt;</span> <span class="fu">:</span>t head
+head<span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> a
+h<span class="fu">&gt;</span> <span class="fu">:</span>t []
+[]<span class="ot"> ::</span> [a]</code></pre>
+<p>GHCI reports that the empty list is indeed in the domain of <code>head</code> (namely, lists). Unlike Ruby or Clojure, Haskell does not commit Tony Hoare’s “<a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">billion dollar mistake</a>” of allowing null values so there’s no option when taking the head of an empty list but to throw an exception.</p>
+<p>The Haskell docs suggest avoiding partial functions altogether. The language provides alternative constructions. Let’s look at one. Rather than test for an empty list and conditionally take its <code>head</code>, the docs suggest we use a <code>case</code> statement.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- replace this</span>
+<span class="kw">if</span> null xs
+  <span class="kw">then</span> g
+  <span class="kw">else</span> h (head xs) (tail xs)
+
+<span class="co">-- with this</span>
+<span class="kw">case</span> xs <span class="kw">of</span>
+  [] <span class="ot">-&gt;</span> g
+  y<span class="fu">:</span>ys <span class="ot">-&gt;</span> h y ys</code></pre>
+<p>Only this doesn’t entirely protect us at runtime! Consider this snippet where I “forget” to list a pattern in the case statement.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">h<span class="fu">&gt;</span> <span class="kw">case</span> [] <span class="kw">of</span> x<span class="fu">:</span>xs <span class="ot">-&gt;</span> x
+<span class="fu">***</span> <span class="dt">Exception</span><span class="fu">:</span> <span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">9</span><span class="fu">:</span><span class="dv">1</span><span class="fu">-</span><span class="dv">20</span><span class="fu">:</span> <span class="dt">Non</span><span class="fu">-</span>exhaustive patterns <span class="kw">in</span> <span class="kw">case</span></code></pre>
+<p>I would have liked the type system to notice my sloppiness ahead of time. After jumping on #haskell I learned that GHCI does actually notice something is awry, but I have to coax it to tell me.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">h<span class="fu">&gt;</span> <span class="fu">:</span>set <span class="fu">-</span><span class="dt">Wall</span>                <span class="co">-- warn about everything</span>
+h<span class="fu">&gt;</span> <span class="fu">:</span>set <span class="fu">-</span><span class="dt">Werror</span>              <span class="co">-- treat warnings as errors</span>
+h<span class="fu">&gt;</span> <span class="kw">case</span> [] <span class="kw">of</span> [] <span class="ot">-&gt;</span> <span class="st">&quot;empty&quot;</span>  <span class="co">-- this could sort of work</span>
+ 
+<span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">15</span><span class="fu">:</span><span class="dv">1</span><span class="fu">:</span> <span class="dt">Warning</span><span class="fu">:</span>
+    <span class="dt">Pattern</span> match(es) are non<span class="fu">-</span>exhaustive
+    <span class="dt">In</span> a <span class="kw">case</span> alternative<span class="fu">:</span> <span class="dt">Patterns</span> not matched<span class="fu">:</span> _ <span class="fu">:</span> _
+ 
+<span class="fu">&lt;</span>no location info<span class="fu">&gt;:</span>
+<span class="dt">Failing</span> due to <span class="fu">-</span><span class="dt">Werror</span><span class="fu">.</span></code></pre>
+<p>The reason that a missing case is not considered an error is that it is not always feasible to determine all possibilities. Sometimes a function parameter can come from another module, and GHC does not do whole-program analysis. Some people defensively write a default case like this</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">h<span class="fu">&gt;</span> <span class="kw">case</span> [] <span class="kw">of</span> x<span class="fu">:</span>_ <span class="ot">-&gt;</span> x ; _ <span class="ot">-&gt;</span> <span class="st">&quot;some info about the function&quot;</span>
+<span class="st">&quot;some info about the function&quot;</span></code></pre>
+<p>In the future I’ll be on the lookout for partial functions inside conditionals, and will try to replace them with pattern matching.</p>
+<p>Oh, and coming back down to earth… would anyone like to share their most elegant implementation of fizzbuzz? :)</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

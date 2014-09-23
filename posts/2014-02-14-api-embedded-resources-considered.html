@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>API embedded resources considered harmful</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>API embedded resources considered harmful</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">February 14, 2014</h5>
+</div>
+
+<div>
+  <div class="alert alert-warning" role="alert">
+<h4>
+Update!
+</h4>
+Another way to handle embedded resources is by including or excluding them explicitly with query parameters. For instance below we could pass a parameter like <code>?include_cast=true</code> to the <code>/movie</code> endpoint. It’s possibly a more pragmatic way to customize the response.
+</div>
+<h4 id="the-false-premise">The False Premise</h4>
+<p>If you aren’t familiar with resource embedding, it’s where an API response contains related information that a client might want. An example would be to include cast information in a response about a movie:</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Stalker&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;year&quot;</span><span class="fu">:</span> <span class="st">&quot;1979&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;director&quot;</span><span class="fu">:</span> <span class="st">&quot;Andrei Tarkovsky&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;language&quot;</span><span class="fu">:</span> <span class="st">&quot;Russian&quot;</span><span class="fu">,</span>
+ 
+  <span class="dt">&quot;_embedded&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+    <span class="dt">&quot;cast&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Alisa Brunovna Freyndlikh&quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;December 8, 1934&quot;</span> <span class="fu">}</span><span class="ot">,</span>
+      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Aleksandr Leonidovich Kaydanovskiy &quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;July 23, 1946&quot;</span> <span class="fu">}</span><span class="ot">,</span>
+      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Otto Alekseevich Solonitsyn&quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;August 30, 1934&quot;</span> <span class="fu">}</span>
+    <span class="ot">]</span>
+  <span class="fu">}</span>
+<span class="fu">}</span></code></pre>
+<p>We’re taught that including embedded information saves the client from having to make additional HTTP requests. The only way to get more information is to make a fresh request, right?</p>
+<p>Not necessarily. For the past fifteen years the mainstream web development community has unfortunately neglected the HTTP spec. You see, by 1999 people had been using and learning from HTTP 1.0 for a few years. It had become obvious that the one-resource-per-request design was awkward. There is overhead to making web requests, from setting up TCP to querying DNS. When possible it makes sense to reuse an existing HTTP connection. Hence the HTTP 1.1 design committee invented the <em>keep-alive</em> header and <a href="https://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a>.</p>
+<p><img src="../images/pipeline.png" style="float:right" /> With pipelining you load several requests into one connection. Sadly its support has been halting and incomplete because of subtleties about slow requests holding up later ones (the “head of line” problem). That subtlety means you shouldn’t pipeline all assets by default. In a way browsers threw out the baby with the bathwater by not allowing you to pipeline selectively.</p>
+<p>Although we can’t use real HTTP pipelining to put related requests together (at least not until <a href="http://tools.ietf.org/html/draft-ietf-httpbis-http2-10#section-5">HTTP/2</a>), there is another trick we can use, and it’s a trick we can put into server middleware so it’s transparent to our application code. But before getting into that, why bother?</p>
+<h4 id="the-problems-with-embedding">The Problems with Embedding</h4>
+<p>What are the downsides with embedding, anyway? It provides helpful information and anticipates the client’s needs. If someone asks you to pass the salt, why not pass the pepper too?</p>
+<p>In the movie example the related cast information was no big deal. Pretty small. However in real requests this additional data can be large, and it’s not always needed. Also including related data is a slippery slope. We could include reviews, showtimes, historical popularity, and similar movies. There’s a limit to how much you choose to include.</p>
+<p>What some people tend to do is create multiple similar endpoints. In our example these endpoints might include a movie-with-its-reviews and a movie-with-cast. Even when developers don’t intentionally start out designing the system this way its evolution often forces the design. Developers end up creating convenience endpoints to serve particular pages. After all, the app should be efficient!</p>
+<p>However it’s not without problems. First, the backend gets harder to maintain. It accumulates similar controller actions with more tests and docs. Second, the chosen subsets are arbitrary. For (n) related datasets there are (2^n) possible embedded-subsets. So the client gets stuck with either more or less data than it needs. Third, independently limiting or filtering each embedded list is hard and might be implemented idiosyncratically and poorly in the app.</p>
+<h4 id="the-solution">The Solution</h4>
+<p>The way to avoid these problems and keep the client and server light and flexible is through <em>relational batch requests</em>. Relational in the sense that we create self-contained root-level resources that accept query parameters to filter them appropriately. Batched in the sense that we combine requests for related resources into a single HTTP request – a spontaneous request that the application code doesn’t need to name or prepare for in any special way.</p>
+<p>If we have an identifier (in this example numerical) for a movie imagine we could send all these requests at once</p>
+<pre><code>Single request:
+ 
+GET /movies/12
+GET /cast?movie=12
+GET /reviews?movie=12</code></pre>
+<p>In fact you can, using a server middleware such as <a href="https://github.com/arsduo/batch_api">arsduo/batch_api</a> which replays the batched requests one by one locally on the server and combines the results. Your server code can’t tell the difference. And each request is allowed to use unrestricted HTTP, with headers and params and all. I’ll show you my idea for a clean Angular module to send the batch requests. But first let’s consider a knee-jerk reaction to these kind of routes.</p>
+<p>Why are we routing to <code>/cast?movie=12</code> rather than <code>/movies/12/cast</code>? The former is not as conventional, at least in the Rails community. But remember this is an API. The endpoint URLs are not providing a visible sense of structure in a visitor’s address bar. I don’t see any benefits from nesting <code>cast</code> under <code>movies/:id</code>. All it does is make the queries less expressive. If you want a list of cast filtered in some other way you will need the root-level <code>cast</code> route anyway, and now you have two routes to maintain.</p>
+<p>Note that relational batch requests can’t handle every kind of request efficiently. For instance aggregate queries should happen on the server. If you want the average rating of a movie it’s overkill to request <code>/reviews?movie=12</code> (even in parallel) and do the math when a fast backend database could do that. Unless someone develops a kind of “APIQL” like <code>l/reviews?movie=12&amp;amp;select=avg(rating)</code>. Interesting, does anyone know of a library for this?</p>
+<p>To make it easy to consume batched APIs we could turn to Angular with its tools to abstract the traditional browser Javascript platform. One might write an extension of Angular’s <code>$resource</code> object that is built from other resources. The key is easy composition like this:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">b = <span class="fu">batch</span>(<span class="st">'/batch_endpoint'</span>, {
+  <span class="dt">movie</span>:   [<span class="st">'get'</span>,   <span class="fu">$resource</span>(<span class="st">'/movies/:movieId'</span>, { <span class="dt">movieId</span>: <span class="st">'@id'</span> }) ],
+  <span class="dt">cast</span>:    [<span class="st">'query'</span>, <span class="fu">$resource</span>(<span class="st">'/cast?movie=:movieId'</span>, { <span class="dt">movieId</span>: <span class="st">'@id'</span> }) ],
+  <span class="dt">reviews</span>: [<span class="st">'query'</span>, <span class="fu">$resource</span>(<span class="st">'/reviews?movie=:movieId'</span>, { <span class="dt">movieId</span>: <span class="st">'@id'</span> }) ]
+});
+
+<span class="co">// b.execute() returns</span>
+<span class="co">// { movie: { ... }, cast: [ ... ], reviews: [ ... ] }</span></code></pre>
+<p>It could work by briefly registering an <code>$http</code> request interceptor and running the quoted verb against each resource. The interceptor will sniff the urls and headers and save them to hidden variables. Then when <code>execute()</code> is called on the batch it will make a request to the batch endpoint properly formatted for the batch middleware.</p>
+<p>Ultimately the client interface will be most pleasant if it is compositional. In other words if I can take regular resources and build more interesting things out of them recursively. There’s nothing stopping a batch from containing other batches. Or containing a <a href="https://github.com/begriffs/angular-paginated-resource">paginated resource</a> rather than a plain one. Finally notice how in this approach the client is in charge of the format of the response. It can pull together any resources and assign them to arbitrary keys. I think with this approach we can create nimbler APIs that are fun to use and easy to maintain without sacrificing performance.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Directional Quotes</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Directional Quotes</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">July  5, 2011</h5>
+</div>
+
+<div>
+  <p>Nesting ambidextrous quotes requires either escaping <code>&quot;he said \&quot;hi\&quot;&quot;</code> or alternating with single quotes <code>&quot;he said 'hi'&quot;</code>. Wouldn’t using book-style quotes <code>“he said “hi””</code>i be easier? If this all seems unimportant, think of it this way: imagine how awkward it is to use the pipe character <code>|</code> as ambidextrous parentheses. <code>|2*\|3+4\|| = 14</code>.</p>
+<p>Not only does it seem easier to use left and right quotes, it might even improve application security. SQL injection often uses quoting tricks, which are easily unmasked when properly expressed. Injecting value =</p>
+<pre class="sourceCode sql"><code class="sourceCode sql">anything<span class="st">' OR '</span>x<span class="st">'='</span>x</code></pre>
+<p>in</p>
+<pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="kw">table</span> <span class="kw">WHERE</span> <span class="kw">column</span> = <span class="st">'value'</span></code></pre>
+<p>will create an unrestricted listing of the table. However, that malicious value’s quotes fail to balance when expressed as left and right quotes:</p>
+<pre class="sourceCode sql"><code class="sourceCode sql">anything” <span class="kw">OR</span> “x”=“x</code></pre>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

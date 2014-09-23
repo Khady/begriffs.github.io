@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Haskell postgresql-simple examples, part 1</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Haskell postgresql-simple examples, part 1</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">September 10, 2013</h5>
+</div>
+
+<div>
+  <p>I’ve been working on a simple api server, and getting confused by the sheer number of new Haskell things I need to learn. There are many combinations of http servers, frameworks, database libraries, and json parsing to try. So I’m taking a different route. I’m learning each piece in isolation so later I can put them together easily. Starting with database access.</p>
+<p>Let’s take the magic out of talking to Postgres. How do you connect to an existing database and read/write data? The most direct way appears to be the <code>postgresql-simple</code> package. There’s an even lower level library called <code>postgresql-libpq</code> that wraps the C-based libpq, but I don’t relish the idea of managing a database connection and other low-level details.</p>
+<p>Can’t get simpler than this: add two and two in sql. No table access needed.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Database.PostgreSQL.Simple</span>
+<span class="kw">import </span><span class="dt">Control.Monad</span>
+<span class="kw">import </span><span class="dt">Control.Applicative</span>
+
+main <span class="fu">=</span> <span class="kw">do</span>
+  conn <span class="ot">&lt;-</span> connect defaultConnectInfo {
+    connectDatabase <span class="fu">=</span> <span class="st">&quot;haskell&quot;</span>
+  }
+
+  putStrLn <span class="st">&quot;2 + 2&quot;</span>
+  mapM_ print <span class="fu">=&lt;&lt;</span> ( query_ conn <span class="st">&quot;select 2 + 2&quot;</span><span class="ot"> ::</span> <span class="dt">IO</span> [<span class="dt">Only</span> <span class="dt">Int</span>] )</code></pre>
+<p>Some notes about this code. Notice how you can extend <code>defaultConnectInfo</code>. It’s more future-proof to do this than trying to specify an entire <code>ConnectInfo</code> yourself. This is Haskell, after all, you can’t just omit a field and the library might expect more fields in future versions. Extending the defaults will be fine because the new default will cover the new type.</p>
+<p>Also, other docs for this library show the use of <code>query</code>, but you need <code>query_</code> for queries which take no arguments. Speaking of docs in general, be careful what Google tells you. I was looking at the Hackage docs for version 0.1.5 of this library for a long time because that is what Google had indexed. The newest version as of this writing is 0.3.6! (Hackage should really display a glaring warning when you look at old versions of a package.)</p>
+<div class="alert alert-info" role="alert">
+<h4>
+Typing details and conventions – safe to ignore.
+</h4>
+The naming style of <code>query_</code> flouts Haskell conventions where a trailing underscore means that the function suppresses a return type. For instance, we’re using <code>mapM_</code> in the code. Look how it differs from its scoreless brother <code>MapM</code> is just map that burrows along through a monad. The <code>print</code> function returns <code>IO ()</code> and <code>mapM_</code> is compatible with that. The <code>query_</code> function returns <code>IO</code> of a certain type of array, which is not compatible to be chained with <code>print</code>s.
+</div>
+<p>On to the next query.</p>
+<pre class="haskll"><code>putStrLn &quot;3 + 5&quot;
+mapM_ print =&lt;&lt; ( query conn &quot;select ? + ?&quot; (3 :: Int, 5 :: Int) :: IO [Only Int] )</code></pre>
+<p>What is this nasty <code>IO [Only Int]</code> annotation? Might make you yearn for a looser language. It’s an instance of a general Haskell principle. The less you <em>do</em> with a value, the more you have to describe its construction. All we’re doing with our query results is looping through its rows (one row it turns out), and printing it. All print wants is an instance of Show. That’s all the compiler can infer. The SQL string is kind of opaque. It’s a foreign language to the compiler, so the compiler cannot see we are adding numbers.</p>
+<p>In fact here’s another digression. SQL is like a foreign function interface isn’t it? One based on string interpolation. If we instead built SQL expressions as Haskell datatypes then the compiler could know what we want. Hmm, I wonder what part two of this article will be about…</p>
+<p>So our annotation of <code>IO</code> and <code>Int</code> is clear. What about this <code>Only</code> thing? It’s some terminology created by <code>postgresql-simple</code> to help protect you from injection. The <code>query</code> function takes a final argument of type <code>FromRow</code>, which is built out of <code>FromField</code>s. Specifically arrays, vectors, or tuples of <code>FromField</code> – or <code>Only FromField</code> for a single one.</p>
+<div class="alert alert-info" role="alert">
+<h4>
+Digression
+</h4>
+In Haskell I don’t think you can properly make recursive definitions with tuples. This library in particular allows you to make <code>FromRow</code> on <code>FromField</code> tuples of length two through ten. They actually specify the constructors for each of these eight sizes. Kind of crazy, isn’t it? From what I can gather it’s a flaw in Haskell’s design that violates the <a href="https://en.wikipedia.org/wiki/Zero_one_infinity_rule">Zero, One, Infinity Rul</a>e and is remedied in Agda using dependent types. To construct bigger <code>FromRow</code> tuples you can combine them with the library-defined <code>(:.)</code> operator.
+</div>
+<p>So much for queries with and without arguments. How about commands? (This example assumes an existing table called <code>words</code> with a column named <code>word</code>.)</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">putStrLn <span class="st">&quot;Enter a word&quot;</span>
+word <span class="ot">&lt;-</span> getLine
+execute conn <span class="st">&quot;insert into words (word) values (?)&quot;</span> <span class="fu">$</span> <span class="dt">Only</span> word</code></pre>
+<p>Not much type annotation needed here, because the way we gather input tells the compiler what type it must be. Notice we use the <code>execute</code> function now. I first tried <code>query</code>, but it gives a runtime error when you try using destructive operations from <code>query</code>. Another level of safety I guess.</p>
+<p>There you go, some pretty “normal” code for doing SQL. In part two we’ll see a more streamlined way to interact with the database, and one that helps the compiler infer more and save you typing. But it’s nice to see the non-magical way first, isn’t it?</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

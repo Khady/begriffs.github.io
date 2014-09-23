@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Some extra safety with Yesod routing</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Some extra safety with Yesod routing</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 26, 2013</h5>
+</div>
+
+<div>
+  <p>Today I played with adding some routes to my sample chat API server. I have nothing original to report, it’s all just stuff in the <a href="http://www.yesodweb.com/book/routing-and-handlers">Yesod Book</a>. But one interesting thing I noticed about routing is that you add constraints by using types – either the standard ones or your own. This allows you to restrict the valid URLs for your app without much boilerplate code.</p>
+<p>For instance, imagine a user view in your app, which needs a numerical user id passed in the route. Add a line in <code>config/routes</code> like <code>/user/#Integer UserR GET</code></p>
+<p>If I then hit the app at <code>/user/hi</code> it gives me a 404 immediately. It doesn’t have to run any of my code which would probably try to run a database query. It just knows that the route is hopeless because it can’t turn “hi” into an Integer.</p>
+<p>Using your own types and <a href="http://www.haskell.org/haskellwiki/Smart_constructors">smart constructors</a> you can easily make validations which will be used both in your controllers (called <em>handlers</em> in Yesod land) and in the generated routes. Talk about <a href="https://en.wikipedia.org/wiki/Don">DRY</a>, this single source of truth coordinates several pieces of your app. You know what’s also dry about Yesod? Before sending requests off to your handlers it goes through a round of URL parsing to make the paths canonical. If someone hits <code>/user//1/</code> the framework will actually send a 301 redirect to <code>/user/1</code>, ensuring your search engine juice stays juicy.</p>
+<p>What other types might be useful for routing validation? Maybe something like ModernYear that ensures a year after 1900 for people’s birthdays.</p>
+<p>Anyway, while thinking about it, I came across a crazy bit of Haskell research called <em>type-level natural numbers</em>. The implementations so far look super awkward but the idea is cool: to allow programmers to restrict the numbers used in constructing a type and to allow the compiler to enforce the restriction. So using the wrong values or even creating a situation which might use the wrong values could be stopped before you run the program. Yeah, that sucked up lots of my time tonight and didn’t lead to any blogworthy epiphanies.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

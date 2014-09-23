@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Haskell Applicative Functors Explained Without Words</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Haskell Applicative Functors Explained Without Words</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 28, 2013</h5>
+</div>
+
+<div>
+  <p>Shh! Words get in your way. Let’s play functional charades, where you will understand a function by watching it in silence.</p>
+<h4 id="section">&lt;$&gt;</h4>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">$</span> <span class="dv">2</span>
+<span class="dv">7</span>
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">2</span>
+<span class="dt">Just</span> <span class="dv">7</span>
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Nothing</span>
+<span class="dt">Nothing</span>
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">6</span>, <span class="dv">7</span>]
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> []
+[]
+
+<span class="fu">&gt;</span> ((<span class="dv">5</span><span class="fu">+</span>) <span class="fu">.</span> read) <span class="fu">$</span> <span class="st">&quot;2&quot;</span>
+<span class="dv">7</span>
+<span class="fu">&gt;</span> ((<span class="dv">5</span><span class="fu">+</span>) <span class="fu">.</span> read) <span class="fu">&lt;$&gt;</span> getLine
+<span class="dv">2</span><span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
+<span class="dv">7</span>
+
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">$</span> (<span class="dv">3</span><span class="fu">+</span>) <span class="dv">2</span>
+<span class="dv">10</span>
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> (<span class="dv">3</span><span class="fu">+</span>) <span class="fu">$</span> <span class="dv">2</span>
+<span class="dv">10</span>
+
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Left</span> <span class="dv">2</span>
+<span class="dt">Left</span> <span class="dv">7</span>
+<span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Right</span> <span class="dv">2</span>
+<span class="dt">Right</span> <span class="dv">7</span>
+
+<span class="fu">&gt;</span> getZipList <span class="fu">$</span> <span class="dt">ZipList</span> [<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>,<span class="dv">2</span>]
+<span class="fu">&gt;</span> getZipList <span class="fu">$</span> (<span class="fu">+</span><span class="dv">5</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">ZipList</span> [<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">6</span>,<span class="dv">7</span>]</code></pre>
+<h4 id="section-1">&lt;*&gt;</h4>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Just</span> <span class="dv">5</span>)
+<span class="dt">Just</span> (<span class="fu">+</span><span class="dv">5</span>)
+<span class="fu">&gt;</span> <span class="dt">Just</span> (<span class="fu">+</span><span class="dv">5</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Just</span> <span class="dv">2</span>)
+<span class="dt">Just</span> <span class="dv">7</span>
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">5</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">2</span>
+<span class="dt">Just</span> <span class="dv">7</span>
+
+<span class="fu">&gt;</span> (<span class="fu">||</span>) <span class="dt">True</span> <span class="dt">False</span>
+<span class="dt">True</span>
+<span class="fu">&gt;</span> (<span class="fu">||</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Just</span> <span class="dt">True</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Just</span> <span class="dt">False</span>)
+<span class="dt">Just</span> <span class="dt">True</span>
+<span class="fu">&gt;</span> (<span class="fu">||</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Just</span> <span class="dt">True</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Nothing</span>
+<span class="dt">Nothing</span>
+
+<span class="fu">&gt;</span> (<span class="fu">||</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Left</span> <span class="dt">True</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Right</span> <span class="dt">False</span>)
+<span class="dt">Left</span> <span class="dt">True</span>
+<span class="fu">&gt;</span> (<span class="fu">||</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Right</span> <span class="dt">True</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Left</span> <span class="dt">False</span>)
+<span class="dt">Left</span> <span class="dt">False</span>
+<span class="fu">&gt;</span> (<span class="fu">&amp;&amp;</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Right</span> <span class="dt">False</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Left</span> <span class="dt">False</span>)
+<span class="dt">Left</span> <span class="dt">False</span>
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Left</span> <span class="dv">5</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Left</span> <span class="dv">2</span>)
+<span class="dt">Left</span> <span class="dv">5</span>
+
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="dv">5</span> <span class="dv">2</span>
+<span class="dv">7</span>
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> [<span class="dv">5</span>] <span class="fu">&lt;*&gt;</span> [<span class="dv">2</span>]
+[<span class="dv">7</span>]
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>] <span class="fu">&lt;*&gt;</span> [<span class="dv">10</span>,<span class="dv">100</span>]
+[<span class="dv">11</span>,<span class="dv">101</span>,<span class="dv">12</span>,<span class="dv">102</span>]
+
+<span class="fu">&gt;</span> getZipList <span class="fu">$</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">ZipList</span> [<span class="dv">1</span>,<span class="dv">2</span>] <span class="fu">&lt;*&gt;</span> <span class="dt">ZipList</span> [<span class="dv">10</span>,<span class="dv">100</span>]
+[<span class="dv">11</span>,<span class="dv">102</span>]
+
+<span class="fu">&gt;</span> (<span class="fu">++</span>) <span class="st">&quot;ab&quot;</span> <span class="st">&quot;cd&quot;</span><span class="ot"> ::</span> [<span class="dt">Char</span>]
+<span class="st">&quot;abcd&quot;</span>
+<span class="fu">&gt;</span> (<span class="fu">++</span>) <span class="fu">&lt;$&gt;</span> getLine <span class="fu">&lt;*&gt;</span> getLine
+ab<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
+cd<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
+<span class="st">&quot;abcd&quot;</span></code></pre>
+<h4 id="pure">pure</h4>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> <span class="dv">5</span>
+<span class="dv">5</span>
+<span class="fu">&gt;</span> (pure <span class="dv">5</span>)<span class="ot"> ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
+<span class="dt">Just</span> <span class="dv">5</span>
+<span class="fu">&gt;</span> (pure <span class="dv">5</span>)<span class="ot"> ::</span> <span class="dt">Either</span> <span class="dt">Int</span> <span class="dt">Int</span>
+<span class="dt">Right</span> <span class="dv">5</span>
+<span class="fu">&gt;</span> (pure <span class="dv">5</span>)<span class="ot"> ::</span> [<span class="dt">Int</span>]
+[<span class="dv">5</span>]
+<span class="fu">&gt;</span> getZipList <span class="fu">$</span> (pure <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">ZipList</span> <span class="dt">Int</span>)
+[<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span> <span class="fu">...</span>]
+<span class="fu">&gt;</span> (pure <span class="dv">5</span>) <span class="dv">2</span>
+<span class="dv">5</span>
+
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">5</span> <span class="fu">&lt;*&gt;</span> pure <span class="dv">2</span>
+<span class="dt">Just</span> <span class="dv">7</span>
+<span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>] <span class="fu">&lt;*&gt;</span> pure <span class="dv">5</span>
+[<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>]
+<span class="fu">&gt;</span> getZipList <span class="fu">$</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">ZipList</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>] <span class="fu">&lt;*&gt;</span> pure <span class="dv">5</span>
+[<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>]
+<span class="fu">&gt;</span> (<span class="fu">++</span>) <span class="fu">&lt;$&gt;</span> getLine <span class="fu">&lt;*&gt;</span> pure <span class="st">&quot;!&quot;</span>
+hi<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
+<span class="st">&quot;hi!&quot;</span>
+<span class="fu">&gt;</span> (<span class="fu">+</span><span class="dv">2</span>) <span class="fu">&lt;$&gt;</span> pure <span class="dv">5</span>
+<span class="dv">7</span></code></pre>
+<p>Now you know.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

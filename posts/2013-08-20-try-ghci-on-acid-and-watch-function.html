@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Try GHCi on Acid and watch function arguments melt away</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Try GHCi on Acid and watch function arguments melt away</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 20, 2013</h5>
+</div>
+
+<div>
+  <p><img src="../images/trippy.jpg" class="right" /> Day 5. I’m doing exercises from <a href="http://www.haskell.org/haskellwiki/H-99:_Ninety-Nine_Haskell_Problems">H-99</a>, and challenging myself to make answers that don’t use named function arguments. Although arguments can help describe a function’s purpose they are often just clutter. In fact uniformly renaming a variable in a function has no effect on the function’s output, a phenomenon known as α-congruence in lambda calculus.</p>
+<p>Because this is Haskell we’re talking about, my idle preoccupation (finding a point-free representation of functions) is of course already someone’s PhD thesis. I want to show you a cool tool that will help you strip out extraneous variables and examine the interesting results.</p>
+<p>To see our code melt down our monitors and have the variables fall out like loose teeth we need to use GHCi on Acid. If you’re using a mac then turn on, tune in, and drop out.</p>
+<p>The installation procedure is slightly different than what I read in the docs. Assuming your machine has <a href="http://brew.sh/">homebrew</a> and <a href="http://www.haskell.org/cabal/">cabal</a> installed, run this:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">brew</span> install pcre
+<span class="kw">cabal</span> install lambdabot
+<span class="kw">cabal</span> isntall goa</code></pre>
+<p>That will take a while. Now create a <code>~/.ghci</code> file with the following</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">:</span>m <span class="fu">-</span> <span class="dt">Prelude</span>
+<span class="fu">:</span>m <span class="fu">+</span> <span class="dt">GOA</span>
+setLambdabotHome <span class="st">&quot;/Users/j/Library/Haskell/ghc-7.6.3/lib/lambdabot-4.3/bin&quot;</span>
+<span class="fu">:</span>def bs        lambdabot <span class="st">&quot;botsnack&quot;</span>
+<span class="fu">:</span>def pl        lambdabot <span class="st">&quot;pl&quot;</span>
+<span class="fu">:</span>def unpl      lambdabot <span class="st">&quot;unpl&quot;</span>
+<span class="fu">:</span>def redo      lambdabot <span class="st">&quot;redo&quot;</span>
+<span class="fu">:</span>def undo      lambdabot <span class="st">&quot;undo&quot;</span>
+<span class="fu">:</span>def index     lambdabot <span class="st">&quot;index&quot;</span>
+<span class="fu">:</span>def docs      lambdabot <span class="st">&quot;docs&quot;</span>
+<span class="fu">:</span>def instances lambdabot <span class="st">&quot;instances&quot;</span>
+<span class="fu">:</span>def hoogle    lambdabot <span class="st">&quot;hoogle&quot;</span>
+<span class="fu">:</span>def source    lambdabot <span class="st">&quot;fptools&quot;</span>
+<span class="fu">:</span>def <span class="kw">where</span>     lambdabot <span class="st">&quot;where&quot;</span>
+<span class="fu">:</span>def version   lambdabot <span class="st">&quot;version&quot;</span>
+<span class="fu">:</span>def src       lambdabot <span class="st">&quot;src&quot;</span></code></pre>
+<p>Your <code>setLambdabotHome</code> will differ from mine. You may only need to change your home directory and the ghc version number to make it work. Worst case just search for the <code>bin</code> folder of <code>lambdabot</code>.</p>
+<p>Now, if everything was successful, your GHCi prompt should say <code>Prelude, GOA&gt;</code> and we can begin using the trippy <em>pl</em> command. Let’s start with a low dose and eliminate a variable that we all know shouldn’t be there</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>pl \x <span class="ot">-&gt;</span> succ x
+ succ</code></pre>
+<p>It detected that our anonymous function which takes a value only to pass it to <code>succ</code> behaves no differently from <code>succ</code> itself. The Greek alphabet lovers among you will be happy to know this is called η-conversion. Now a harder example. Let’s make a function similar to <code>(!!)</code> but which uses 1-based indexing. I can think of one that takes two arguments, but let’s let :pl attack it.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>pl \xs i <span class="ot">-&gt;</span> xs <span class="fu">!!</span> (pred i)
+ (<span class="fu">.</span> pred) <span class="fu">.</span> (<span class="fu">!!</span>)</code></pre>
+<p>What an interesting result. Do you think it’s an improvement? I kind of like it, built as it is purely from simple functions. However its meaning doesn’t jump out at me. Let’s think it through.</p>
+<p>Fist, what kind of a function is <code>(. pred)</code> and how is it suitable to compose with <code>(!!)</code>?</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">.</span> pred)
+(<span class="fu">.</span> pred)<span class="ot"> ::</span> <span class="dt">Enum</span> b <span class="ot">=&gt;</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c
+<span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">!!</span>)
+<span class="ot">(!!) ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> a
+<span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">.</span>pred) <span class="fu">.</span> (<span class="fu">!!</span>)
+(<span class="fu">.</span>pred) <span class="fu">.</span><span class="ot"> (!!) ::</span> [c] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> c</code></pre>
+<p>Starting with the latter, it’s a function which takes a list and returns a new function – which is expecting an Integer argument and will give back a list item. Now <code>(. pred)</code> takes a function, and given this one it will return a function with the same domain. In this case a list. And what is the range? Functions from Int to list items. Hey, that’s the what we wanted originally with our 1-based element getter.</p>
+<p>Honestly I can’t say it’s easy for me to think through this strange composition, but many of the point-free results do look pretty and symmetric. For instance, check out how to modify a function’s second or first argument</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- modify the second argument</span>
+<span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>pl \a b <span class="ot">-&gt;</span> f(a (g b))
+ (f <span class="fu">.</span>) <span class="fu">.</span> (<span class="fu">.</span> g)
+
+<span class="co">-- modify the first argument</span>
+<span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>pl \a b <span class="ot">-&gt;</span> f((g a) b)
+ (f <span class="fu">.</span>) <span class="fu">.</span> g</code></pre>
+<p>It looks natural this way. Now the <code>:pl</code> command goes beyond stringing together composition and can summon strange functions I don’t know about yet. For instance, look how it rewrites a function that checks if a list is a palindrome.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>pl \xs <span class="ot">-&gt;</span> xs <span class="fu">==</span> reverse xs
+ ap (<span class="fu">==</span>) reverse
+<span class="dt">Prelude</span> <span class="dt">GOA</span><span class="fu">&gt;</span> <span class="fu">:</span>pl \xs <span class="ot">-&gt;</span> reverse xs <span class="fu">==</span> xs
+ (<span class="fu">==</span>) <span class="fu">=&lt;&lt;</span> reverse</code></pre>
+<p>In either direction we get some crazy moon language! Do any of you, my dear readers, have ways to make sense of the point-free idioms? Perhaps I shouldn’t use the exotic ones and should stick to old fashioned named arguments.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Groundhog: a Haskell db wrapper that gets it right</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Groundhog: a Haskell db wrapper that gets it right</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 30, 2013</h5>
+</div>
+
+<div>
+  <p>Once again I feel spoiled for starting to learn Haskell at the time I am. So many real-world tools are emerging that writing a commercial app on this stack looks promising.</p>
+<p>As I mentioned before, I am using Yesod to write a very basic chat API server that speaks JSON and lets people send and receive little messages. So far I learned to create an app skeleton and deploy it. I learned how to make some basic routes, and to parse JSON. Time for the real deal: database access.</p>
+<p>Yesod ships with the Persist library, a wrapper to marshall Haskell data types into the db and do migrations. It uses quasiquotation to invent a powerful DSL that writes both declarations of the data types and the code to insert them into the database. Adapters exist for Postgres, MySQL, sqlite, Mongo, and I think Redis. It gracefully degrades when you attach it to dbs with less structure.</p>
+<p>Very nice, but I think I found something even nicer called Groundhog. This one uses a DSL too, but one which gives you fine control over how your Haskell data matches up with a real database. It is refreshing to see an ORM that embraces its letter “R.” It looks like it handles everything, from foreign keys to composite (natural) keys to constraints to deletion restrictions to indices. Not sure about views and joins yet.</p>
+<p>What’s more, declaring database properties in the Groundhog DSL creates a single source of truth. It uses this definition to create migrations and generate your full relational structure. You know (if you’re a Rubyist) how ActiveRecord model definitions keep declared constraints locked in Ruby code and don’t inform the db? Groundhog is smarter. When you write a constraint, like “age” is greater than 21, the constraint will turn into real SQL and go into your database. Any code hitting the db outside your app and ORM cannot mess the data up.</p>
+<p>The catch is that Groundhog’s documentation is just some code in an <code>examples</code> folder in the repo. So I’m going to learn to make a real db with Groundhog and write a tutorial in the process. Yay, my first chance to contribute!</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

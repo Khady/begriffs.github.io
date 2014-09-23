@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Faster, Safer ActiveRecord</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Faster, Safer ActiveRecord</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August  5, 2012</h5>
+</div>
+
+<div>
+  <p>ActiveRecord (“AR”) was introduced to abbreviate single-table <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a> and basic inner joins. However, if used naively in bigger queries it can generate grossly inefficient SQL. This article will explore tricks for keeping AR fast when using moderately complex queries.</p>
+<p>For the full code behind this article, see my repository <a href="https://github.com/begriffs/orm-wars">ORM-wars</a>. Feel free to add your own AR tricks; pull requests are welcome.</p>
+<h4 id="strengthening-constraints">Strengthening constraints</h4>
+<p>Consider a scenario with two models, User and Group where groups have many users. We’ll create migrations for the tables, and establish the association between the models.</p>
+<p>Migration:</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="kw">class</span> <span class="dt">CreateGroups</span> &lt; <span class="dt">ActiveRecord</span>::<span class="dt">Migration</span>
+  <span class="kw">def</span> <span class="dv">self</span>.up
+    create_table <span class="st">:groups</span>
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="dv">self</span>.down
+    drop_table <span class="st">:groups</span>
+  <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">class</span> <span class="dt">CreateUsers</span> &lt; <span class="dt">ActiveRecord</span>::<span class="dt">Migration</span>
+  <span class="kw">def</span> <span class="dv">self</span>.up
+    create_table <span class="st">:users</span>
+    add_column <span class="st">:users</span>, <span class="st">:group_id</span>, <span class="st">:integer</span>
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="dv">self</span>.down
+    drop_table <span class="st">:users</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre>
+<p>Models:</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="kw">class</span> <span class="dt">User</span> &lt; <span class="dt">ActiveRecord</span>::<span class="dt">Base</span>
+  belongs_to <span class="st">:group</span>
+<span class="kw">end</span>
+<span class="kw">class</span> <span class="dt">Group</span> &lt; <span class="dt">ActiveRecord</span>::<span class="dt">Base</span>
+  has_many <span class="st">:users</span>
+<span class="kw">end</span></code></pre>
+<p>Notice how the association is (not) enforced. A pervasive opinion in AR is that database constraints should be enforced by Ruby code, not by the database. The <code>belongs_to</code> and <code>has_many</code> options do not affect the SQL that AR generates:</p>
+<pre><code>==  CreateUsers: migrating ====================================================
+-- create_table(:users)
+   (3.2ms)  CREATE TABLE &quot;users&quot; (&quot;id&quot; serial primary key) 
+   -&gt; 0.0039s
+-- add_column(:users, :group_id, :integer)
+   (0.3ms)  ALTER TABLE &quot;users&quot; ADD COLUMN &quot;group_id&quot; integer
+   -&gt; 0.0009s
+==  CreateUsers: migrated (0.0049s) ===========================================</code></pre>
+<p>This choice makes the database schema fragile. Data integrity is not guarded from other scripts or systems which may interact with the database. Without further precautions, the use of ActiveRecord encourages insular Ruby applications.</p>
+<p>Luckily there’s a gem called <a href="https://github.com/matthuhiggins/foreigner/">foreigner</a> which makes AR serious about foreign key constraints. It defines the function <code>add_foreign_key</code> for migrations. We use it for our schema like so.</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="kw">class</span> <span class="dt">CreateUsers</span> &lt; <span class="dt">ActiveRecord</span>::<span class="dt">Migration</span>
+  <span class="kw">def</span> <span class="dv">self</span>.up
+    create_table <span class="st">:users</span>
+    add_column <span class="st">:users</span>, <span class="st">:group_id</span>, <span class="st">:integer</span>
+    add_foreign_key <span class="st">:users</span>, <span class="st">:groups</span>
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="dv">self</span>.down
+    drop_table <span class="st">:users</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre>
+<p>Validations at the Ruby model level are certainly helpful. They give form validators etc informative error messages. They are also useful when using a less capable database backend. However, when you are using a real database you would be wise to duplicate model validations as database constraints in your migrations. Postgres constraints, for instance, are <a href="http://www.postgresql.org/docs/9.0/static/ddl-constraints.html">not lacking</a>. This is most important if you plan to ever interact with your data outside of your Ruby app.</p>
+<h4 id="bulk-imports">Bulk imports</h4>
+<p>Continuing the story, let’s populate one hundred users and three groups, adding fifty users to one group, fifty to another, and none to the last. The default ActiveRecord behavior is inefficient. Each creation of a user or group issues a new command to the database, including a new transaction. Luckily there is a gem to help: <a href="https://github.com/zdennis/activerecord-import">activerecord-import</a>. It drastically improves the performance of bulk import. Just build arrays and import them:</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="dt">Group</span>.import [<span class="dt">Group</span>.new]*<span class="dv">3</span>
+groups = <span class="dt">Group</span>.find(<span class="st">:all</span>, <span class="st">:limit</span> =&gt; <span class="dv">2</span>)
+<span class="dt">User</span>.import (<span class="dv">0</span>...<span class="dv">100</span>).map { |i| <span class="dt">User</span>.new(group: groups[i%<span class="dv">2</span>]) }</code></pre>
+<h4 id="using-joins-to-avoid-redundant-queries">Using joins to avoid redundant queries</h4>
+<p>Now that the database is seeded let’s consider some queries and how to write them in ActiveRecord. First, how do we find which groups contain no users? The most obvious (but worst) way is to loop over the groups in Ruby and filter based on subsequent queries:</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="dt">Group</span>.all.select { |g| g.users.count == <span class="dv">0</span> }</code></pre>
+<p>However, ActiveRecord hides repeated queries behind its innocent façade. It ends up running a total of four queries:</p>
+<pre><code>Group Load (0.3ms)  SELECT &quot;groups&quot;.* FROM &quot;groups&quot; 
+(0.6ms)  SELECT COUNT(*) FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;group_id&quot; = 1
+(0.3ms)  SELECT COUNT(*) FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;group_id&quot; = 2
+(0.3ms)  SELECT COUNT(*) FROM &quot;users&quot; WHERE &quot;users&quot;.&quot;group_id&quot; = 3</code></pre>
+<p>The bulk of the time in these small queries is simply spent sending them to the database. Consolidation is the best optimization.</p>
+<p>One way to do this is by thinking more relationally, and less in terms of objects. A left outer join can identify those groups with no users – the user’s <code>group_id</code> will be NULL.</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="dt">Group</span>.all(
+  <span class="st">:joins</span> =&gt; <span class="st">&quot;LEFT OUTER JOIN users u ON u.group_id = groups.id&quot;</span>,
+  <span class="st">:conditions</span> =&gt; <span class="st">&quot;u.group_id IS NULL&quot;</span>
+)</code></pre>
+<p>My benchmark shows this to be four times faster than the previous approach, exactly as expected. Not only is it a single query, but Postgres uses a scalable evaluation strategy:</p>
+<pre><code>------------------------------------------------------------------------------------
+ Merge Anti Join  (cost=149.78..272.13 rows=1200 width=4)
+   Merge Cond: (groups.id = u.group_id)
+   -&gt;  Index Scan using groups_pkey on groups  (cost=0.00..84.25 rows=2400 width=4)
+   -&gt;  Sort  (cost=149.78..155.13 rows=2140 width=4)
+         Sort Key: u.group_id
+         -&gt;  Seq Scan on users u  (cost=0.00..31.40 rows=2140 width=4)
+`&lt;/pre&gt;However, we can still improve our query syntactically. ActiveRecord provides a more readable alternative to the longwinded join string
+&lt;pre&gt;`Group.includes(:users).where('users.group_id' =&gt; nil)
+`&lt;/pre&gt;The _includes_ method does so-called [eager loading](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#label-Eager+loading+of+associations). Internally it uses a left outer join. Here is the SQL that ActiveRecord generates for this statement:
+&lt;pre&gt;`SELECT &quot;groups&quot;.&quot;id&quot; AS t0_r0, &quot;users&quot;.&quot;id&quot; AS t1_r0, &quot;users&quot;.&quot;group_id&quot; AS t1_r1
+FROM &quot;groups&quot; LEFT OUTER JOIN &quot;users&quot; ON &quot;users&quot;.&quot;group_id&quot; = &quot;groups&quot;.&quot;id&quot;
+WHERE &quot;users&quot;.&quot;group_id&quot; IS NULL</code></pre>
+<p>Essentially the same as the custom join, but with some unnecessary columns selected. The performance difference is negligible, so using the <code>includes</code> method is the best choice.</p>
+<p>Note that <code>includes</code> does not work with group-by clauses because it selects all columns, overriding previous choices of selection. So, for instance, to count how many users are in each group, we must use an explicit join:</p>
+<pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="dt">Group</span>.all(
+  <span class="st">:select</span> =&gt; <span class="st">&quot;groups.id, count(u.group_id) as users_count&quot;</span>,
+  <span class="st">:joins</span>  =&gt; <span class="st">&quot;LEFT OUTER JOIN users u ON u.group_id = groups.id&quot;</span>,
+  <span class="st">:group</span>  =&gt; <span class="st">&quot;groups.id&quot;</span>
+)</code></pre>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

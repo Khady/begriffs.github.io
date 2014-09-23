@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Put Quality on Autopilot</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Put Quality on Autopilot</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">November 11, 2012</h5>
+</div>
+
+<div>
+  <h3 id="summary">Summary</h3>
+<p>In this article I will identify when and how to use automated code-quality tools (especially for web development). I will survey and classify existing tools, and share new tools I am developing.</p>
+<h3 id="introduction">Introduction</h3>
+<p>We bred dogs to bark. Their ancestors, wolves, don’t relentlessly yip like the poodle next door. If you find yapping dogs annoying let me remind you that we made them that way. We did it for a reason, and I suggest we make our computers noisy too.</p>
+<p>Much like a dog, a computer isn’t very busy most of the time. The interval between our keypresses stretches into clock cycle eternity. Also, both canines and computers have senses that exceed our own. Dogs have keen senses of smell and hearing, and computers have perfect attention. Dogs use their senses to protect and alert us, and I propose we do a better job training our software to similarly bark at any hint of danger.</p>
+<h3 id="necessary-conditions">Necessary Conditions</h3>
+<p>If you introduce the wrong code checking tool in a project it will quickly fall out of use and potentially delay the project. Below is a list of what I believe are the necessary conditions for any code-quality tool to succeed.</p>
+<p>Use an automated code-quality tool only if:</p>
+<ul>
+<li><strong>A1</strong>) It can’t possibly create a bug</li>
+<li><strong>A2</strong>) It isn’t onerously slow</li>
+<li><strong>A3</strong>) It requires no repeated intervention to function</li>
+<li><strong>A4</strong>) Its use can be enforced across your whole team</li>
+<li><strong>A5</strong>) Its results are concise and understandable</li>
+</ul>
+<p>The reason we turn to computers to check our work is because they are methodical and merciless. If we want to use tools effectively, we need to ensure our they fulfill <strong>A3</strong>. If a tool requires our intervention then we are back to our original problem of human negligence.</p>
+<p>Having <strong>A3</strong> without <strong>A1</strong> would be an unpredictable nightmare where code breaks unnoticed. A manually run quality tool could conceivably be useful without <strong>A1</strong>, but only under close supervision.</p>
+<p>A tool with <strong>A3</strong> but without <strong>A4</strong> would create friction in a team and ulimately be abandoned. Some team members (new ones, subcontractors, consultants) would drift into ignoring the quality warnings and leave other members to clean up. Any tool your team adopts must be difficult to circumvent. For instance your team can block Git commits of failing code via a pre-commit hook.</p>
+<p>The remaining requirements, <strong>A2</strong> and <strong>A5</strong> are more subjective, but vitally important. I have worked on codebases with test suites that took more than twenty minutes to run. In those cases <a href="http://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a> more accurately stands for Break-Driven Development.</p>
+<p>If a tool improves code but violates <strong>A5</strong> by providing confusing output or suggestions then its use is questionable. Somewhat selfishly I might discard it because it makes my job hateful, especially if it’s in my face day after day due to property <strong>A4</strong>. If, on the other hand, a transformation tool violates <strong>A5</strong> by producing correct but awkward code then it should be rejected without question. Just be sure that you don’t mistake habitual, unexamined stylistic allegiance for a substantial objection. More on this below.</p>
+<h3 id="sufficient-conditions-and-popular-resistance">Sufficient Conditions and Popular Resistance</h3>
+<p>When, then, should an automated code quality tool be used? Are <strong>A1</strong>-<strong>A5</strong> sufficient (as well as necessary) conditions? If code quality tools are seldom used, is it simply because they violate <strong>A1</strong>-<strong>A5</strong>?</p>
+<p>Speaking for myself, I have failed to use code quality tools because of:</p>
+<ul>
+<li><strong>B1</strong>) ignorance</li>
+<li><strong>B2</strong>) incompatible requirements</li>
+<li><strong>B3</strong>) stylistic allegiance</li>
+<li><strong>B4</strong>) unimportant programs</li>
+</ul>
+<p>Ignorance needs no explanation. Luckily there is plenty to learn about code-quality tools, and delightful opportunities abound. My first exposure to automated sanity checking was doing C programming. I soon discovered compiler warning level options and saved myself lots of time. Even now I’m discovering more warning options for the <code>gcc</code> compiler (check <a href="http://stackoverflow.com/questions/5088460/flags-to-enable-thorough-and-verbose-g-warnings/9862800#9862800">this</a> out and be amazed).</p>
+<p>Incompatible requirements are a bigger problem. When your program uses a sloppy library that raises a slew of warnings, then reading the output will be annoying and will obscure any warnings about your own code.</p>
+<p>Choosing to disable warnings rather than fix libraries causes what social scientists James Wilson and George Kelling call “the broken window” effect. They ask us to “consider a building with a few broken windows. If the windows are not repaired, the tendency is for vandals to break a few more windows.” Using sloppy dependencies, even if they are bug-free, is actually hazardous to your code insofar as they prevent you from comfortably enabling automated warnings.</p>
+<p>Anyone who has programmed for a while has developed their own syntactical style. However these styles have no effect on program execution in most languages; they are subjective. When working with a team it is best to choose a convention and compromise your style. Personal style allegiance can interfere with tools like linters and reformatters, so if you are already compromising your style to harmonize with a team, why not match the team style with that expected by your quality tools? Doing so in fact effectively enforces the team style.</p>
+<p>In his JavaScript lectures, Douglas Crockford maintains that “[programming] style should not be about personal preferences and self-expression,” rather, “the most important thing about a program is for people to understand it.” A style that is least surprising reduces errors, and syntactical forms that hide defects are themselves defective.</p>
+<p>The last reason why I have personally neglected to use program quality checkers is that I (rightly or wrongly) believed my programs weren’t important. When writing a little script or toy project the codebase starts small. Often I write a program to test its fundamental ideas, it felt irritating to simultaneously audit the code quality.</p>
+<p>Unfortunately, the habits (<em>ethos</em>) we practice with our unimportant projects eventually shift our programming character (<em>ethikos</em>). So get comfortable incorporating quality checks into your unimportant projects and you will be prepared for important ones.</p>
+<p>In summary, every reason other than incompatible requirements <strong>B2</strong> is within my power to change. I conclude that properties <strong>A1</strong>-<strong>A5</strong> are sufficient reason to use an automated testing tool in the absence of objection <strong>B2</strong>.</p>
+<h3 id="types-of-tools">Types of Tools</h3>
+<p>Code quality tools can be broadly classified as linters, fuzz testers, vulnerability scanners, and transformers. Linters statically analyze source code to find suspicious patterns such as unused variables, unreachable control flow, or side-effect trickery. Fuzz testers generate unusual inputs to test programs outside of the bias existing in human developers’ minds. Vulnerability scanners work in some cases like linters to look for insecure patterns in source code, and other times probe a live server with web requests. Transformers rewrite source code, in some cases standardizing its style, in others simplifying its logic.</p>
+<p>Below is a survey of code quality tools that are relevant to a Ruby on Rails development stack. Please let me know about others I have missed.</p>
+<h4 id="linters">linters</h4>
+<ul>
+<li><a href="https://github.com/clutchski/coffeelint">clutchski / coffeelint</a></li>
+<li><a href="https://github.com/douglascrockford/JSLint">douglascrockford / JSLint</a></li>
+<li><a href="https://github.com/stubbornella/csslint">stubbornella / csslint</a></li>
+<li><a href="https://github.com/codegram/pelusa">codegram / pelusa</a></li>
+<li><a href="https://github.com/seattlerb/heckle">seattlerb / heckle</a></li>
+<li><a href="https://github.com/bendyworks/lock_block">bendyworks / lock_block</a></li>
+</ul>
+<h4 id="fuzz-testers">fuzz testers</h4>
+<ul>
+<li><a href="https://github.com/relevance/tarantula">relevance / tarantula</a></li>
+<li><a href="https://github.com/IKEGAMIDaisuke/rushcheck">IKEGAMIDaisuke / rushcheck</a></li>
+</ul>
+<h4 id="vulnerability-scanners">vulnerability scanners</h4>
+<ul>
+<li><a href="https://github.com/presidentbeef/brakeman">presidentbeef / brakeman</a></li>
+<li><a href="https://github.com/Arachni/arachni">Arachni / arachni</a></li>
+<li><a href="https://github.com/Netflix/SimianArmy">Netflix / SimianArmy</a></li>
+</ul>
+<h4 id="transformers">transformers</h4>
+<ul>
+<li><a href="https://github.com/einars/js-beautify">einars / js-beautify</a></li>
+<li><a href="https://github.com/nex3/sass">sass-convert</a></li>
+<li><a href="https://github.com/begriffs/css-ratiocinator">begriffs / css-ratiocinator</a> (in progress)</li>
+</ul>
+<h3 id="my-contribution">My Contribution</h3>
+<p>I and some other <a href="http://bendyworks.com/workers">Bendyworkers</a> are experimenting with creating our own code-quality tools. The first is a Ruby gem called <em>lock_block</em>. It’s a command line (and vim-enabled) tool to help you get a handle on your changing code. You select a couple of lines of code and tell Lock Block to tag those lines. It wraps the block with annotating comments containing a hash of the code state. If the code changes then you can find out.</p>
+<p>Lock_block is useful for associating comments with code and reminding people to keep the comments up to date. It’s also useful in a legacy codebase to flag fragile and dangerous sections. This gives newcomers an explicit warning, especially when combined with a Git pre-commit hook to stop people from committing changes before they acknowledge them.</p>
+<p>The second tool we’re working on is called the <em>CSS Ratiocinator</em> (after Leibniz’s Calculus Ratiocinator). It examines the live DOM in the browser and reverse engineers a new, more elegant, CSS definition that captures styles down to the pixel.</p>
+<p>It addresses the problem of old CSS whose styles accumulate and contradict each other. After a certain point all CSS seems to grow only by internal antagonism. The ratiocinator wipes the slate clean and provides a harmonious new beginning. It is best used with sass-convert to further improve the result.</p>
+<p>Ratiocinator is under active development and has plenty of challenges left before it is ready for production. Pull requests are welcome. If you want to know how to help, examine the issues logged in GitHub.</p>
+<p>I’ll close with a word of warning: don’t turn off your mind. Automated code tools can lull you into a false sense of security. If your vulnerability scanner gives you the green light you might conclude your code is secure…don’t. However, if you stay vigilant you can expect nothing but help from code-quality tools.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

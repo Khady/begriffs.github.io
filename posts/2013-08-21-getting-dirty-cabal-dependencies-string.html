@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Getting dirty - cabal dependencies, string types, JSON</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Getting dirty - cabal dependencies, string types, JSON</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 21, 2013</h5>
+</div>
+
+<div>
+  <p>Tonight we leave the calm of the stratosphere and descend into the babbling of human language and strife of cabal dependencies. In short, I tried to do a regular programming thing.</p>
+<p>JSON. It’s passing messages the world over, and I’d like my program to speak it too. Some Googling reveals that <a href="https://github.com/bos/aeson">bos/aseson</a> is the thing to use. I try to install it with cabal and apparently all the other things I had previously installed have put me in “cabal hell” and I have contradictory dependencies. No problem, blew all my installation away with <code>rm -fr ~/.ghc ~/.cabal</code> and installed <a href="https://github.com/Paczesiowa/hsenv">hsenv</a>. For you Ruby people, gem = cabal and rvm = hsenv. Even though doing so takes more space on your disk you should use hsenv.</p>
+<p>So let’s take an example from the Aeson docs and parse a JSON array.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>m <span class="fu">+</span><span class="dt">Data.Aeson</span>
+<span class="dt">Prelude</span> <span class="dt">Data.Aeson</span><span class="fu">&gt;</span> decode <span class="st">&quot;[1,2,3]&quot;</span><span class="ot"> ::</span> <span class="dt">Maybe</span> [<span class="dt">Int</span>]
+
+<span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">3</span><span class="fu">:</span><span class="dv">8</span><span class="fu">:</span>
+    <span class="dt">Couldn't</span> match expected <span class="kw">type</span> <span class="ot">`Data.ByteString.Lazy.Internal.ByteString'</span>
+<span class="ot">                with actual type `</span>[<span class="dt">Char</span>]<span class="ch">'</span>
+    <span class="dt">In</span> the first argument <span class="kw">of</span> <span class="ot">`decode', namely `</span><span class="st">&quot;[1,2,3]&quot;</span><span class="ch">'</span>
+    <span class="dt">In</span> the expression<span class="fu">:</span> decode <span class="st">&quot;[1,2,3]&quot;</span><span class="ot"> ::</span> <span class="dt">Maybe</span> [<span class="dt">Int</span>]
+    <span class="dt">In</span> an equation for <span class="ot">`it': it = decode &quot;[1,2,3]&quot; :: Maybe [Int]</span>
+<span class="ot">Prelude Data.Aeson&gt; :t decode</span>
+<span class="ot">decode</span>
+<span class="ot">  :: FromJSON a =&gt;</span>
+<span class="ot">     Data.ByteString.Lazy.Internal.ByteString -&gt; Maybe a</span></code></pre>
+<p>Wait, what’s wrong with my string? Turns out that we often mean several things by “string” and these things are disambiguated in Haskell. One meaning is an array of Chars, which are big fat UTF-32 characters all in memory at once. Sadly this is wrong for JSON in two ways. First we often want to decode JSON from a stream, aka lazily. Second JSON is UTF-8. Enter <code>Data.ByteString.Lazy.Char8</code>, a representation of a lazy sequence of bytes which is an instance of the <code>IsString</code> typeclass. Perfect for slurping UTF-8 in from a socket, and exactly what Aeson uses.</p>
+<p>We could explicitly convert our string literals to this type, but there’s a GHC extension to make this nicer. Enabling it will infer the type of string needed from context and use the function <code>fromString</code> (derived from <code>IsString</code>) to convert a string literal to the right type as needed. Once we import the needed type and enable the GHC extension our example works like we would expect.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- having started ghci with -XOverloadedStrings</span>
+<span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>m <span class="fu">+</span><span class="dt">Data.Aeson</span>
+<span class="dt">Prelude</span> <span class="dt">Data.Aeson</span><span class="fu">&gt;</span> <span class="fu">:</span>m <span class="fu">+</span><span class="dt">Data.ByteString.Lazy.Char8</span>
+<span class="dt">Prelude</span> <span class="dt">Data.Aeson</span> <span class="dt">Data.ByteString.Lazy.Char8</span><span class="fu">&gt;</span> decode <span class="st">&quot;[1,2,3]&quot;</span><span class="ot"> ::</span> <span class="dt">Maybe</span> [<span class="dt">Int</span>]
+<span class="dt">Just</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</code></pre>
+<p>Tomorrow I’ll continue toward making a real API web service in Haskell. It will power an in-app messaging ajax widget for other web sites. I met some people last week here in SF who want to add this type of feature to their site so I thought it would be a good way to put my Haskell to the test and power a JS widget. Who knows, maybe I can learn about compiling Haskell to JS to make the widget. All kinds of fun ahead!</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

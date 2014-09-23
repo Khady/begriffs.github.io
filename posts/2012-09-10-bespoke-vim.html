@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bespoke Vim</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-6" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-6 list-inline">
+          <li><a class="text-muted" href="../about.html">About</a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Bespoke Vim</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">September 10, 2012</h5>
+</div>
+
+<div>
+  <p>Carpenters used to make their own applewood saw handles to perfectly fit their hand. The handles outlasted the rest of the saw. When a saw wore out, the carpenter would reattach its handle to a new saw. Using the handle for years only made it smoother.</p>
+<p>Vim is my saw, and I have undertaken to fashion a handle. I started with the basic default MacVim installation and arrived at a comfortable, logical, and personal result.</p>
+<p>Others have of course done the same, and their configurations illustrate what’s possible. Examples of high-quality configurations include <a href="https://github.com/skwp/dotfiles">skwp</a>, <a href="https://github.com/spf13/spf13-vim">spf13</a>, <a href="https://github.com/carlhuda/janus">janus</a>, <a href="https://github.com/vgod/vimrc">vgod</a>, <a href="https://github.com/amix/vimrc">amix</a>, and <a href="https://github.com/mrmargolis/vim_files">mmargolis</a>. You should try them and see how they feel. You’ll ultimately discover your own style.</p>
+<p>I found that I value two things most in a vin configuration: fast manual control, and logical groupings of commands. Some configs enable vim features that I find unnerving, such as autocompleted suggestions at every keystroke, or unsolicited spell checking, or background ctagging. They provide the features of an IDE but introduce lag and make vim unpredictable. I prefer a lightning fast editor that waits for explicit commands before acting.</p>
+<p>The vocabulary of explicit commands should be logical. Basic vim commands require a fair amount of brute memorization and use up most of the available keys. Hence additional commands tend to get mapped to a series of keys beginning with a “leader.” The leader key signals a new meaning for its followers. Whereas some configurations seem to choose key mappings indiscriminately, I prefer to define them in prefix groups. For instance, I assign all git-related commands the “&lt;<em>leader</em>&gt;g” prefix, all the shell and test running commands the “&lt;<em>leader</em>&gt;r” prefix, etc.</p>
+<p>When beginning to customize your vim, it helps to create a list of things you wish it could do. What do you find awkward about how you currently work? This was my list:</p>
+<ul>
+<li>Find definition and uses of functions</li>
+<li>Send text to a repl</li>
+<li>Run tests</li>
+<li>Summarize methods in file</li>
+<li>Align symbols</li>
+<li>Manipulate language blocks</li>
+<li>Interrogate git</li>
+<li>Clerical conversions</li>
+<li>Tab completion</li>
+<li>Syntax closing</li>
+</ul>
+<p>Next investigate the many vim plugins available to accomplish these tasks. Certain plugins are clearly champions (generally anything written by <a href="https://github.com/tpope">tpope</a>), and have been discussed ad nauseum on blogs for years.</p>
+<p>You can manage plugins several ways. In the beginning people manually copied them into certain local directories. Then <a href="https://github.com/tpope/vim-pathogen">Pathogen</a> came along and simplified the directory structure while leveraging git submodules to keep plugins up to date. Finally there is <a href="https://github.com/gmarik/vundle">Vundle</a>, which improves Pathogen and allows you to declare from inside your <em>.vimrc</em> which vim plugin “bundles” you want to use. This is the best option because it’s concise and keeps all your environment choices inside one file.</p>
+<p>The best way to learn about vim plugins and configurations is to try them, and I invite you to <a href="https://github.com/begriffs/dotfiles">try mine</a>. It is fairly self-contained, well commented, and should be easy to modify. You can consult the README for installation instructions and list of key mappings.</p>
+<p>If you work with text every day then you owe yourself a bespoke vim. Take a cue from craftsmen of old and use a tool that fits you.</p>
+</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
