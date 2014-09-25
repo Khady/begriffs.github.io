@@ -2,7 +2,7 @@
 title: The Pilgrimage Begins
 ---
 
-<img src="/images/pilgrim.png" class="left" />
+<img src="/images/jpilgrim.png" class="left" />
 I leave this weekend to begin my [programming
 pilgrimage](2013-02-04-programming-pilgrimage.html) in San Francisco.
 It will be two weeks of high-intensity OSS hacking at twelve

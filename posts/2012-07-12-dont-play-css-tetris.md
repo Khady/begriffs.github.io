@@ -3,7 +3,7 @@ title: Don't Play CSS Tetris
 ---
 
 "Want to see the future?" Dale Sande
-([@anotheruiguy](https://twitter.com/anotheruiguy/)) leaned toward
+([\@anotheruiguy](https://twitter.com/anotheruiguy/)) leaned toward
 me with a conspiratorial gleam in his eye. His laptop was crowded
 with code and design layouts. He proceeded to show me that I have
 been doing CSS all wrong.
