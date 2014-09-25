@@ -33,7 +33,7 @@
   <h5 class="text-muted">July 27, 2012</h5>
 </div>
 
-<div>
+<div class="content">
   <p>Like any piece of art, a stylesheet should be indivisible and bold, but natural. It should arrive to the browser in one elegant file, a succinct connection between page semantics and presentation. Preprocessing distances a stylesheet from the Sturm und Drang of its development, and this distance is necessary for completion and refinement.</p>
 <p>Carpenters remove measurement marks from their finished works. Painters cover sketch lines. So should CSS authors remove their own scaffolding from stylesheets. Every “big green button” class, every “grid-column-2” are so many unseemly nicks and marks. Preprocessors such as Sass remove these artifacts through the concept of mixins.</p>
 <p>Mixins provide modular styles at authoring-time, but are preprocessed to hide the structure from the client. Consider a “Buy Now” button – the HTML should reference only the meaning of the button, not its presentation.</p>
@@ -46,6 +46,19 @@
 <p>Beyond its promoting semantic HTML and separating concerns, Sass allows designers to write their intentions rather than implementations. Libraries like <a href="http://compass-style.org/">Compass</a> include mixins to simplify concepts like <a href="http://compass-style.org/reference/compass/typography/vertical_rhythm/">vertical rhythm</a>. Forget tinkering with element padding, just declare that an item is, for instance, a “leader” or a “trailer” and the library will add padding appropriate to the size and surroundings of the element.</p>
 <p>Finally, the hidden life of preprocessed CSS can include secret manuscript notes. Authors can add comments to their styles, noting the ways they can combine, and their variations. For instance a login form can have invalid fields and required fields.  Kyle Neath believes that the best documentation is living documentation, and he created a library called <a href="https://github.com/kneath/kss">KSS</a> to bring Sass styles to life. KSS parses specially formatted Sass comments and demonstrate them in a styleguide. Using KSS you can see your styles in their hidden life, posing for the ways they will appear in production.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

@@ -33,7 +33,7 @@
   <h5 class="text-muted">September 14, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p><a href="2013-09-10-haskell-postgresql-simple-examples-part.html">Part 1</a> described how to do queries and read results. Refer to it to learn how to connect to Postgres and all that.</p>
 <p>I thought I was just getting into the good stuff with this library. I thought you could create algebraic data types and then read them in and out of table rows. The reality is frankly not that cool. The way you associate a data type with a SQL statement is very positional. You have to match your data structure with the SQL expression argument by argument. Different parts of your code need to know and implicitly share this order. And the compiler can’t detect the order being flipped, so you can get runtime errors.</p>
 <p>My verdict: this is not Haskell at its best, but it is nice and simple. Use the <code>postgresql-simple</code> library if you need to throw together a direct ad-hoc query. It’s great for that, but not good for much more.</p>
@@ -41,6 +41,19 @@
 <p>Writing rows feels even more awkward. Notice that how I’ve written this, I might as well have dispensed with writing a Dictionary per-se, and could have just written the values I used to construct the Dictionary.</p>
 <p>But there you have it. If you’d like to do simple things with queries, that’s how this library does it.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

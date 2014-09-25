@@ -33,7 +33,7 @@
   <h5 class="text-muted">August 25, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>Haskell’s type classes exist to make make your functions more general while still keeping you safe. In this post I will work with GHC to arrive at the right signature for a function. The “weaker” the types we choose the more situations a function can handle. It’s instructive to omit types entirely and see how GHC guides us toward the most general thing that can work. I see a parallel between trying to compile in a language like Haskell and running tests in a language like Ruby.</p>
 <pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">equal_steps ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> [a]
 equal_steps x y <span class="fu">=</span> [ (a <span class="fu">-</span> smaller)<span class="fu">/</span>distance <span class="fu">|</span> a <span class="ot">&lt;-</span> [smaller<span class="fu">..</span>larger] ]
@@ -121,6 +121,19 @@ equal_steps x y <span class="fu">=</span> [ (a <span class="fu">-</span> smaller
 </div>
 <p>And that’s why Fractional doesn’t include a range-walking operator. Yeah, it’s like the Haskell98 committee actually put some educated thought into what they were building.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

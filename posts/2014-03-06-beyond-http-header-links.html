@@ -33,7 +33,7 @@
   <h5 class="text-muted">March  6, 2014</h5>
 </div>
 
-<div>
+<div class="content">
   <p>The idea of <em>Hypertext As The Engine Of Application State</em> is that each hypermedia resource provides links to related resources. These links are typically called affordances. Clients can decouple themselves from a server by following affordances rather than constructing – or memorizing – URLs. Servers are then free to change URLs or gracefully degrade service.</p>
 <p>One of the more popularly adopted affordances are pagination link headers. The server includes links to the <em>prev</em>, <em>next</em>, <em>first</em>, and <em>last</em> pages at each page in a series. The client can disregard the URL scheme and just follow the links to access the pages as a doubly-linked list.</p>
 <p>Problem: pagination is often random-access. Look familiar?</p>
@@ -67,6 +67,19 @@ Response
 <p>Notice the negotiation. Both the client and server have limited numbers of items they want to consume or serve at once. In the first request the server limited the response, and in the second it honored the client’s request to further limit it. At this point the client knows what range it has been given, along with the total number of items. Requesting any page is just math.</p>
 <p>I’d suggest this supersedes the classic pagination link headers. It’s equally restful yet more powerful.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

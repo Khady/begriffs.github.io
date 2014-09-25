@@ -33,7 +33,7 @@
   <h5 class="text-muted">August 12, 2014</h5>
 </div>
 
-<div>
+<div class="content">
   <p>“Static sites are fast, secure, easy to deploy, and manageable using version control.” So states the webpage for <a href="http://jaspervdj.be/hakyll/">Hakyll</a>, a great way to set up a static site or blog. It allows you to write blog posts by simply editing markdown in git, all the while having access to delicious Haskell for deeper customizations.</p>
 <p>You can configure things to let you write blog posts directly on Github’s interface and use Travis CI to deploy your changes. Most day-to-day blogging will not require using Haskell at all or even having the Haskell environment installed on the blogger’s machine.</p>
 <p>I’ll show you how to set everything up, including an optimized Travis config that can deploy changes in less than a minute. There is some existing information online about doing this sort of thing, but it’s all outdated in one way or another.</p>
@@ -135,6 +135,19 @@ _site</code></pre></li>
   <span class="fu">secret_access_key:</span>
     <span class="fu">secure:</span> YOUR_SECURE_KEY</code></pre>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

@@ -33,7 +33,7 @@
   <h5 class="text-muted">July 12, 2012</h5>
 </div>
 
-<div>
+<div class="content">
   <p>“Want to see the future?” Dale Sande (<span class="citation">[@anotheruiguy]</span>(https://twitter.com/anotheruiguy/)) leaned toward me with a conspiratorial gleam in his eye. His laptop was crowded with code and design layouts. He proceeded to show me that I have been doing CSS all wrong.</p>
 <p>My first mistake is using CSS at all. “If you’re like most developers you start designing a web page from the top-left down. This ends up painting you into a corner,” Dale explains. Building style by stacking DOM elements together is like playing Tetris – you will always lose in the end.</p>
 <p>He believes in a modular inside-out approach to design, one where developers start by identifying and isolating repeated widgets of design, like navigation links, sections, and forms. CSS was not designed for this approach, and Dale believes that SCSS provides the necessary features to encourage proper modular reuse.</p>
@@ -44,6 +44,19 @@
 <p>To learn about modern web styling I will refactor my <a href="http://1up.begriffs.com/">1up</a> site to use a styleguide and serve styles from a separate Toadstool-powered Heroku server.</p>
 <p>For more information about OOSCSS and Toadstool, see <a href="https://speakerdeck.com/u/anotheruiguy/p/module-design-ui-dev-patterns">this presentation</a>.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

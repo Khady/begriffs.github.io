@@ -33,7 +33,7 @@
   <h5 class="text-muted">April  8, 2014</h5>
 </div>
 
-<div>
+<div class="content">
   <p>This afternoon I paired with Tikhon. He’s a Haskeller, researcher, and the organizer of the SF Types, Theorems, and Programming Languages group. His <a href="https://github.com/TikhonJelvis/Cow">project</a> is to extend the unix commands <code>diff</code> and <code>merge</code> to understand and work better on JavaScript code.</p>
 <p>As a product of the Unix tradition the standard <code>diff</code> program operates line by line between files. This affects not just diff itself but programs like git that rely on it. Have you ever changed a program in a way that does not affect its operation such as changing indentation and then been forced to make a big git commit? Have you ever changed the name of a variable and caused a big fragmented commit? Tikhon believes that small changes of meaning should appear as small diffs and the reason that they currently don’t is that we still think in terms of teletypes rather than syntax.</p>
 <p>Most importantly Tikhon realized that operating crudely on lines can create merge conflicts when there needn’t be any. For instance, consider this original file:</p>
@@ -137,6 +137,19 @@ editDistance xs ys <span class="fu">=</span> table <span class="fu">!</span> (m,
     ]</code></pre>
 <p>What remains is to translate this nice memoized string edit distance to trees using tree edit operations rather than string operations. Notice the lookup table we used above is a two-dimensional array indexed by the length of segments. To translate the lookup table strategy to trees we need a way to uniquely name partial-traversals, which we could do by choosing the number of hops along the traversal to be the “index.” (We experimented with using a Haskell Map keyed off the trees but that was really slow.) Ultimately we did not complete the refactor to make the tree diff sub-exponential speed, but we discovered how it will be done.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

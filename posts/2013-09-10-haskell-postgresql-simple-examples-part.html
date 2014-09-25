@@ -33,7 +33,7 @@
   <h5 class="text-muted">September 10, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>I’ve been working on a simple api server, and getting confused by the sheer number of new Haskell things I need to learn. There are many combinations of http servers, frameworks, database libraries, and json parsing to try. So I’m taking a different route. I’m learning each piece in isolation so later I can put them together easily. Starting with database access.</p>
 <p>Let’s take the magic out of talking to Postgres. How do you connect to an existing database and read/write data? The most direct way appears to be the <code>postgresql-simple</code> package. There’s an even lower level library called <code>postgresql-libpq</code> that wraps the C-based libpq, but I don’t relish the idea of managing a database connection and other low-level details.</p>
 <p>Can’t get simpler than this: add two and two in sql. No table access needed.</p>
@@ -77,6 +77,19 @@ execute conn <span class="st">&quot;insert into words (word) values (?)&quot;</s
 <p>Not much type annotation needed here, because the way we gather input tells the compiler what type it must be. Notice we use the <code>execute</code> function now. I first tried <code>query</code>, but it gives a runtime error when you try using destructive operations from <code>query</code>. Another level of safety I guess.</p>
 <p>There you go, some pretty “normal” code for doing SQL. In part two we’ll see a more streamlined way to interact with the database, and one that helps the compiler infer more and save you typing. But it’s nice to see the non-magical way first, isn’t it?</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

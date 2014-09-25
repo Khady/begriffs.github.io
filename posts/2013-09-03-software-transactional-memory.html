@@ -33,11 +33,24 @@
   <h5 class="text-muted">September  3, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>This evening I took a train to Sunnyvale to visit a Haskell guru named Joshua Ball. He got his start in the language years ago and is very comfortable with it. I had a question for the master: what is the mysterious STM type?</p>
 <p>Back when I was experimenting with applicative functors and wrapping values in various things like Maybe and lists I encountered STM. Josh explains it stands for software transactional memory, or as other languages like to call it, variables. Except STM doesn’t contain your usual sloppy variables, it provides a totally thread-safe way to transactionally change values and run alternatives when variables are not ready to read. I’ll give you an example.</p>
 <p>Actually I won’t – at least not tonight. That train ride was two hours each way and now it’s time for bed. Check back for my next blog post to see some Haskell code that solves a multithreaded scenario which would baffle most languages.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

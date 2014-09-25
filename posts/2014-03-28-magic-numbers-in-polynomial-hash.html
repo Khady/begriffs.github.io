@@ -33,7 +33,7 @@
   <h5 class="text-muted">March 28, 2014</h5>
 </div>
 
-<div>
+<div class="content">
   <p>Every time I see copypasta polynomial string hash functions on the internet I am mystified by the arcane and magical numbers they contain. Today it’s time to find out which numbers are acceptable and why. Scanning stack overflow discussions and spending some time at the blackboard has revealed the beginning of the secret.</p>
 <p>Polynomial hashes are computed from a base number and the character codes of an input string. Let \(s_0 \ldots s_{k-1}\) be the codes of each input character in string \(s\). It’s our job to choose constants \(b\) and \(n\) to minimize collisions in the hash function \(h(s) = \sum b^i s_i\ \text{mod}\ n\), where \(b\) is an arbitrary number and \(n\) is the number of buckets in our hash table.</p>
 <p>Increasing \(n\) certainly helps. If \(n=1\) then everything will collide and we needn’t worry about \(b\). So fix \(n\) as large as sensible for application memory. We’ll see that certain choices of \(b\) are statistically better than others. Certain choices are really bad.</p>
@@ -69,6 +69,19 @@ len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</s
 </div>
 <p>For the best \(b\) a whole 89% of keys are collision-free. At the worst end all but six collide. Apparently there is some deeper stuff going on. That’s as far as I’m going to take it for now.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

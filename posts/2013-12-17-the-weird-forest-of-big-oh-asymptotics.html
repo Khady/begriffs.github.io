@@ -33,7 +33,7 @@
   <h5 class="text-muted">December 17, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>You may have a decent intuition of common algorithm time complexities — recognizing one as linear time, another quadratic, etc — but still feel uncomfortable about the details of “Big-Oh” notation. It’s no wonder. The notation has long been abused by computer science textbooks, and is used today in sloppy jargon.</p>
 <p>This article will show you how to reason about the asymptotic behavior of functions and then demonstrate that their growth rates form a strange tapestry of which most textbooks show you only a thread.</p>
 <p>Let’s start with some unconventional notation that I think is more suggestive than Big-Oh and easier for reasoning. The fundamental definition is this. If \(f\) and \(g\) are functions \(\mathbb{R} \to \mathbb{R}\), we say \(f \lesssim g\) iff there is a \(c \in \mathbb{R}^+\), and an \(x_0 \in \mathbb{R}\) such that \(\left|f(x)\right| &lt; c\left|g(x)\right|\) for every \(x &gt; x_0\). You can read \(f \lesssim g\) as “\(g\) <em>linearly dominates</em> \(f\).”</p>
@@ -56,6 +56,19 @@
 <p>To summarize, we saw that \(\Theta\)-classes are densely ordered. The next surprise (at least for me) is that they are not totally ordered. That is, the elements can’t be arranged in a single line, having a definite place with respect to every other. Some functions forever alternately outperform each other, so you can’t say that either ever dominates the other. For instance \(\neg (1 \lesssim x\cdot sin(x))\) and \(\neg (x\cdot sin(x) \lesssim 1)\). They diverge beyond any constant multiple, and neither has the upper hand consistently.</p>
 <p>Asymptotic dominance is a bit of a riddle. It’s a dense partial order with infinite chains and looks stranger than introductory articles led me to believe. The twelve <a href="https://en.wikipedia.org/wiki/Big_O_notation#Orders_of_common_functions">function families</a> listed on Wikipedia’s Big-O article are like twelve months which hold mysterious days and hours.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

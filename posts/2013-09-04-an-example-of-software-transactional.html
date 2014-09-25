@@ -33,7 +33,7 @@
   <h5 class="text-muted">September  4, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>Yesterday I took a train for hours to consult a Haskell <a href="https://github.com/sciolizer">guru</a>. I now bring unto you his wisdom.</p>
 <p>Let’s take advantage of Haskell’s efficient threads and the elegance of the STM pattern to write a short program to spawn workers and consume the results as they are generated. It may help to watch this <a href="http://blip.tv/oreilly-open-source-convention/oscon-2007-simon-peyton-jones-322473">presentation</a> about STM (it is not specific to Haskell) before looking at my example code.</p>
 <p>Part of what might look unfamiliar about the code is its use of <code>Data.Sequence</code>. That library provides a queue structure which allows efficient insertion to the beginning or end. Internally it is a tree, so we use a trick to pattern-match it in a function. But one thing at a time.</p>
@@ -95,6 +95,19 @@ consumer total p q <span class="fu">=</span> print <span class="fu">=&lt;&lt;</s
 <p>Finally, it’s a good idea to declare the type of your functions. Haskell can deduce it just fine, so it might feel redundant, but when a type error ever happens in the way you use your functions it will tend to be reported high up the call stack. That makes it hard for you to debug. So throw type declarations liberally so the errors are matched closer to their cause.</p>
 <p>So that’s STM in a nutshell. Go forth and concur.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

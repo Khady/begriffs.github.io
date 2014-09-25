@@ -33,13 +33,26 @@
   <h5 class="text-muted">February 10, 2014</h5>
 </div>
 
-<div>
+<div class="content">
   <p>While preparing to create the next version of the <a href="http://bountysource.com/">Bountysource</a> API, I’ve been reading articles about versioning. There are many contradicting opinions online.</p>
 <p>Many articles argue that APIs should be easy for developers to explore in a web browser, so API versions should be specified in the url, like <code>https://api.site.com/v23/foo</code> rather than being negotiated in the HTTP headers. How else could you explore the API through a web browser? However I’d argue that we have browser extensions for this (<a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo?hl=en-US">1</a>), 9<a href="https://chrome.google.com/webstore/detail/rest-console/cokgbflfommojglbmbpenpphppikmonn?hl=en">2</a>), (<a href="https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb">3</a>) (<a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en">4</a>). Also no end user needs to make direct old-school bookmarks of an API resource.</p>
 <p>I think versioning in the URL is not the right choice, and it stems from a historical constraint. Developers had to resort to JSONP to make cross-origin requests in old browsers, and you can’t specify headers with JSONP. Nowadays CORS support is widespread. If you really have to support IE &lt;10 you can actually encode headers over JSONP as a query parameter if the client and server cooperate.</p>
 <p>I think that versioning in the URL ignores how the web already works. When I want <code>/foo</code> in Spanish I don’t request <code>/es/foo</code>, I send an <code>Accept-Language</code> header. In fact many representational details are negotiable, like the charset, the encoding, and the mime type of a resource. We don’t put them in the URL because their position is irrelevant. It gets absurd: <code>/es/utf8/application-json/foo</code>. Ultimately we are just requesting different representations of a single resource.</p>
 <p>So what’s the right way? I propose using the <code>Accept</code> header with type <code>application/vnd.you.com+format; version=n</code> where format is e.g. <code>json</code>. Rather than using <a href="http://semver.org/">semantic versioning</a> conventions, we specify major version only, since only breaking changes matter. Give clients backward-compatible changes for free; they can handle it.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

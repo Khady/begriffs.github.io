@@ -33,7 +33,7 @@
   <h5 class="text-muted">August 31, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>I simplified a Groundhog code example to see how it behaves with its default settings. To make this code work you’ll need to install some cabal packages.</p>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> install groundhog
 <span class="kw">cabal</span> install groundhog-sqlite
@@ -82,6 +82,19 @@ main <span class="fu">=</span> withSqliteConn <span class="st">&quot;:memory:&qu
      a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Cond</span> db r</code></pre>
 <p>Try building and running the code. Seems to work fine.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

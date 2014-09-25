@@ -33,7 +33,7 @@
   <h5 class="text-muted">December 31, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p>When rich JavaScript apps first started getting popular a few years ago, it honestly took me a while to catch on. I mistakenly thought it was primarily an optimization of page load times, a technique that sacrificed simplicity and forced developers to reinvent mature technology like browser page-history.</p>
 <p>I was wrong — I think client side apps provide a better developer experience fundamental ways. The design of server-side apps is built around historical browser limitations.</p>
 <p>HTTP begin in 1991 as a simple protocol. It had one (idempotent) method, <code>GET</code>. You would use it to get documents over TCP. The essentially modern <a href="https://tools.ietf.org/html/rfc2068">Version 1.1</a> was standardized at the beginning of 1997. Those were the days of Internet Explorer 2. Compared with the foresight and subtlety of HTTP 1.1 these browsers were quite primitive.</p>
@@ -45,6 +45,19 @@
 <p>But to me at least this power didn’t really sink in. A link is a link, right? A form is a form. I guess this Ajax thing is just for updating little parts of the page… My experience prevented me from thinking outside these conventions. In the next two blog posts I’m going to help you reimagine the possibilities for the way modern client-side apps interact with the server over HTTP. We’ll use pagination as a case study.</p>
 <p>In the next post I’ll discuss a way to do server-side pagination . Hint, there won’t be any <code>&quot;?page=2&quot;</code> nonsense. In the post after that I’ll walk you through a way to extend AngularJS’s $resource service to automatically accommodate pagination by using HTTP to negotiate with the server.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

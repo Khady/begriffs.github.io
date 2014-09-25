@@ -33,7 +33,7 @@
   <h5 class="text-muted">August 24, 2013</h5>
 </div>
 
-<div>
+<div class="content">
   <p><img src="../images/heroku.png" class="right" /> I deployed my first Yesod app today! Deploying to Heroku has gotten way smoother since even a few months ago let me tell you. I read articles with crazy gymnastics like booting up a virtual machine that matches Heroku infrastructure to build a binary on a special deploy branch that you copy and… no. Not doing that.</p>
 <p>I like Yesod so far. It feels like a real framework that can make real pages. It was definitely influenced by Rails but one thing it left behind is the creepy Rails magic. Things are explicitly linked together so it makes sense (aside from some of the Haskell constructions which are still foreign to me). Plus these DSLs are startlingly clean. Cabal files are like <code>make</code> meets <code>bundler</code>. Hspec is like rspec without stuttering. But my sycophancy aside, here’s how you deploy.</p>
 <h4 id="step-1-a-basic-yesod-app-and-local-databases">Step 1: a basic Yesod app and local databases</h4>
@@ -66,6 +66,19 @@
 <span class="kw">git</span> push heroku master</code></pre>
 <p>This is all a one-time thing. The first deploy takes a really long time as it installs all the dependencies. To deploy in the future just do <code>git push heroku master</code> and it’s fast and works perfectly.</p>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 

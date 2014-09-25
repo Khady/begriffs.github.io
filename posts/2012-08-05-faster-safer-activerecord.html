@@ -33,7 +33,7 @@
   <h5 class="text-muted">August  5, 2012</h5>
 </div>
 
-<div>
+<div class="content">
   <p>ActiveRecord (“AR”) was introduced to abbreviate single-table <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a> and basic inner joins. However, if used naively in bigger queries it can generate grossly inefficient SQL. This article will explore tricks for keeping AR fast when using moderately complex queries.</p>
 <p>For the full code behind this article, see my repository <a href="https://github.com/begriffs/orm-wars">ORM-wars</a>. Feel free to add your own AR tricks; pull requests are welcome.</p>
 <h4 id="strengthening-constraints">Strengthening constraints</h4>
@@ -130,6 +130,19 @@ WHERE &quot;users&quot;.&quot;group_id&quot; IS NULL</code></pre>
   <span class="st">:group</span>  =&gt; <span class="st">&quot;groups.id&quot;</span>
 )</code></pre>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
