@@ -15,13 +15,6 @@
 
 .header ul {
   font-size: 28px;
-  text-align: right;
-}
-
-@media(max-width:767px) {
-  .header ul {
-    text-align: left;
-  }
 }
 
 ul.posts li {
