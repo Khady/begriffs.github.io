@@ -25,6 +25,7 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
@@ -58,6 +59,24 @@ main = hakyll $ do
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
+
+
+    create ["atom.xml"] $ do
+      route idRoute
+      compile $ do
+        let feedCtx = postCtx `mappend` bodyField "description"
+        posts <- fmap (take 10) . recentFirst =<<
+          loadAllSnapshots "posts/*" "content"
+        renderAtom myFeedConfiguration feedCtx posts
+
+      where
+        myFeedConfiguration = FeedConfiguration
+          { feedTitle       = "Begriffs.com blog"
+          , feedDescription = "Code and life"
+          , feedAuthorName  = "Joe Nelson"
+          , feedAuthorEmail = "cred+blog@begriffs.com"
+          , feedRoot        = "http://begriffs.com"
+          }
 
 
 --------------------------------------------------------------------------------
