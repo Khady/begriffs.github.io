@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Begriffs.com blog</title>
+    <link href="http://begriffs.com/atom.xml" rel="self" />
+    <link href="http://begriffs.com" />
+    <id>http://begriffs.com/atom.xml</id>
+    <author>
+        <name>Joe Nelson</name>
+        <email>cred+blog@begriffs.com</email>
+    </author>
+    <updated>2014-08-12T00:00:00Z</updated>
+    <entry>
+    <title>Create a static site with Hakyll, Github and Travis CI</title>
+    <link href="http://begriffs.com/posts/2014-08-12-create-static-site-with-hakyll-github.html" />
+    <id>http://begriffs.com/posts/2014-08-12-create-static-site-with-hakyll-github.html</id>
+    <published>2014-08-12T00:00:00Z</published>
+    <updated>2014-08-12T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Create a static site with Hakyll, Github and Travis CI</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 12, 2014</h5>
+</div>
+
+<div class="content">
+  <p>“Static sites are fast, secure, easy to deploy, and manageable using version control.” So states the webpage for <a
+href="http://jaspervdj.be/hakyll/">Hakyll</a>, a great way to set up a static site or blog. It allows you to write blog posts by simply editing markdown in git, all the while having access to delicious Haskell for deeper customizations.</p>
+<p>You can configure things to let you write blog posts directly on Github’s interface and use Travis CI to deploy your changes. Most day-to-day blogging will not require using Haskell at all or even having the Haskell environment installed on the blogger’s machine.</p>
+<p>I’ll show you how to set everything up, including an optimized Travis config that can deploy changes in less than a minute. There is some existing information online about doing this sort of thing, but it’s all outdated in one way or another.</p>
+<p>We’ll be using Github Pages to serve the final assets. I’ll assume you’re making a static site for a Github organization called <code>myorg</code> and want it to live at <code>myorg.io</code>.</p>
+<h3 id="installation">Installation</h3>
+<ol style="list-style-type: decimal">
+<li>Create a Github organization. E.g. <code>myorg</code></li>
+<li>Create a project <code>myorg/myorg.github.io</code></li>
+<li>The master branch will be repeatedly overwritten and committed later on by Travis, so you won’t make any edits there directly. For now add a file to the root of the master branch called <code>CNAME</code> containing the string <code>myorg.io</code></li>
+<li>Create two <code>A</code> records in the DNS for <code>myorg.io</code> pointing at 192.30.252.153 and 192.30.252.154 respectively.</li>
+<li><p>Generate the base Hakyll project.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># in an empty directory of your choice</span>
+<span class="co"># NOT in the git repo you&#39;ve been using</span>
+
+<span class="kw">cabal</span> sandbox init
+<span class="kw">cabal</span> install -j --disable-documentation hakyll
+<span class="kw">cabal</span> exec hakyll-init myorg.github.io</code></pre></li>
+<li><p>Create an orphan source branch in your git repo and copy the generated files there.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> checkout --orphan source
+<span class="kw">git</span> rm CNAME
+<span class="kw">cp</span> -r /path/to/generated/myorg/* .
+<span class="kw">git</span> add .</code></pre></li>
+<li><p>Reuse the cabal sandbox you created earlier:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> -r /where/you/ran/cabal/install/.cabal-sandbox .</code></pre></li>
+<li><p>Keep build artifacts out of git by adding these lines to <code>.gitignore</code></p>
+<pre><code>.cabal-sandbox
+cabal.sandbox.config
+dist/
+_cache
+_site</code></pre></li>
+<li><p>Run your new site locally to see that it works!</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sandbox init
+<span class="kw">cabal</span> run rebuild
+<span class="kw">cabal</span> watch
+
+<span class="co"># now load http://localhost:8000</span></code></pre></li>
+<li><p>Create <code>.travis.yml</code> and add the following boilerplate:</p>
+<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
+<span class="fu">ghc:</span> 7.8
+<span class="fu">branches:</span>
+  <span class="fu">only:</span>
+  <span class="kw">-</span> source
+<span class="fu">before_install:</span>
+  <span class="kw">-</span> git submodule foreach --recursive <span class="st">&#39;git checkout master; git ls-files | grep -v README | grep -v CNAME | xargs -r git rm&#39;</span>
+<span class="fu">install:</span>
+  <span class="kw">-</span> <span class="fu">curl http:</span>//bin.begriffs.com/hakyll/cabal-sandbox.tar.xz | tar xJ
+  <span class="kw">-</span> cabal sandbox init
+  <span class="kw">-</span> cabal configure --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-split-objs
+<span class="fu">before_script:</span>
+  <span class="kw">-</span> git config --global user.email <span class="st">&quot;$GIT_EMAIL&quot;</span>
+  <span class="kw">-</span> git config --global user.name <span class="st">&quot;$GIT_NAME&quot;</span>
+<span class="fu">script:</span> cabal run -j build
+<span class="fu">after_script:</span>
+  <span class="kw">-</span> cd _site
+  <span class="kw">-</span> <span class="fu">export REMOTE=$(git config remote.origin.url | sed &#39;s/.*:</span>\/\///&#39;)
+  <span class="kw">-</span> <span class="fu">git remote add github https:</span>//${GH_TOKEN}@${REMOTE}
+  <span class="kw">-</span> git add --all
+  <span class="kw">-</span> git status
+  <span class="kw">-</span> git commit -m <span class="st">&quot;Built by Travis ( build $TRAVIS_BUILD_NUMBER )&quot;</span>
+  <span class="kw">-</span> <span class="fu">git push github master:</span>master | grep -v http</code></pre></li>
+<li>Generate a Github <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use">auth token</a>.</li>
+<li><p>Set encrypted environment variables to allow Travis to commit to the master branch</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gem</span> install travis
+<span class="kw">travis</span> encrypt -r myorg/myorg.github.io --add GH_NAME=<span class="st">&quot;J. Doe&quot;</span> GH_EMAIL=jdoe@myorg.io GH_TOKEN=xxxxxxxx</code></pre></li>
+<li>Commit all the files.</li>
+<li>Enable Travis for your repo. <a href="http://docs.travis-ci.com/user/getting-started/#Step-one%3A-Sign-in">Instructions here</a>.</li>
+<li>Push the <code>source</code> branch to Github.</li>
+<li><p>Watch the deploy progress at https://travis-ci.org/myorg/myorg.github.io</p></li>
+</ol>
+<p>Now you can <a href="https://help.github.com/articles/editing-files-in-your-repository">create and edit</a> blog posts right in Github and your changes get deployed automatically.</p>
+<h4 id="optional-generating-a-custom-cabal-sandbox-for-travis">(optional) Generating a custom cabal sandbox for Travis</h4>
+<p>You can use my <a href="http://bin.begriffs.com/hakyll/cabal-sandbox.tar.xz">shared cabal sandbox</a> on Travis as done above, or you can build your own. It’s a little trickier. Use this Travis config as a start. It takes advantage of post-build deployment to S3.</p>
+<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
+<span class="fu">ghc:</span> 7.8
+<span class="fu">branches:</span>
+  <span class="fu">only:</span>
+  <span class="kw">-</span> source
+<span class="fu">before_install:</span>
+  <span class="kw">-</span> <span class="fu">travis_retry sudo add-apt-repository -y ppa:</span>hvr/ghc
+  <span class="kw">-</span> travis_retry sudo apt-get update
+  <span class="kw">-</span> travis_retry sudo apt-get install --force-yes happy-1.19.3 alex-3.1.3
+  <span class="kw">-</span> <span class="fu">export PATH=/opt/alex/3.1.3/bin:</span>/opt/happy/1.19.3/bin:$PATH
+<span class="fu">install:</span>
+  <span class="kw">-</span> cabal sandbox init
+  <span class="kw">-</span> cabal install -j --disable-documentation -fhttps pandoc
+  <span class="kw">-</span> cabal install -j --disable-documentation --disable-tests --reorder-goals
+<span class="fu">deploy:</span>
+  <span class="fu">provider:</span> s3
+  <span class="fu">access_key_id:</span> AKIAIYJJY5B5UWSU3CFQ
+  <span class="fu">bucket:</span> YOUR_BUCKET
+  <span class="fu">region:</span> us-west-1
+  <span class="fu">skip_cleanup:</span> true
+  <span class="fu">local-dir:</span> <span class="st">&quot;.cabal-sandbox&quot;</span>
+  <span class="fu">upload-dir:</span> hakyll
+  <span class="fu">acl:</span> !ruby/string:HighLine::String public_read
+  <span class="fu">on:</span>
+    <span class="fu">repo:</span> myorg/myorg.github.io
+    <span class="fu">branch:</span> source
+  <span class="fu">secret_access_key:</span>
+    <span class="fu">secure:</span> YOUR_SECURE_KEY</code></pre>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Pair programming with Haskell and Digital Ocean</title>
+    <link href="http://begriffs.com/posts/2014-06-09-pair-programming-with-haskell-and.html" />
+    <id>http://begriffs.com/posts/2014-06-09-pair-programming-with-haskell-and.html</id>
+    <published>2014-06-09T00:00:00Z</published>
+    <updated>2014-06-09T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Pair programming with Haskell and Digital Ocean</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">June  9, 2014</h5>
+</div>
+
+<div class="content">
+  <p>Here’s an overview of using <a href="https://github.com/begriffs/haskell-pair">hakell-pair</a>, a vagrant image for pair programming with Haskell. It allows you to roll out a standardized development environment for your team. Check out the screencast below to get an idea how it works.</p>
+<div id="wistia_mn1fmo8q0i" class="wistia_embed" style="width:640px;height:360px;">
+ 
+</div>
+<script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js"></script>
+<script>
+  wistiaEmbed = Wistia.embed("mn1fmo8q0i", { videoFoam: true });
+</script>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Database migrations without merge conflicts</title>
+    <link href="http://begriffs.com/posts/2014-04-30-database-migrations-without-merge.html" />
+    <id>http://begriffs.com/posts/2014-04-30-database-migrations-without-merge.html</id>
+    <published>2014-04-30T00:00:00Z</published>
+    <updated>2014-04-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Database migrations without merge conflicts</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">April 30, 2014</h5>
+</div>
+
+<div class="content">
+  <p>Ever discover an open source project that makes you overjoyed? That moment when you feel like <em>somebody gets it</em>, and things are getting better? That’s how I felt tonight:</p>
+<div style="text-align: center;">
+[ <a href="https://github.com/theory/sqitch">theory/sqitch</a> ]
+</div>
+<p>This is a database migration system built for the git era. It supports non-linear patch history and a system of detailed logging, reversion, and tagging. Oh, and it’s built around test driven database design.</p>
+<p>Here’s one ingenious property of the system. It has a special format for the so-called “plan file” it updates as you apply or revert migrations. People are free to work on multiple branches of a codebase and change the plan file willy nilly. You might be used to getting merge conflicts in your database schema, but the plan file format is designed to merge cleanly and automatically in git with the <a href="http://git-scm.com/docs/gitattributes#_built-in_merge_drivers">union merge strategy</a>. Just put <code>sqitch.plan merge=union</code> into your <code>.gitattributes</code> file and relax.</p>
+<p>Sqitch is under active development for “better integration with version control systems…to make managing idempotent reworkings even easier.”</p>
+<div style="text-align: center;">
+[ <a href="https://github.com/theory/sqitch/blob/master/lib/sqitchtutorial.pod">try the tutorial</a> ]
+</div>
+<h4 id="objections">Objections</h4>
+<ul>
+<li>“It’s written in Perl, eww!” Yeah I don’t write perl either, but the project is easy to install (even has a homebrew <a
+  href="https://github.com/theory/homebrew-sqitch/">tap</a>) and you don’t have to worry about it. That’s like complaining about the fuel used in a hyperdimensional warp drive as you ride in your horse-drawn buggy.</li>
+<li>“It wants me to write crusty stored procedures?” No, not at all. Write the SQL of your choice to match the architecture of your app.</li>
+<li>“Is that an unsalted md5 password in the documentation example?” Don’t worry, read the whole documentation. Some examples intentionally show the wrong ways of doing things in order to correct them later and demonstrate concepts.</li>
+</ul>
+<script async class="speakerdeck-embed" data-id="ad105ed0ac490130d6a626f5cde8fd08" data-ratio="1.2994923857868" src="//speakerdeck.com/assets/embed.js"></script>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Good songs in classical, romantic, impressionist and 20th century art music</title>
+    <link href="http://begriffs.com/posts/2014-04-14-the-best-songs-in-classical-romantic.html" />
+    <id>http://begriffs.com/posts/2014-04-14-the-best-songs-in-classical-romantic.html</id>
+    <published>2014-04-14T00:00:00Z</published>
+    <updated>2014-04-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Good songs in classical, romantic, impressionist and 20th century art music</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">April 14, 2014</h5>
+</div>
+
+<div class="content">
+  <p>I’ll list only those songs I really like but add a (★) to the those that have especially stuck with me.</p>
+<p>Find a cozy chair, turn up the volume and let’s begin.</p>
+<h3 id="aaron-copland">Aaron Copland</h3>
+<p>A man of musical contradictions. He has distinct styles, from forbidding angular melodies, to gentle populist songs (for instance commercial background music for a puppet show). He’s all-American, like a musical Frank Lloyd Wright.</p>
+<ul>
+<li><strong>Concerto for Piano and Orchestra (1926)</strong>. A poignant song of spacious yearning. The second movement gets ragtime and goofy though. <a href="https://www.youtube.com/watch?v=B09MlQANOlY">youtube</a></li>
+<li><strong>Two Pieces for Violin and Piano (1926)</strong>. It confides a sad secret.</li>
+<li><strong>Piano Variations (1930)</strong>. Contemptuous, self-sufficient. <a href="https://www.youtube.com/watch?v=i1-vIw_M-Qg">youtube</a></li>
+<li><strong>Sunday Afternoon Music (1935)</strong>. A simple, pure little song.</li>
+<li><strong>Appalachian Spring (1944) </strong>★. There is a recording of Copland rehearsing it with an orchestra. On the last movement he makes them retry several times, saying “no, do it like a prayer.” It’s a musical prayer which has stayed with me ever since. <a href="https://www.youtube.com/watch?v=t4E1JYP5Tgc">youtube</a></li>
+<li><strong>Midsummer Nocturne (1947)</strong>. Jazzy yet contemplative. <a href="https://www.youtube.com/watch?v=Q7Ax1ATBJbY">youtube</a></li>
+<li><strong>Quartet for Piano and Strings (1950)</strong>. Complex, with a peppy neoclassical second movement. <a href="https://www.youtube.com/watch?v=J8UpEIvrIGw">youtube</a></li>
+<li><strong>Two Ballads for Violin and Piano (1957)</strong>. Like an edgy lullaby.</li>
+<li><strong>Night Thoughts (1972)</strong>.</li>
+</ul>
+<h3 id="virgil-thomson">Virgil Thomson</h3>
+<p>His compositions have an interesting disinterestedness. It’s as if he indicates his musical exhibits with a pointer, murmuring, “now observe this melody.” Spend some time with his music and enjoy its curious aloofness.</p>
+<ul>
+<li><strong>Symphony No. 1 “On a Hymn Tune” (1928)</strong>★. Sweet hymns mingle with tart accompaniment. A memorable piece that displays Thomson’s characteristic hesitating transitions and American flavor. Listen to both the orchestral and piano arrangements for a better appreciation of the song.</li>
+<li><strong>Symphony No. 2 (1941)</strong>. A mercurial romp, sometimes emotionally distant, sometimes intimate.</li>
+<li><strong>Solitude, a portrait of Lou Harrison (1945)</strong>. A thorny bramble.</li>
+<li><strong>Mother of Us All (1947)</strong>. Ordinarily I don’t enjoy opera, its artifice distracts. But this opera is hypnotic and impulsive.</li>
+<li><strong>Four Songs to Poems by Thomas Campion (1951)</strong>. A beautiful arrangement. (I could only find crappy recordings online though)
+<div>
+</li>
+</ul>
+<h3 id="erik-satie">Erik Satie</h3>
+<p>Satie lived by his own secret rules. He created an elaborate religion, posted space for let ads in the paper for imaginary castles, developed refined gothic penmanship, wore identical velvet suits every day. He was “born very young in a very old world.” If you get the chance look at his musical scores because they have hidden messages for the performer. I find his first works best and most authentic. Later his music got more compromised to pay the bills. You can listen to his cabaret songs to appreciate how he suffered in life, being often broke and at once point evicted from his cramped Montmartre studio and forced to move to Arcueil.</p>
+<p>Imagine him on his long walks (he walked everywhere) under lamplight watching the world and judging it by his internal rules. The works are often built in threes, and are designed to view the same musical material from three angles. Many of the song titles are absurd. Satie took refuge in irony and did not like to reveal his real emotions.</p>
+<p>The music does reveal them, however, in a precise, odd, inspired, absolutely unique voice. His compositions might seem infantile to virtuosic performers and people with conventional minds, and Satie even took pains later in life to learn traditional composition at the Schola Cantorum. It simply didn’t suit him. He played what he played and wrote what he wrote, and thankfully kept true to himself.</p>
+<ul>
+<li><strong>Ogives (1886)</strong>. Ascetic and stern. I eat this stuff up. <a href="https://www.youtube.com/watch?v=hI7a0Eh_IPo">youtube</a></li>
+<li><strong>Trois Sarabandes (1887)</strong>. Notice the lack of musical development. The melodies are fragments in a typical Satie dreamworld. <a href="https://www.youtube.com/watch?v=OKUo47CpN3g">youtube</a></li>
+<li><strong>Trois Gymnopédies (1888)</strong>. ★ This <em>is</em> Satie, this is what he sounds like, the perfect little tuning fork of his soul. <a href="https://www.youtube.com/watch?v=FyUNbrgLezI">youtube</a></li>
+<li><strong>Gnossiennes (1889-97)</strong>. A mystical-contemplative dance. Later pieces have an elegant eccentricity. <a href="https://www.youtube.com/watch?v=xwgvEOY0vaA">youtube</a></li>
+<li><strong>Le Fils des étoiles (1891)</strong>. Dense, dry, tintinnabular. <a href="https://www.youtube.com/watch?v=Wc2UFjh_xtA">youtube</a></li>
+<li><strong>Trois Sonneries de la Rose†Croix (1892).</strong> Music for his mystic order, structured around the golden ratio. <a href="https://www.youtube.com/watch?v=r5scs9aagrg">youtube</a></li>
+<li><strong>Uspud (1892)</strong>. A “Christian ballet” with dark ritualistic undertones. <a href="https://www.youtube.com/watch?v=HQTzqy-7c4c">youtube</a></li>
+<li><strong>Danses Gothiques (1893)</strong>. Static eerie dances. <a href="https://www.youtube.com/watch?v=P871ssjLhZU">youtube</a></li>
+<li><strong>Vexations (1893)</strong>. He lost his love, a vivacious painter named Suzanne Valadon. He wrote her for thirty years thereafter but she never came back. This is his song about it. <a href="https://www.youtube.com/watch?v=dBhjGIdL5cM">youtube</a></li>
+<li><strong>Dans de travers, No. 2 (1897)</strong>. Patterns unfurl. <a href="https://www.youtube.com/watch?v=9x6nuiNN3JI">youtube</a></li>
+<li><strong>Arrière-propos (1912)</strong>. Like a jazzier <em>Fils des étoiles</em>.</li>
+<li><strong>Préludes flasques pour un chien (1912)</strong>. Sedate and gnomish. <a href="https://www.youtube.com/watch?v=uMp8tOIfPk0">youtube</a> <a href="https://www.youtube.com/watch?v=dJ62JRw2p00">funny synth remix</a></li>
+<li><strong>Croquis et agaceries d’un gros bonhomme en bois (1913)</strong>. Oddball waltz. <a href="https://www.youtube.com/watch?v=JV-uBDUIrKs">youtube</a></li>
+<li><strong>Descriptions automatiques (1913)</strong>. The first piece is like a tender soliloquy. <a href="https://www.youtube.com/watch?v=OoAzws5Pz0c">youtube</a></li>
+<li><strong>Avant-dernières pensées (1915)</strong>. ★ Mesmerizing ostinato. The score has a weird little <a href="http://petrucci.mus.auth.gr/imglnks/usimg/e/ef/IMSLP08099-Avant-dernieres.pdf">story</a> inside. What does it mean? <a href="https://www.youtube.com/watch?v=KIcA6bkJtAg">youtube</a></li>
+<li><strong>Sonatine bureaucratique (1917)</strong>. Balanced and self-assured. <a href="https://www.youtube.com/watch?v=kpp_cpiMS3U">youtube</a></li>
+<li><strong>Carnet d’Esquisses et de Croquis (1919)</strong>. Delightfully deranged ditties.</li>
+<li><strong>Nocturnes (1919)</strong>.★ Haunting. <a href="https://www.youtube.com/watch?v=tR627jMtu40">youtube</a></li>
+</ul>
+<h3 id="federico-mompou">Federico Mompou</h3>
+<p>Listening to Mompou is like discovering a secret attic you never thought existed. It’s full of mysterious shapes covered in fabric and dusty pictures in tasteful frames. The attic stairs behind you seem to stretch far away now, down into that impossible world of modern times. Or have you been up here all along and have yet to explore the world outside?</p>
+<ul>
+<li><strong>Pressebres (1917)</strong>. Folksy and out of kilter. <a href="https://www.youtube.com/watch?v=xgkofTG4I4g">youtube</a></li>
+<li><strong>Scènes d’Enfants (1918)</strong>. Expansive and sunny. <a href="https://www.youtube.com/watch?v=QMNfBBNjgtU">youtube</a></li>
+<li><strong>Trois Variations (1921)</strong>. Variations on a pure little melody. <a href="https://www.youtube.com/watch?v=uJyTFthZ_m8">youtube</a>, now watch the patterns: <a href="https://www.youtube.com/watch?v=b14T_9-_R00">youtube</a></li>
+<li><strong>Charmes (1921)</strong>.★ Magical sleepwalking. <a href="https://www.youtube.com/watch?v=b9ywF1XXn18">youtube</a></li>
+<li><strong>Paisajes (1960)</strong>. Follow the secret footpath. <a href="https://www.youtube.com/watch?v=mfOzbcPLjuM">youtube</a></li>
+<li><strong>Musica Callada (1959, 1962, 1965, 1967)</strong>. ★ Written in four books. Inspired by the the mystic poet St. John of the Cross’ who wrote about, “La Música Callada, la Soledad Sonora” or “the silent music, the murmuring of solitude.” <a href="https://www.youtube.com/watch?v=Vxuv_g5vE1o">youtube</a></li>
+</ul>
+<h3 id="claude-debussy">Claude Debussy</h3>
+<p>Debussy, the impressionist’s impressionist, master of lush webs of sound and of subtle orchestration. His music loses itself in a scintillating haze of colors and associations. It ushered in a freedom of composition and nuance lacking in the Germanic romanticism preceding it. As Satie remarked, “I explained to Debussy that a Frenchman had to free himself from the Wagnerian adventure, which wasn’t the answer to our national aspirations. I also pointed out that I was in no way anti-Wagnerian, but that we should have a music of our own – if possible, without any Sauerkraut.”</p>
+<p>Here’s a <a href="https://www.youtube.com/watch?v=_ejDe6NghmI">funny video</a> that explains more about this musical transition.</p>
+<ul>
+<li><strong>Beau Soir (1879)</strong>. Velvety. <a href="https://www.youtube.com/watch?v=TRCk49vcjjY">youtube</a></li>
+<li><strong>Salut printemps (1882)</strong>. Composed for the Prix de Rome scholarship competition. Breezy, elegant, slightly pentatonic. <a href="https://www.youtube.com/watch?v=DJeqdA8N2FQ">youtube</a></li>
+<li><strong>Printemps, Suite symphonique (1887)</strong>. richly orchestrated <a href="https://www.youtube.com/watch?v=nZkgyIdXt44">youtube</a></li>
+<li><strong>Deux Arabesques (1888)</strong>. Charming and feminine <a href="https://www.youtube.com/watch?v=Yh36PaE-Pf0">youtube</a></li>
+<li><strong>Suite bergamasque (1890, published 1905)</strong>. Overplayed easy listening, but why not? It’s graceful and good. <a href="https://www.youtube.com/watch?v=dBVLdqSK2Ns">youtube</a></li>
+<li><strong>String Quartet in G minor (1893)</strong>. Memorable and lively. <a href="https://www.youtube.com/watch?v=H7f7u3TbY84">youtube</a></li>
+<li><strong>Prélude à l’après-midi d’un faune (1894)</strong>. ★ Languorous, kaleidoscopic <a href="https://www.youtube.com/watch?v=bYyK922PsUw">youtube</a></li>
+<li><strong>Nocturnes (1899)</strong>. ★ Sumptuous strings and a luminous choir. <a href="https://www.youtube.com/watch?v=zn77zaA6mZM">youtube</a></li>
+<li><strong>Danse sacrée et Danse profane (1903)</strong>. A shimmering harp piece that contrasts the love of the spiritual and the natural. <a href="https://www.youtube.com/watch?v=q6XudR60rtA">youtube</a></li>
+<li><strong>La Mer (1905)</strong>. Subtle orchestration evoking a rather literary depiction of the sea. <a href="https://www.youtube.com/watch?v=RLAIJjWdJRQ">youtube</a></li>
+<li><strong>Images pour piano, Deuxième Série (1907)</strong>. Ringing and chatty. <a href="https://www.youtube.com/watch?v=KkFoP-2Pz6k">youtube</a></li>
+<li><strong>Preludes book 1 (1910)</strong></li>
+<li>“Footprints in the Snow.” ★ Cold, delicate and resigned. Only the footprints remain, the person is never coming back. <a href="https://www.youtube.com/watch?v=jFKfuanIfdU">youtube</a></li>
+<li>“The girl with the flaxen hair.” ★ An intimate gold-tinted memory. <a href="https://www.youtube.com/watch?v=Yu4KObwynSc">youtube</a></li>
+<li>“The submerged cathedral.” A contemplative otherworldly dive. <a href="https://www.youtube.com/watch?v=JAVyKDDsM3s">youtube</a></li>
+<li><strong>Première rhapsodie for clarinet and orchestra (1910)</strong>. Meandering songbird-like piece. <a href="https://www.youtube.com/watch?v=TLVxj2YQuJ0">youtube</a></li>
+<li><strong>Douze Études, book 1 (1915)</strong>. Hard-to-play studies in chords built of different intervals.</li>
+<li>Étude 4, pour les sixtes. Like distinguished but tarnished jewelry. <a href="https://www.youtube.com/watch?v=_4O-ujzdygs">youtube</a></li>
+<li><strong>Page D’Album (1915)</strong>. Smooth and clear. The left hand reminds me a little of Satie’s Gymnopédies. <a href="https://www.youtube.com/watch?v=aR_pBMA8MOg">youtube</a></li>
+<li><strong>Sonate pour flûte, alto et harpe (1915)</strong>. Melancholy, somewhat senile wandering. <a href="https://www.youtube.com/watch?v=ie_1RSnldAQ">youtube</a></li>
+<li><strong>Sonate pour violoncelle et piano (1915)</strong>. A dextrous and sinewy duet. Delightful! <a href="https://www.youtube.com/watch?v=1dWfYWkksXY">youtube</a></li>
+</ul>
+<h3 id="toru-takemitsu">Toru Takemitsu</h3>
+<p>Takemitsu started out writing film scores and making experimental electronic music. As he became better known he combined traditional eastern sounds and melodies with the western avant garde. The result is rich orchestral haiku. He ranges from jazzy pop tunes to eerie alien soundscapes with plenty of good stuff in between.</p>
+<ul>
+<li><strong>Clouds at Sunset (1967)</strong>. Lounge music with a Harpsichord! <a href="https://www.youtube.com/watch?v=d5qAbncvtJk">youtube</a></li>
+<li><strong>A Secret Post-Tokyo War Story Soundtrack (1970)</strong>. Hippy bongos and vibraphone. <a href="https://www.youtube.com/watch?v=769LjaAs9vo">youtube</a></li>
+<li><strong>Les Fils des Etoiles (1975)</strong>. Satie remix.</li>
+<li><strong>Ballad of Orin Soundtrack (1977)</strong>. Eerie and imaginative</li>
+<li><strong>In an Autumn Garden (1979)</strong>. Beautiful intense droning. <a href="https://www.youtube.com/watch?v=nYRUmvHEXfE">youtube</a></li>
+<li><strong>Rain Tree (1982)</strong>. Translucent and mystical. <a href="https://www.youtube.com/watch?v=S6jOWREQ7j0">youtube</a></li>
+<li><strong>I Hear the Water Dreaming (1987)</strong>. Ambiguously restless. <a href="https://www.youtube.com/watch?v=Ega5qU7MoHE">youtube</a></li>
+<li><strong>Rikyu Soundtrack (1991)</strong>. Fascinating mix of baroque melodies and anxious strings. <a href="https://www.youtube.com/watch?v=A5S3v2Qrx4I">youtube</a></li>
+</ul>
+<h3 id="bohuslav-martinů">Bohuslav Martinů</h3>
+<p>Martinů is the <a href="https://www.youtube.com/watch?v=BzNzgsAE4F0">shephard tone</a> of composers. Listening to his stuff feels like climbing a mountain, it gets increasingly hectic and then makes a sudden “switch” to expose a broad vista at the top. Then it starts climbing again and you realize you haven’t reached the real peak.</p>
+<p>That said, he does use a certain musical gesture compulsively. I’m fond of it but once you listen to a few songs you’ll know what I mean. Enough talking, get ready to be dazzled by an inventive and overlooked composer.</p>
+<ul>
+<li><strong>Three Czech Dances (1926)</strong>. Frenetic, almost like a player-piano score. <a href="https://www.youtube.com/watch?v=aadeccHoWaE">youtube</a></li>
+<li><strong>The Butterfly that Stamped (1926)</strong>. Fluid and percussive, awash in combinations. Starts a little slowly. <a href="https://www.youtube.com/watch?v=SRtIrpnc3kU">youtube</a></li>
+<li><strong>La Revue de Cuisine (1927)</strong>. ★ Fresh and irregular. <a href="https://www.youtube.com/watch?v=XjLMh0mZ4qo">youtube</a></li>
+<li><strong>Suite Miniature: Seven Easy Pieces for Cello and Piano (1931)</strong>. Tight, balanced duet. <a href="https://www.youtube.com/watch?v=LyVDFQ9BFAU">youtube</a></li>
+<li><strong>Les Ritournelles (1932)</strong>. Nervous and cerebral. <a href="https://www.youtube.com/watch?v=RRRWzsY4TUI">youtube</a></li>
+<li><strong>Julietta, moderato (1937)</strong>. Quiet and kind of mind-bending. <a href="https://www.youtube.com/watch?v=vejci6bC2Zs">youtube</a></li>
+<li><strong>Sonata No. 1 for Cello and Piano (1939)</strong>. Lively, with the surprising twists characteristic of Martinů’s mature style. <a href="https://www.youtube.com/watch?v=ifsVgN19QPk">youtube</a></li>
+<li><strong>Sinfonietta Giocosa, first movement (1940)</strong> ★ Soaring. <a href="https://www.youtube.com/watch?v=WH3mZAJWIVw">youtube</a></li>
+<li><strong>Dumka No. 3 (1941)</strong>. Matter-of-fact.</li>
+<li><strong>Piano Quartet (1942)</strong>. ★ Rolling, boisterous. <a href="https://www.youtube.com/watch?v=iW9gLP48FEc">youtube</a></li>
+<li><strong>Symphony No. 1 (1942)</strong>. Spacious and majestic. <a href="https://www.youtube.com/watch?v=XzrHLcmmRJI">youtube</a></li>
+<li><strong>Fantasia for Theremin with Oboe, String Quartet and Piano (1944)</strong>. ★ Spectral melodies with exciting piano/string accompaniment. <a href="https://www.youtube.com/watch?v=fIN28gEWJdY">youtube</a> (pitchy recording)</li>
+<li><strong>Etudes and Polkas (1945)</strong>. A river of whirling sounds. <a href="https://www.youtube.com/watch?v=QImT91O0d_4">youtube</a></li>
+<li><strong>Toccata e Due Canzoni (1946)</strong>. Stormy and suspenseful. <a href="https://www.youtube.com/watch?v=WMZw0uoRc4w">youtube</a></li>
+<li><strong>Rhapsody Concerto for Viola and Orchestra (1952)</strong>. Full and passionate. <a href="https://www.youtube.com/watch?v=PPUlbGs5GFE">youtube</a></li>
+<li><strong>Sonata No. 3 for Cello and Piano (1952)</strong>. Twisting topsy-turvy. <a href="https://www.youtube.com/watch?v=Aw4NCkJCgP0">youtube</a></li>
+<li><strong>Oboe Concerto (1955)</strong>. Buoyant. <a href="https://www.youtube.com/watch?v=8RDRMudi2W8">youtube</a></li>
+<li><strong>Chamber Music No 1, second movement (1959)</strong>. A touch of almost Copland. <a href="https://www.youtube.com/watch?v=zbtmsZfpjwA">youtube</a></li>
+<li><strong>Nonet No 2 (1959)</strong>. Charming neoclassical work, written as a goodbye on his deathbead. <a href="https://www.youtube.com/watch?v=7nBhO0ll_vI">youtube</a></li>
+</ul>
+<h3 id="to-be-continued">To be continued…</h3>
+<p>Check back for more great music.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Tikhon Jelvis' ideas about Structural Merging</title>
+    <link href="http://begriffs.com/posts/2014-04-08-pilgrimage-report-structural-merging.html" />
+    <id>http://begriffs.com/posts/2014-04-08-pilgrimage-report-structural-merging.html</id>
+    <published>2014-04-08T00:00:00Z</published>
+    <updated>2014-04-08T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Tikhon Jelvis' ideas about Structural Merging</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">April  8, 2014</h5>
+</div>
+
+<div class="content">
+  <p>This afternoon I paired with Tikhon. He’s a Haskeller, researcher, and the organizer of the SF Types, Theorems, and Programming Languages group. His <a href="https://github.com/TikhonJelvis/Cow">project</a> is to extend the unix commands <code>diff</code> and <code>merge</code> to understand and work better on JavaScript code.</p>
+<p>As a product of the Unix tradition the standard <code>diff</code> program operates line by line between files. This affects not just diff itself but programs like git that rely on it. Have you ever changed a program in a way that does not affect its operation such as changing indentation and then been forced to make a big git commit? Have you ever changed the name of a variable and caused a big fragmented commit? Tikhon believes that small changes of meaning should appear as small diffs and the reason that they currently don’t is that we still think in terms of teletypes rather than syntax.</p>
+<p>Most importantly Tikhon realized that operating crudely on lines can create merge conflicts when there needn’t be any. For instance, consider this original file:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span> (a, b) {
+  <span class="kw">return</span> a + b;
+}
+
+<span class="kw">function</span> <span class="fu">foo2</span> (a, b) {
+  <span class="kw">return</span> a - b;
+}</code></pre>
+<p>One person edits it by moving one function inside the scope of the other.</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span> (a, b) {
+  <span class="kw">return</span> a + b;
+
+  <span class="kw">function</span> <span class="fu">foo2</span> (a, b) {
+    <span class="kw">return</span> a - b;
+  }
+}</code></pre>
+<p>Another edits it by changing variable names.</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span> (a, b) {
+  <span class="kw">return</span> a + b;
+}
+
+<span class="kw">function</span> <span class="fu">foo2</span> (c, d) {
+  <span class="kw">return</span> c - d;
+}</code></pre>
+<p>The merge fails! Resolution requires accepting one version and manually adding the changes from the other.</p>
+<pre class="sourceCode diff"><code class="sourceCode diff">function foo (a, b) {
+  return a + b;
+
+<span class="st">&lt;&lt;&lt;&lt;&lt;&lt;&lt; move.js</span>
+  function foo2 (a, b) {
+    return a - b;
+  }
+<span class="kw">=======</span>
+function foo2 (c, d) {
+  return c - d;
+<span class="ot">&gt;&gt;&gt;&gt;&gt;&gt;&gt; rename.js</span>
+}</code></pre>
+<p>His solution: a <em>structural</em> merge. A traditional diff sees each of these changes as many lines, whereas each of the files being merged differs by only a single structural change, and those changes can be harmlessly resolved. In terms of syntax, the first change (moving foo2 inside foo) looks like this</p>
+<div class="figure">
+<img src="/images/tree-1.png" alt="Moving foo" /><p class="caption">Moving foo</p>
+</div>
+<p>The second (renaming the variables) looks like this</p>
+<div class="figure">
+<img src="/images/tree-2.png" alt="Renaming variables" /><p class="caption">Renaming variables</p>
+</div>
+<p>These representations are created using the Zhang-Shasha tree edit-distance algorithm. It indicates “tree diff” in terms of the node operations <em>move</em>, <em>relabel</em>, <em>add</em>, and <em>delete</em>. The algorithm finds the minimum number of applications of these rules to transform one tree into another.</p>
+<p>Interestingly if we create a tree diff of tree diffs themselves we can use it to display more meaningful merge conflicts. The diff of the two diff trees above looks like this</p>
+<div class="figure">
+<img src="/images/tree-diff.png" alt="Tree diff" /><p class="caption">Tree diff</p>
+</div>
+<p>A second pass with a simplifying algorithm shows there is exactly one edit operation introduced by each change. A structural merge program can interactively ask the user which edit operation to apply (and can do them both if requested).</p>
+<p>Tikhon’s big hurdle is to make his tree diff fast. As he quipped, “[it runs in] exponential time…I’m not a fan.” The solution is dynamic programming, and in a lazy language like Haskell with immutable data structures it only takes a tiny change in a program to automatically memoize functions and enable dynamic programming. We spent the day investigating how to do it for his tree diff function, but began by playing with it in the simpler problem of string edit distance.</p>
+<p>Let me show you the trick first. It uses laziness and co-recursion to make the function and its lookup table always keep one step ahead of each other in a magical circle. Observe how it is used to generate Fibonacci numbers.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">fibs <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:</span> <span class="dv">1</span> <span class="fu">:</span> zipWith (<span class="fu">+</span>) fibs (drop <span class="dv">1</span> fibs)
+
+<span class="co">-- take 10 fibs</span>
+<span class="co">-- [0,1,1,2,3,5,8,13,21,34]</span></code></pre>
+<p>Let’s see a naive implementation of string edit distance and how to transform it with The Trick. It’s a Haskell implementation of the Wagner–Fischer algorithm which recursively calculates the edit distance of every initial segment of the two strings eventually working up to the original strings. Using the edit operations insert, delete, and substitute it can be expressed succinctly as</p>
+<div class="figure">
+<img src="/images/wagner-fischer.png" alt="Wagner fischer" /><p class="caption">Wagner fischer</p>
+</div>
+<p>Translated to Haskell it becomes</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">editDistance ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+editDistance xs ys <span class="fu">=</span> dist m n
+  <span class="kw">where</span>
+  (m,n) <span class="fu">=</span> (length xs, length ys)
+  x <span class="fu">=</span> array (<span class="dv">1</span>,m) (zip [<span class="dv">1</span><span class="fu">..</span>] xs)
+  y <span class="fu">=</span> array (<span class="dv">1</span>,n) (zip [<span class="dv">1</span><span class="fu">..</span>] ys)
+
+<span class="ot">  dist ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
+  dist <span class="dv">0</span> j <span class="fu">=</span> j
+  dist i <span class="dv">0</span> <span class="fu">=</span> i
+  dist i j <span class="fu">=</span> minimum [
+      (dist (i<span class="fu">-</span><span class="dv">1</span>) j    ) <span class="fu">+</span> <span class="dv">1</span>,
+      (dist i     (j<span class="fu">-</span><span class="dv">1</span>)) <span class="fu">+</span> <span class="dv">1</span>,
+      <span class="kw">if</span> x <span class="fu">!</span> i <span class="fu">==</span> y <span class="fu">!</span> j <span class="kw">then</span>     dist (i<span class="fu">-</span><span class="dv">1</span>) (j<span class="fu">-</span><span class="dv">1</span>)
+                        <span class="kw">else</span> <span class="dv">1</span> <span class="fu">+</span> dist (i<span class="fu">-</span><span class="dv">1</span>) (j<span class="fu">-</span><span class="dv">1</span>)
+    ]</code></pre>
+<p>The trick to make it fast is to co-recursively fill in a lookup table with the edit distances of initial segments, and to calculate edit distances…by referencing the table. Mind = blown.</p>
+<p>After implementing the function above that returns merely the minimum edit distance, we augmented it to return an array of the actual edit actions needed. Got into some performance problems of repeatedly calculating the length of those arrays when checking for the minimum, but found a way around that problem.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">editDistance ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+editDistance xs ys <span class="fu">=</span> table <span class="fu">!</span> (m,n)
+  <span class="kw">where</span>
+  (m,n) <span class="fu">=</span> (length xs, length ys)
+  x     <span class="fu">=</span> array (<span class="dv">1</span>,m) (zip [<span class="dv">1</span><span class="fu">..</span>] xs)
+  y     <span class="fu">=</span> array (<span class="dv">1</span>,n) (zip [<span class="dv">1</span><span class="fu">..</span>] ys)
+
+<span class="ot">  table ::</span> <span class="dt">Array</span> (<span class="dt">Int</span>,<span class="dt">Int</span>) <span class="dt">Int</span>
+  table <span class="fu">=</span> array bnds [(ij, dist ij) <span class="fu">|</span> ij <span class="ot">&lt;-</span> range bnds]
+  bnds  <span class="fu">=</span> ((<span class="dv">0</span>,<span class="dv">0</span>),(m,n))
+
+  dist (<span class="dv">0</span>,j) <span class="fu">=</span> j
+  dist (i,<span class="dv">0</span>) <span class="fu">=</span> i
+  dist (i,j) <span class="fu">=</span> minimum [
+      table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j) <span class="fu">+</span> <span class="dv">1</span>,
+      table <span class="fu">!</span> (i,j<span class="fu">-</span><span class="dv">1</span>) <span class="fu">+</span> <span class="dv">1</span>,
+      <span class="kw">if</span> x <span class="fu">!</span> i <span class="fu">==</span> y <span class="fu">!</span> j <span class="kw">then</span>     table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j<span class="fu">-</span><span class="dv">1</span>)
+                        <span class="kw">else</span> <span class="dv">1</span> <span class="fu">+</span> table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j<span class="fu">-</span><span class="dv">1</span>)
+    ]</code></pre>
+<p>What remains is to translate this nice memoized string edit distance to trees using tree edit operations rather than string operations. Notice the lookup table we used above is a two-dimensional array indexed by the length of segments. To translate the lookup table strategy to trees we need a way to uniquely name partial-traversals, which we could do by choosing the number of hops along the traversal to be the “index.” (We experimented with using a Haskell Map keyed off the trees but that was really slow.) Ultimately we did not complete the refactor to make the tree diff sub-exponential speed, but we discovered how it will be done.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Magic numbers in polynomial hash functions</title>
+    <link href="http://begriffs.com/posts/2014-03-28-magic-numbers-in-polynomial-hash.html" />
+    <id>http://begriffs.com/posts/2014-03-28-magic-numbers-in-polynomial-hash.html</id>
+    <published>2014-03-28T00:00:00Z</published>
+    <updated>2014-03-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Magic numbers in polynomial hash functions</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">March 28, 2014</h5>
+</div>
+
+<div class="content">
+  <p>Every time I see copypasta polynomial string hash functions on the internet I am mystified by the arcane and magical numbers they contain. Today it’s time to find out which numbers are acceptable and why. Scanning stack overflow discussions and spending some time at the blackboard has revealed the beginning of the secret.</p>
+<p>Polynomial hashes are computed from a base number and the character codes of an input string. Let \(s_0 \ldots s_{k-1}\) be the codes of each input character in string \(s\). It’s our job to choose constants \(b\) and \(n\) to minimize collisions in the hash function \(h(s) = \sum b^i s_i\ \text{mod}\ n\), where \(b\) is an arbitrary number and \(n\) is the number of buckets in our hash table.</p>
+<p>Increasing \(n\) certainly helps. If \(n=1\) then everything will collide and we needn’t worry about \(b\). So fix \(n\) as large as sensible for application memory. We’ll see that certain choices of \(b\) are statistically better than others. Certain choices are really bad.</p>
+<p>Let’s get to our conclusion the roundabout way and see what happens when we pick bad values. Assume \(n \mid b\), that is \(b = nm\) for some \(m\). In this case \(h(s) = \sum b^i s_i = s_0 + nmX \equiv s_0\ \text{mod}\ n\). Hence only the first character of the string affects the hash value. This is terrible performance.</p>
+<p>More generally if \(i \mid b\) and \(i \mid n\) for \(i &gt; 1\) then \(b = ij\), \(n = ik\) for some \(j\) and \(k\). Thus each \(\sum b^i s_i\) can be written \(s_0 + ijX\). As in the previous case the \(s_0\) term turns out to be more important than the others. Notice \(s_0 + ijX \equiv s_0 + ijY\ \text{mod}\ ik\) iff \(ij(X-Y) \equiv 0\ \text{mod}\ ik\) iff \(j(X-Y) \equiv 0\ \text{mod}\ k\). That’s not good – the final terms, whatever they may be, are modded by \(k\) which is \(i\) times smaller than \(n\). Smaller modding means fewer bucket choices which makes collisions more likely.</p>
+<p>Which brings us to the first conclusion: choose \(b\) and \(n\) to be relatively prime. Beware that integer arithmetic is already modular, so \(h(s)\) is really \(h(s)\ \text{mod}\ 2^{32}\). Don’t choose \(b\) as a power of two (in fact choose it to be odd) or else \(\gcd{(b, 2^{32})} &gt; 1\).</p>
+<p>This is why the typical hash function snippet on stack overflow uses a prime for \(b\). The author doesn’t know what you’ll pick for \(n\) so they play it safe. However there is still an interesting question about which prime to pick. Sadly coprimality, while necessary, is not sufficient to guard against collisions. I wrote some code to test various strings and constants.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Control.Monad</span> (replicateM)
+<span class="kw">import </span><span class="dt">Data.Char</span> (ord)
+<span class="kw">import </span><span class="dt">Data.List</span> (group, sort)
+
+<span class="ot">allStrings ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Char</span>] <span class="ot">-&gt;</span> [ [<span class="dt">Char</span>] ]
+allStrings from to alphabet <span class="fu">=</span> [from<span class="fu">..</span>to] <span class="fu">&gt;&gt;=</span> (<span class="ot">`replicateM`</span> alphabet)
+
+<span class="ot">numCollisions ::</span> <span class="dt">Ord</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+numCollisions <span class="fu">=</span> sum <span class="fu">.</span> (filter (<span class="fu">&gt;</span> <span class="dv">1</span>)) <span class="fu">.</span> (map length) <span class="fu">.</span> group <span class="fu">.</span> sort
+
+<span class="ot">coprimes ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+coprimes n <span class="fu">=</span> [m <span class="fu">|</span> m <span class="ot">&lt;-</span> [<span class="dv">2</span><span class="fu">..</span>n], (gcd m n) <span class="fu">==</span> <span class="dv">1</span>]
+
+<span class="co">-- Horner&#39;s method for polynomial evaluation</span>
+<span class="ot">horner ::</span> (<span class="dt">Num</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> a
+horner x <span class="fu">=</span> foldr (\a b <span class="ot">-&gt;</span> a <span class="fu">+</span> b<span class="fu">*</span>x) <span class="dv">0</span>
+
+<span class="ot">hash ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Char</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+hash n b s <span class="fu">=</span> (horner b (map ord s)) <span class="ot">`mod`</span> n
+
+<span class="ot">len3collisions ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
+len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</span> map (hash n b) <span class="fu">$</span> allStrings <span class="dv">3</span> <span class="dv">3</span> [<span class="ch">&#39;a&#39;</span><span class="fu">..</span><span class="ch">&#39;z&#39;</span>]</code></pre>
+<p>There are \(26^3 = 17576\) length three strings of lowercase letters. If we let \(n = 17576\) and run through all relatively prime choices of \(b &lt; n\) there are plenty of bad values. To get a feel for how the performance varies, I sorted the number of keys that collide with any other keys as \(b\) varies. (The x-axis below is <strong>not</strong> \(b\).) The graph gives a feeling for the range of success.</p>
+<div class="figure">
+<img src="/images/hash-chart.png" alt="Hash collisions" /><p class="caption">Hash collisions</p>
+</div>
+<p>For the best \(b\) a whole 89% of keys are collision-free. At the worst end all but six collide. Apparently there is some deeper stuff going on. That’s as far as I’m going to take it for now.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Beyond HTTP Header Links</title>
+    <link href="http://begriffs.com/posts/2014-03-06-beyond-http-header-links.html" />
+    <id>http://begriffs.com/posts/2014-03-06-beyond-http-header-links.html</id>
+    <published>2014-03-06T00:00:00Z</published>
+    <updated>2014-03-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Beyond HTTP Header Links</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">March  6, 2014</h5>
+</div>
+
+<div class="content">
+  <p>The idea of <em>Hypertext As The Engine Of Application State</em> is that each hypermedia resource provides links to related resources. These links are typically called affordances. Clients can decouple themselves from a server by following affordances rather than constructing – or memorizing – URLs. Servers are then free to change URLs or gracefully degrade service.</p>
+<p>One of the more popularly adopted affordances are pagination link headers. The server includes links to the <em>prev</em>, <em>next</em>, <em>first</em>, and <em>last</em> pages at each page in a series. The client can disregard the URL scheme and just follow the links to access the pages as a doubly-linked list.</p>
+<p>Problem: pagination is often random-access. Look familiar?</p>
+<div class="figure">
+<img src="/images/pagination-1.png" alt="Linked list" /><p class="caption">Linked list</p>
+</div>
+<p>Sure, it has previous and next links but there are also links to go directly to numbered pages. Some interfaces embrace random access even more directly.</p>
+<div class="figure">
+<img src="/images/pagination-2.png" alt="Random access" /><p class="caption">Random access</p>
+</div>
+<p>In a potentially unbounded sequence we can’t include a header link to each page. What link relations would we use, and how would the client know what they mean? Ideally we would like a content agnostic way to paginate large resources, a standards-compliant way that doesn’t have to adjust the URL.</p>
+<p>If we can find a way to expose affordances for random-access pagination then why include the traditional four links? I’d prefer a standard way to access any page at all, which would make the first, last, next and prev links superfluous.</p>
+<p>The solution is, I think, range headers. They were originally constructed to resume big downloads. Perfect! What is pagination but a slow download into human eyes? The HTTP 1.1 spec provides a standard way to request part of a resource and to discover how much is left to go. Let’s see how it works.</p>
+<pre><code>Request
+  GET /resource
+Response
+  Status 206 (partial content)
+  Accept-Ranges: items
+  Range-Unit: items
+  Content-Range: 0-249/1000000</code></pre>
+<p>Here the client asks for a resource. The server doesn’t want to send more than two hundred and fifty items at once, so it sends a partial response. A client that understands the “Accept-Ranges” affordance can now request specific ranges.</p>
+<p>The client needn’t inspect or adjust the URL to select a new range. It just sets a header</p>
+<pre><code>Request
+  GET /resource
+  Range-Unit: items
+  Range: 0-24
+Response
+  Status: 206
+  Range-Unit: items
+  Content-Range: 0-24/1000000</code></pre>
+<p>Notice the negotiation. Both the client and server have limited numbers of items they want to consume or serve at once. In the first request the server limited the response, and in the second it honored the client’s request to further limit it. At this point the client knows what range it has been given, along with the total number of items. Requesting any page is just math.</p>
+<p>I’d suggest this supersedes the classic pagination link headers. It’s equally restful yet more powerful.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>Thoughts for a new API server stack</title>
+    <link href="http://begriffs.com/posts/2014-03-01-thoughts-for-new-api-server-stack.html" />
+    <id>http://begriffs.com/posts/2014-03-01-thoughts-for-new-api-server-stack.html</id>
+    <published>2014-03-01T00:00:00Z</published>
+    <updated>2014-03-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Thoughts for a new API server stack</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">March  1, 2014</h5>
+</div>
+
+<div class="content">
+  <p>If you could choose any technologies to build your next API server, what would they be?</p>
+<p>I’ve been thinking a lot about this question because I know we can do better than the status quo. I feel that the current generation of web frameworks are lacking because they make us focus on MVC procedures rather than the data itself.</p>
+<p>Before I jump into coding my first proof-of-concept, I feel like talking it out in a blog post. If you disagree with my approach let’s discuss.</p>
+<ol style="list-style-type: decimal">
+<li>Start with <strong>PostgreSQL</strong>. It is a very capable database, and we can use its built-in features rather than rewriting them. It might not be the right choice for certain applications (like graph connectedness queries), but it is perfect for traditional crud apps. It can handle geospatial and full text searching as well.</li>
+<li>Store database migrations in a git repo and use <a href="https://github.com/depesz/Versioning"><strong>depesz/Versioning</strong></a> (see his <a href="http://www.depesz.com/2010/08/22/versioning/">blog post</a>). If you’ve used Rails then you know about migrations, but depesz’s are better. Have you ever switched branches in your code and been unable to migrate because some of your migrations are on a different branch? I don’t think this library has that problem (but I haven’t tried it yet). Unlike the Rails model, this one recognizes that migrations form a dependency tree, not a straight line, and it keeps fuller record in the db of migration history. (<strong>UPDATE</strong>: <a href="https://github.com/theory/sqitch">theory/sqitch</a> looks even better)</li>
+<li>Use <strong>test-driven development</strong> in migrations. The good thing about relational databases is there is less to test in the first place. By using constraints you can often just declare what you want. But for more complicated things like subtle row ordering or joins we can include fixtures and tests with each migration. Perhaps wrap the migration in a transaction that ensures the tests fail before migration and succeed afterward, else roll back the whole thing.</li>
+<li>Define <strong>views</strong> that will be the face of the API. Don’t allow public access to any underlying tables. Postgres 9.3 now supports <a href="http://michael.otacoo.com/postgresql-2/postgres-9-3-feature-highlight-auto-updatable-views/">auto-updatable</a> views, so you don’t have to create stored procedures to change data. Even views with aggregate functions and joins can be updatable, as long as you write triggers to intercept the update.</li>
+<li><strong>Add HTTP caching</strong> hints to views as <a href="http://www.postgresql.org/docs/9.3/static/sql-comment.html">comments</a>. The comment can be SQL which produces a single-row table that can contain any of these columns: <code>Expires</code>, <code>max_age</code>, <code>Last-Modified</code>, and <code>ETag</code>. The API server can run the comment query in a production environment to decide what headers to set.</li>
+<li><strong>Version</strong> the views with schemas. Backward compatibility is important for an API, so we should address it early. For each major (breaking) version create a schema like v1 or v2. Consumers of the API will have their queries executed within a schema depending on the version they request. Also views can be accessed across schemas with the <code>search_path</code> setting (to fall back to old versions of whichever views you don’t feel like redefining in the new version).</li>
+<li>Use Postgres default <strong>security through <a href="http://www.postgresql.org/docs/9.3/static/user-manag.html">roles</a></strong>, not custom app logic. Create the roles and decide which views they can access. Signing into the API should be standard HTTPS auth which forwards to the database for login. Your API will not create its own table with usernames and hashed passwords. If you need to store more info about your users (name, email etc) you can create a table with a foreign key to the <code>pg_authid</code> table.</li>
+<li><strong>No controller logic.</strong> Wrap your database behind a <a href="http://sandman.io/">Sandman</a> server. The routes and content of every view is then created mechanically from your database views. If you want to change anything you have to do it in the db. This way there is one source of truth and one place to write tests.</li>
+<li>Select the version with proper HTTP <a href="http://blog.begriffs.com/2014/02/api-versioning-best-practices-no-really.html"><strong>content negotiation</strong></a>. The chosen version will determine the schema in which queries execute.</li>
+<li>Provide <strong>server-side pagination</strong> through <a href="http://blog.begriffs.com/2014/01/unlocking-deep-http-with-javascript-pt-2.html">headers</a>.</li>
+<li><strong>Deploy using Heroku.</strong> I’m not a devops expert, but I know Heroku makes things pretty easy. It handles automated database backup, and has easy Postgres scaling settings (depending on your budget). Add the New Relic <a href="https://newrelic.com/plugins/boundless/109">Postgres Plugin</a>, and autoscale your web dynos with <a href="http://hirefire.io/">HireFire</a>.</li>
+</ol>
+<p>This is my current opinion about how to create quality APIs. Please help me think through the issues and poke holes in it. Likely both Sandman and depesz/Versioning need more features to support the ideas in my list.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>API embedded resources considered harmful</title>
+    <link href="http://begriffs.com/posts/2014-02-14-api-embedded-resources-considered.html" />
+    <id>http://begriffs.com/posts/2014-02-14-api-embedded-resources-considered.html</id>
+    <published>2014-02-14T00:00:00Z</published>
+    <updated>2014-02-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>API embedded resources considered harmful</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">February 14, 2014</h5>
+</div>
+
+<div class="content">
+  <div class="alert alert-warning" role="alert">
+<h4>
+Update!
+</h4>
+Another way to handle embedded resources is by including or excluding them explicitly with query parameters. For instance below we could pass a parameter like <code>?include_cast=true</code> to the <code>/movie</code> endpoint. It’s possibly a more pragmatic way to customize the response.
+</div>
+<h4 id="the-false-premise">The False Premise</h4>
+<p>If you aren’t familiar with resource embedding, it’s where an API response contains related information that a client might want. An example would be to include cast information in a response about a movie:</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Stalker&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;year&quot;</span><span class="fu">:</span> <span class="st">&quot;1979&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;director&quot;</span><span class="fu">:</span> <span class="st">&quot;Andrei Tarkovsky&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;language&quot;</span><span class="fu">:</span> <span class="st">&quot;Russian&quot;</span><span class="fu">,</span>
+ 
+  <span class="dt">&quot;_embedded&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+    <span class="dt">&quot;cast&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Alisa Brunovna Freyndlikh&quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;December 8, 1934&quot;</span> <span class="fu">}</span><span class="ot">,</span>
+      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Aleksandr Leonidovich Kaydanovskiy &quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;July 23, 1946&quot;</span> <span class="fu">}</span><span class="ot">,</span>
+      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Otto Alekseevich Solonitsyn&quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;August 30, 1934&quot;</span> <span class="fu">}</span>
+    <span class="ot">]</span>
+  <span class="fu">}</span>
+<span class="fu">}</span></code></pre>
+<p>We’re taught that including embedded information saves the client from having to make additional HTTP requests. The only way to get more information is to make a fresh request, right?</p>
+<p>Not necessarily. For the past fifteen years the mainstream web development community has unfortunately neglected the HTTP spec. You see, by 1999 people had been using and learning from HTTP 1.0 for a few years. It had become obvious that the one-resource-per-request design was awkward. There is overhead to making web requests, from setting up TCP to querying DNS. When possible it makes sense to reuse an existing HTTP connection. Hence the HTTP 1.1 design committee invented the <em>keep-alive</em> header and <a href="https://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a>.</p>
+<p><img src="/images/pipeline.png" style="float:right" /> With pipelining you load several requests into one connection. Sadly its support has been halting and incomplete because of subtleties about slow requests holding up later ones (the “head of line” problem). That subtlety means you shouldn’t pipeline all assets by default. In a way browsers threw out the baby with the bathwater by not allowing you to pipeline selectively.</p>
+<p>Although we can’t use real HTTP pipelining to put related requests together (at least not until <a href="http://tools.ietf.org/html/draft-ietf-httpbis-http2-10#section-5">HTTP/2</a>), there is another trick we can use, and it’s a trick we can put into server middleware so it’s transparent to our application code. But before getting into that, why bother?</p>
+<h4 id="the-problems-with-embedding">The Problems with Embedding</h4>
+<p>What are the downsides with embedding, anyway? It provides helpful information and anticipates the client’s needs. If someone asks you to pass the salt, why not pass the pepper too?</p>
+<p>In the movie example the related cast information was no big deal. Pretty small. However in real requests this additional data can be large, and it’s not always needed. Also including related data is a slippery slope. We could include reviews, showtimes, historical popularity, and similar movies. There’s a limit to how much you choose to include.</p>
+<p>What some people tend to do is create multiple similar endpoints. In our example these endpoints might include a movie-with-its-reviews and a movie-with-cast. Even when developers don’t intentionally start out designing the system this way its evolution often forces the design. Developers end up creating convenience endpoints to serve particular pages. After all, the app should be efficient!</p>
+<p>However it’s not without problems. First, the backend gets harder to maintain. It accumulates similar controller actions with more tests and docs. Second, the chosen subsets are arbitrary. For (n) related datasets there are (2^n) possible embedded-subsets. So the client gets stuck with either more or less data than it needs. Third, independently limiting or filtering each embedded list is hard and might be implemented idiosyncratically and poorly in the app.</p>
+<h4 id="the-solution">The Solution</h4>
+<p>The way to avoid these problems and keep the client and server light and flexible is through <em>relational batch requests</em>. Relational in the sense that we create self-contained root-level resources that accept query parameters to filter them appropriately. Batched in the sense that we combine requests for related resources into a single HTTP request – a spontaneous request that the application code doesn’t need to name or prepare for in any special way.</p>
+<p>If we have an identifier (in this example numerical) for a movie imagine we could send all these requests at once</p>
+<pre><code>Single request:
+ 
+GET /movies/12
+GET /cast?movie=12
+GET /reviews?movie=12</code></pre>
+<p>In fact you can, using a server middleware such as <a href="https://github.com/arsduo/batch_api">arsduo/batch_api</a> which replays the batched requests one by one locally on the server and combines the results. Your server code can’t tell the difference. And each request is allowed to use unrestricted HTTP, with headers and params and all. I’ll show you my idea for a clean Angular module to send the batch requests. But first let’s consider a knee-jerk reaction to these kind of routes.</p>
+<p>Why are we routing to <code>/cast?movie=12</code> rather than <code>/movies/12/cast</code>? The former is not as conventional, at least in the Rails community. But remember this is an API. The endpoint URLs are not providing a visible sense of structure in a visitor’s address bar. I don’t see any benefits from nesting <code>cast</code> under <code>movies/:id</code>. All it does is make the queries less expressive. If you want a list of cast filtered in some other way you will need the root-level <code>cast</code> route anyway, and now you have two routes to maintain.</p>
+<p>Note that relational batch requests can’t handle every kind of request efficiently. For instance aggregate queries should happen on the server. If you want the average rating of a movie it’s overkill to request <code>/reviews?movie=12</code> (even in parallel) and do the math when a fast backend database could do that. Unless someone develops a kind of “APIQL” like <code>l/reviews?movie=12&amp;amp;select=avg(rating)</code>. Interesting, does anyone know of a library for this?</p>
+<p>To make it easy to consume batched APIs we could turn to Angular with its tools to abstract the traditional browser Javascript platform. One might write an extension of Angular’s <code>$resource</code> object that is built from other resources. The key is easy composition like this:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript">b = <span class="fu">batch</span>(<span class="st">&#39;/batch_endpoint&#39;</span>, {
+  <span class="dt">movie</span>:   [<span class="st">&#39;get&#39;</span>,   <span class="fu">$resource</span>(<span class="st">&#39;/movies/:movieId&#39;</span>, { <span class="dt">movieId</span>: <span class="st">&#39;@id&#39;</span> }) ],
+  <span class="dt">cast</span>:    [<span class="st">&#39;query&#39;</span>, <span class="fu">$resource</span>(<span class="st">&#39;/cast?movie=:movieId&#39;</span>, { <span class="dt">movieId</span>: <span class="st">&#39;@id&#39;</span> }) ],
+  <span class="dt">reviews</span>: [<span class="st">&#39;query&#39;</span>, <span class="fu">$resource</span>(<span class="st">&#39;/reviews?movie=:movieId&#39;</span>, { <span class="dt">movieId</span>: <span class="st">&#39;@id&#39;</span> }) ]
+});
+
+<span class="co">// b.execute() returns</span>
+<span class="co">// { movie: { ... }, cast: [ ... ], reviews: [ ... ] }</span></code></pre>
+<p>It could work by briefly registering an <code>$http</code> request interceptor and running the quoted verb against each resource. The interceptor will sniff the urls and headers and save them to hidden variables. Then when <code>execute()</code> is called on the batch it will make a request to the batch endpoint properly formatted for the batch middleware.</p>
+<p>Ultimately the client interface will be most pleasant if it is compositional. In other words if I can take regular resources and build more interesting things out of them recursively. There’s nothing stopping a batch from containing other batches. Or containing a <a href="https://github.com/begriffs/angular-paginated-resource">paginated resource</a> rather than a plain one. Finally notice how in this approach the client is in charge of the format of the response. It can pull together any resources and assign them to arbitrary keys. I think with this approach we can create nimbler APIs that are fun to use and easy to maintain without sacrificing performance.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
+    <title>API versioning best practices</title>
+    <link href="http://begriffs.com/posts/2014-02-10-api-versioning-best-practices-no-really.html" />
+    <id>http://begriffs.com/posts/2014-02-10-api-versioning-best-practices-no-really.html</id>
+    <published>2014-02-10T00:00:00Z</published>
+    <updated>2014-02-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>API versioning best practices</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">February 10, 2014</h5>
+</div>
+
+<div class="content">
+  <p>While preparing to create the next version of the <a href="http://bountysource.com/">Bountysource</a> API, I’ve been reading articles about versioning. There are many contradicting opinions online.</p>
+<p>Many articles argue that APIs should be easy for developers to explore in a web browser, so API versions should be specified in the url, like <code>https://api.site.com/v23/foo</code> rather than being negotiated in the HTTP headers. How else could you explore the API through a web browser? However I’d argue that we have browser extensions for this (<a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo?hl=en-US">1</a>), 9<a href="https://chrome.google.com/webstore/detail/rest-console/cokgbflfommojglbmbpenpphppikmonn?hl=en">2</a>), (<a href="https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb">3</a>) (<a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en">4</a>). Also no end user needs to make direct old-school bookmarks of an API resource.</p>
+<p>I think versioning in the URL is not the right choice, and it stems from a historical constraint. Developers had to resort to JSONP to make cross-origin requests in old browsers, and you can’t specify headers with JSONP. Nowadays CORS support is widespread. If you really have to support IE &lt;10 you can actually encode headers over JSONP as a query parameter if the client and server cooperate.</p>
+<p>I think that versioning in the URL ignores how the web already works. When I want <code>/foo</code> in Spanish I don’t request <code>/es/foo</code>, I send an <code>Accept-Language</code> header. In fact many representational details are negotiable, like the charset, the encoding, and the mime type of a resource. We don’t put them in the URL because their position is irrelevant. It gets absurd: <code>/es/utf8/application-json/foo</code>. Ultimately we are just requesting different representations of a single resource.</p>
+<p>So what’s the right way? I propose using the <code>Accept</code> header with type <code>application/vnd.you.com+format; version=n</code> where format is e.g. <code>json</code>. Rather than using <a href="http://semver.org/">semantic versioning</a> conventions, we specify major version only, since only breaking changes matter. Give clients backward-compatible changes for free; they can handle it.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+
+</feed>
