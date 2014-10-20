@@ -8,8 +8,163 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-08-12T00:00:00Z</updated>
+    <updated>2014-10-19T00:00:00Z</updated>
     <entry>
+    <title>Writing controller specs for a Warp server</title>
+    <link href="http://begriffs.com/posts/2014-10-19-warp-server-controller-test.html" />
+    <id>http://begriffs.com/posts/2014-10-19-warp-server-controller-test.html</id>
+    <published>2014-10-19T00:00:00Z</published>
+    <updated>2014-10-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Writing controller specs for a Warp server</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 19, 2014</h5>
+</div>
+
+<div class="content">
+  <p>This guide will show you how to configure a Cabal project to test a Warp server (such as Scotty or Yesod) using hspec2. It will allow you to test HTTP requests and responses and to prepare the database before/between steps.</p>
+<h3 id="directories-and-cabal">directories and cabal</h3>
+<p>Assuming your project code lives in a top-level <code>src</code> directory, create another top-level directory called <code>test</code>. We need to add a new section to the project cabal file that builds the test suite and can access the rest of the project. Append this and adjust package versions to taste:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Test</span><span class="fu">-</span><span class="dt">Suite</span> spec
+  <span class="dt">Type</span><span class="fu">:</span>                exitcode<span class="fu">-</span>stdio<span class="fu">-</span><span class="fl">1.0</span>
+  <span class="dt">Default</span><span class="fu">-</span><span class="dt">Language</span><span class="fu">:</span>    <span class="dt">Haskell2010</span>
+  <span class="dt">Hs</span><span class="fu">-</span><span class="dt">Source</span><span class="fu">-</span><span class="dt">Dirs</span><span class="fu">:</span>      test, src
+  ghc<span class="fu">-</span>options<span class="fu">:</span>         <span class="fu">-</span><span class="dt">Wall</span> <span class="fu">-</span><span class="dt">W</span> <span class="fu">-</span><span class="dt">Werror</span>
+  <span class="dt">Main</span><span class="fu">-</span><span class="dt">Is</span><span class="fu">:</span>             Main.hs
+  <span class="dt">Other</span><span class="fu">-</span><span class="dt">Modules</span><span class="fu">:</span>       <span class="co">-- other project modules</span>
+  <span class="dt">Build</span><span class="fu">-</span><span class="dt">Depends</span><span class="fu">:</span>       base
+                     , hspec2
+                     , hspec<span class="fu">-</span>wai
+                     , hspec<span class="fu">-</span>wai<span class="fu">-</span>json
+                     , warp
+                     , wai</code></pre>
+<p>Add <code>test/Main.hs</code>. This is a good place to run other pre-test tasks like loading a database fixture.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Test.Hspec</span>
+<span class="kw">import </span><span class="dt">Spec</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> hspec spec</code></pre>
+<p>Create <code>test/Spec.hs</code> containing this gobbledygook</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# OPTIONS_GHC -F -pgmF hspec-discover -optF --no-main #-}</span></code></pre>
+<p>This will search for and run all Haskell files <code>spec/**/*Spec.hs</code> as part of the test suite so you do not have to later remember to add new spec files to a configuration list. We’ll see later there is a way to focus the tests when running the suite.</p>
+<p>Finally build your project and make it available for testing.</p>
+<pre class="sh"><code>$ cabal install -j --enable-tests</code></pre>
+<h3 id="beyond-simple-request-specs">beyond simple request specs</h3>
+<p>The <a href="https://hackage.haskell.org/package/hspec-wai">hspec-wai</a> package contains some matchers to make things easy. Here’s an example from the readme showing simple reqeusts.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">app ::</span> <span class="dt">IO</span> <span class="dt">Application</span>
+app <span class="fu">=</span> S.scottyApp <span class="fu">$</span> <span class="kw">do</span>
+  S.get <span class="st">&quot;/&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    S.text <span class="st">&quot;hello&quot;</span>
+
+<span class="ot">spec ::</span> <span class="dt">Spec</span>
+spec <span class="fu">=</span> with app <span class="fu">$</span>
+  describe <span class="st">&quot;GET /&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    it <span class="st">&quot;responds with 200&quot;</span> <span class="fu">$</span>
+      get <span class="st">&quot;/&quot;</span> <span class="ot">`shouldRespondWith`</span> <span class="dv">200</span>
+
+    it <span class="st">&quot;responds with &#39;hello&#39;&quot;</span> <span class="fu">$</span>
+      get <span class="st">&quot;/&quot;</span> <span class="ot">`shouldRespondWith`</span> <span class="st">&quot;hello&quot;</span>
+
+    it <span class="st">&quot;responds with 200 / &#39;hello&#39;&quot;</span> <span class="fu">$</span>
+      get <span class="st">&quot;/&quot;</span> <span class="ot">`shouldRespondWith`</span> <span class="st">&quot;hello&quot;</span> {matchStatus <span class="fu">=</span> <span class="dv">200</span>}</code></pre>
+<p>I like to run the tests with colored output and showing all steps, even those that pass.</p>
+<pre class="sh"><code>$ cabal test -j --show-details=always --test-options=&quot;--color&quot;</code></pre>
+<p>This is nice and simple, but what if you want to run a customized check on a response? For instance, let’s test that a header value matches a regex. You can do it inside lifted IO.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE OverloadedStrings #-}</span>
+<span class="kw">import </span><span class="dt">Test.Hspec</span>
+<span class="kw">import </span><span class="dt">Test.Hspec.Wai</span>
+<span class="kw">import </span><span class="dt">Network.HTTP.Types</span>
+<span class="kw">import </span><span class="dt">Network.Wai.Test</span> (<span class="dt">SResponse</span>(simpleHeaders,simpleStatus))
+<span class="kw">import qualified</span> <span class="dt">Data.ByteString.Char8</span> <span class="kw">as</span> <span class="dt">BS</span>
+<span class="kw">import </span><span class="dt">Data.CaseInsensitive</span> (<span class="dt">CI</span>(..))
+<span class="kw">import </span><span class="dt">Text.Regex.TDFA</span> ((=~))
+
+<span class="ot">matchHeader ::</span> <span class="dt">CI</span> <span class="dt">BS.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Header</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+matchHeader name valRegex headers <span class="fu">=</span>
+  maybe <span class="dt">False</span> (<span class="fu">=~</span> valRegex) <span class="fu">$</span> lookup name headers
+
+<span class="ot">spec ::</span> <span class="dt">Spec</span>
+spec <span class="fu">=</span> with app <span class="fu">$</span>
+  describe <span class="st">&quot;GET /list&quot;</span> <span class="fu">$</span>
+    it <span class="st">&quot;responds with valid range headers&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+      r <span class="ot">&lt;-</span> request methodGet <span class="st">&quot;/list&quot;</span>
+             [<span class="st">&quot;Range-Unit&quot;</span> <span class="fu">&lt;:&gt;</span> <span class="st">&quot;items&quot;</span>, <span class="st">&quot;Range&quot;</span> <span class="fu">&lt;:&gt;</span> <span class="st">&quot;0-9&quot;</span>]
+
+      liftIO <span class="fu">$</span> <span class="kw">do</span>
+        simpleHeaders r <span class="ot">`shouldSatisfy`</span>
+          matchHeader <span class="st">&quot;Content-Range&quot;</span> <span class="st">&quot;^0-[0-9]+/[0-9]+$&quot;</span>
+        simpleStatus r <span class="ot">`shouldBe`</span> partialContent206</code></pre>
+<p>How do the tests know where to send requests? The trick is at the beginning in the <code>with</code> function which is an alias for <code>before</code> and defined in <code>hspec-wai</code> rather than <code>hspec</code> itself.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">before ::</span> <span class="dt">IO</span> a <span class="ot">-&gt;</span> <span class="dt">SpecWith</span> a <span class="ot">-&gt;</span> <span class="dt">Spec</span></code></pre>
+<p>We give it an IO action, in this case <code>app :: IO Application</code> and it builds <code>SpecWith Application</code> which is a Reader monad that future test steps can query. For instance, the <code>request</code> method grabs the application internally with <code>getApp</code>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- | Perform a request to the application under test, with specified HTTP</span>
+<span class="co">-- method, request path, headers and body.</span>
+<span class="ot">request ::</span> <span class="dt">Method</span> <span class="ot">-&gt;</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Header</span>] <span class="ot">-&gt;</span> <span class="dt">LB.ByteString</span>
+                  <span class="ot">-&gt;</span> <span class="dt">WaiSession</span> <span class="dt">SResponse</span>
+request method path headers body <span class="fu">=</span>
+  getApp <span class="fu">&gt;&gt;=</span> liftIO <span class="fu">.</span> runSession (Wai.srequest <span class="fu">$</span> <span class="dt">SRequest</span> req body)
+  <span class="kw">where</span>
+    req <span class="fu">=</span> setPath defaultRequest
+            {requestMethod <span class="fu">=</span> method, requestHeaders <span class="fu">=</span> headers} path</code></pre>
+<p>Really <code>getApp</code> is a glorified <code>ask</code>, along with type constraints that would make it fail to compile if the surrounding test was not using <code>SpecWith Application</code>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">getApp ::</span> <span class="dt">WaiSession</span> <span class="dt">Application</span>
+getApp <span class="fu">=</span> <span class="dt">WaiSession</span> ask</code></pre>
+<p>Another less explicitly monadic way to interact with the test subject is using an argument in the <code>it</code> function. What goes into <code>with</code> can come out in <code>it</code>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">spec ::</span> <span class="dt">Spec</span>
+spec <span class="fu">=</span> with (return <span class="dv">42</span>)<span class="ot"> ::</span> <span class="dt">IO</span> <span class="dt">Int</span> <span class="fu">$</span>
+  describe <span class="st">&quot;This magical number&quot;</span> <span class="fu">$</span>
+    it <span class="st">&quot;is bigger than 40&quot;</span> <span class="fu">$</span> \n <span class="ot">-&gt;</span>
+      n <span class="ot">`shouldSatisfy`</span> (<span class="fu">&gt;</span><span class="dv">40</span>)</code></pre>
+<p>Perhaps it’s silly as stated, but imagine the integer is a database connection instead. In fact this leads to the next topic…</p>
+<h3 id="cleaning-the-db-between-tests">cleaning the db between tests</h3>
+<p>In contrast to the <code>before</code> family of functions which use <code>SpecWith a</code> types, the <code>after</code> and <code>around</code> functions use <code>ActionWith a</code>. Internally it’s not much to speak of, but the alias will make our actions’ types read cleaner.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">ActionWith</span> a <span class="fu">=</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</code></pre>
+<p>What’s a good use case for around actions? Cleaning up the environment so tests do not pollute each other’s state is one. Here’s an example of rolling back any changes to a Postgres database after each test.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Test.Hspec</span>
+<span class="kw">import </span><span class="dt">Database.HDBC</span>
+<span class="kw">import </span><span class="dt">Database.HDBC.PostgreSQL</span>
+<span class="kw">import </span><span class="dt">Control.Exception.Base</span> (bracket)
+
+<span class="ot">withDatabaseConnection ::</span> <span class="dt">ActionWith</span> <span class="dt">Connection</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+withDatabaseConnection <span class="fu">=</span> bracket openConnection disconnect
+  <span class="kw">where</span> openConnection <span class="fu">=</span> connectPostgreSQL&#39; <span class="st">&quot;postgres://etcetc&quot;</span>
+
+<span class="ot">withRollback ::</span> <span class="dt">ActionWith</span> <span class="dt">Connection</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+withRollback action <span class="fu">=</span> withDatabaseConnection <span class="fu">$</span> \c <span class="ot">-&gt;</span> <span class="kw">do</span>
+  runRaw c <span class="st">&quot;begin;&quot;</span>
+  action c
+  rollback c
+
+<span class="ot">spec ::</span> <span class="dt">Spec</span>
+spec <span class="fu">=</span> around withRollback <span class="fu">$</span>
+  describe <span class="st">&quot;inserting with abandon&quot;</span> <span class="fu">$</span>
+    it <span class="st">&quot;does all kinds of things&quot;</span> <span class="fu">$</span> \conn <span class="ot">-&gt;</span>
+      <span class="co">-- here we can use the connection and be assured</span>
+      <span class="co">-- our sql commands will be rolled back</span></code></pre>
+<p>One tiny but important detail is the choice of <code>connectPostgreSQL'</code> (with an apostrophe). The non-prime connect function in HDBC.PostgreSQL enables auto-commit. This means it peforms every statement in a transaction, which will cause surprises for you. The prime version is for manual transaction management like we are using here.</p>
+<p>Simply combine the <code>with app</code> and <code>around withRollback</code> to do controller tests that include database cleaning. And don’t forget you can perform an action before the entire suite runs inside the <code>Main.hs</code> we created.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Create a static site with Hakyll, Github and Travis CI</title>
     <link href="http://begriffs.com/posts/2014-08-12-create-static-site-with-hakyll-github.html" />
     <id>http://begriffs.com/posts/2014-08-12-create-static-site-with-hakyll-github.html</id>
@@ -768,43 +923,6 @@ GET /reviews?movie=12</code></pre>
 <span class="co">// { movie: { ... }, cast: [ ... ], reviews: [ ... ] }</span></code></pre>
 <p>It could work by briefly registering an <code>$http</code> request interceptor and running the quoted verb against each resource. The interceptor will sniff the urls and headers and save them to hidden variables. Then when <code>execute()</code> is called on the batch it will make a request to the batch endpoint properly formatted for the batch middleware.</p>
 <p>Ultimately the client interface will be most pleasant if it is compositional. In other words if I can take regular resources and build more interesting things out of them recursively. There’s nothing stopping a batch from containing other batches. Or containing a <a href="https://github.com/begriffs/angular-paginated-resource">paginated resource</a> rather than a plain one. Finally notice how in this approach the client is in charge of the format of the response. It can pull together any resources and assign them to arbitrary keys. I think with this approach we can create nimbler APIs that are fun to use and easy to maintain without sacrificing performance.</p>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>API versioning best practices</title>
-    <link href="http://begriffs.com/posts/2014-02-10-api-versioning-best-practices-no-really.html" />
-    <id>http://begriffs.com/posts/2014-02-10-api-versioning-best-practices-no-really.html</id>
-    <published>2014-02-10T00:00:00Z</published>
-    <updated>2014-02-10T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>API versioning best practices</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">February 10, 2014</h5>
-</div>
-
-<div class="content">
-  <p>While preparing to create the next version of the <a href="http://bountysource.com/">Bountysource</a> API, I’ve been reading articles about versioning. There are many contradicting opinions online.</p>
-<p>Many articles argue that APIs should be easy for developers to explore in a web browser, so API versions should be specified in the url, like <code>https://api.site.com/v23/foo</code> rather than being negotiated in the HTTP headers. How else could you explore the API through a web browser? However I’d argue that we have browser extensions for this (<a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo?hl=en-US">1</a>), 9<a href="https://chrome.google.com/webstore/detail/rest-console/cokgbflfommojglbmbpenpphppikmonn?hl=en">2</a>), (<a href="https://chrome.google.com/webstore/detail/simple-rest-client/fhjcajmcbmldlhcimfajhfbgofnpcjmb">3</a>) (<a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en">4</a>). Also no end user needs to make direct old-school bookmarks of an API resource.</p>
-<p>I think versioning in the URL is not the right choice, and it stems from a historical constraint. Developers had to resort to JSONP to make cross-origin requests in old browsers, and you can’t specify headers with JSONP. Nowadays CORS support is widespread. If you really have to support IE &lt;10 you can actually encode headers over JSONP as a query parameter if the client and server cooperate.</p>
-<p>I think that versioning in the URL ignores how the web already works. When I want <code>/foo</code> in Spanish I don’t request <code>/es/foo</code>, I send an <code>Accept-Language</code> header. In fact many representational details are negotiable, like the charset, the encoding, and the mime type of a resource. We don’t put them in the URL because their position is irrelevant. It gets absurd: <code>/es/utf8/application-json/foo</code>. Ultimately we are just requesting different representations of a single resource.</p>
-<p>So what’s the right way? I propose using the <code>Accept</code> header with type <code>application/vnd.you.com+format; version=n</code> where format is e.g. <code>json</code>. Rather than using <a href="http://semver.org/">semantic versioning</a> conventions, we specify major version only, since only breaking changes matter. Give clients backward-compatible changes for free; they can handle it.</p>
 </div>
 
 <div id="disqus_thread"></div>
