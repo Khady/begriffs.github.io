@@ -8,8 +8,176 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-10-19T00:00:00Z</updated>
+    <updated>2014-10-25T00:00:00Z</updated>
     <entry>
+    <title>Creating a package on Hackage</title>
+    <link href="http://begriffs.com/posts/2014-10-25-creating-package-hackage.html" />
+    <id>http://begriffs.com/posts/2014-10-25-creating-package-hackage.html</id>
+    <published>2014-10-25T00:00:00Z</published>
+    <updated>2014-10-25T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Creating a package on Hackage</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 25, 2014</h5>
+</div>
+
+<div class="content">
+  <p>How do you go from a pile of Haskell code on your machine to a finished package on <a href="http://hackage.haskell.org">Hackage</a> in all its tactfully understated glory? I recently took this journey and some of the steps were tricky enough that I thought someone ought to write a guide.</p>
+<h3 id="step-1---the-account">Step 1 - the account</h3>
+<p><a href="http://hackage.haskell.org/users/register-request">Register</a> a user account. Like many steps in Hackage, this is a somewhat human and manual process. A person has to review your submission and deem you worthy. So I guess don’t pick a profile name like <code>javascriptFTW</code> that would anger them.</p>
+<h3 id="step-2---package-structure">Step 2 - package structure</h3>
+<p>Structure your package in a standard way. Source directories are nested and named after the exposed module path. Your test suite lives in its own place and needs some boilerplate configuration. And of course you’ll need a good cabal file. <em>Want the shortcut?</em> Run <a href="https://github.com/fujimura/hi">fujimura/hi</a> to generate your project structure. By default it will choose a BSD license and use <code>hspec</code> for tests. Speaking for myself I changed it to an MIT license and <a href="http://hackage.haskell.org/package/hspec2">hspec2</a>.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">hi</span> --module-name <span class="st">&quot;Foo.Bar.Baz&quot;</span> --author <span class="st">&quot;J Doe&quot;</span> --email <span class="st">&quot;jdoe@me.com&quot;</span></code></pre>
+<h3 id="step-3---cabal">Step 3 - cabal</h3>
+<p>Customize the package cabal file. If you’re wondering whether it includes enough information, check with</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> check</code></pre>
+<p>which will point out any problems. In fact Hackage will refuse a package upload that fails the check. However there are fields you might like to add beyond the bare minimum, such as the <code>Homepage</code> field with a link to the project on Github. See this <a href="http://www.haskell.org/ghc/docs/7.0.3/html/Cabal/authors.html#general-fields">reference</a> of all the fields.</p>
+<h3 id="step-4---docs">Step 4 - docs</h3>
+<p>Add Haddock documentation to your code as comments. There is more to Haddock than can reasonably fit in a little guide like this, but a good way to go is copy what people do in a popular package you admire. Generally the structure of generated docs is determined in your module declaration. Be sure to include some example code since it gives a quick overview to would-be users.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Foo.Bar.Baz</span>
+  (
+    <span class="co">-- * Example usage</span>
+    <span class="co">-- $use</span>
+
+    <span class="co">-- * A section</span>
+    <span class="dt">Thingie</span>(<span class="fu">..</span>)
+
+    <span class="co">-- * More stuff</span>
+  , fun
+  , joy
+  ) <span class="kw">where</span></code></pre>
+<p>Notice you can create chunks by name like <code>$use</code> and interpolate them at the right place in the module declaration. To preview your docs locally run</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> haddock</code></pre>
+<p>which will build the docs in <code>dist/doc/html/your-pkg/index.html</code>. Note that unlike the custom in other languages, Haskellers usually don’t put much info into READMEs. At first I thought they were being negligent but I learned that the combination of strong types and Haddock’s structure provide a standardized documentation experience that works better. I like to add a link in my Github readme to point at the Hackage docs to help those unfamiliar with the convention.</p>
+<h3 id="step-5---ci">Step 5 - CI</h3>
+<p>Enable continuous integration. You want to ensure that</p>
+<ul>
+<li>your usual tests pass</li>
+<li>your project works in a few versions of GHC</li>
+<li>your cabal file is well-formed</li>
+<li>a source distribution can be generated</li>
+<li>docs build cleanly</li>
+</ul>
+<p>Here’s a nice Travis config adapted from <a href="https://twitter.com/bitemyapp">bytemyapp</a> who got it from <a href="https://github.com/hvr">hvr</a>.</p>
+<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
+
+<span class="fu">ghc:</span>
+ <span class="kw">-</span> 7.6
+ <span class="kw">-</span> 7.8
+
+<span class="fu">before_install:</span>
+ <span class="kw">-</span> <span class="fu">sudo add-apt-repository -y ppa:</span>hvr/ghc
+ <span class="kw">-</span> sudo apt-get update
+ <span class="kw">-</span> sudo apt-get install happy-1.19.3
+ <span class="kw">-</span> sudo apt-get install alex-3.1.3
+ <span class="kw">-</span> <span class="fu">export PATH=~/.cabal/bin:</span>$PATH <span class="co"># for newer alex</span>
+ <span class="kw">-</span> cabal update
+ <span class="kw">-</span> cabal install alex happy
+
+<span class="fu">install:</span>
+ <span class="kw">-</span> cabal install --only-dependencies --enable-tests --enable-benchmarks --force-reinstalls
+
+<span class="fu">script:</span>
+ <span class="co"># -v2 provides useful information for debugging</span>
+ <span class="kw">-</span> cabal configure --enable-tests --enable-benchmarks -v2
+
+ <span class="co"># this builds all libraries and executables</span>
+ <span class="co"># (including tests/benchmarks)</span>
+ <span class="kw">-</span> cabal build
+
+ <span class="kw">-</span> cabal test
+ <span class="kw">-</span> cabal check
+
+ <span class="co"># tests that a source-distribution can be generated</span>
+ <span class="kw">-</span> cabal sdist
+
+ <span class="co"># check that the generated source-distribution can be built &amp; installed</span>
+ <span class="kw">-</span> export SRC_TGZ=$(cabal info . | awk <span class="st">&#39;{print $2 &quot;.tar.gz&quot;;exit}&#39;</span>) ;
+   cd dist/;
+   if <span class="kw">[</span> -f <span class="st">&quot;$SRC_TGZ&quot;</span> <span class="kw">]</span>; then
+      cabal install <span class="st">&quot;$SRC_TGZ&quot;</span>;
+   else
+      echo <span class="st">&quot;expected &#39;$SRC_TGZ&#39; not found&quot;</span>;
+      exit 1;
+   fi</code></pre>
+<h3 id="step-6---dependencies">Step 6 - dependencies</h3>
+<p>Add some constraints to your library’s dependencies in the cabal file. Locking major versions of dependencies will help prevent surprise Cabal build failures by your users. This is about the only rule of thumb I know. Setting constraints more intelligently is certainly possible, and I welcome your comments about your own strategies.</p>
+<h3 id="step-7---candidate-package">Step 7 - candidate package</h3>
+<p>Your tests pass, your docs look good. It’s time to upload a “package candidate” for a last check that things are OK on the real Hackage.</p>
+<p>Create a source distribution</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sdist</code></pre>
+<p>This will generate <code>dist/your-pkg-x.y.z.tar.gz</code>. Select this file in the <a href="https://hackage.haskell.org/packages/candidates/upload">candidate uploader</a> and give it a go.</p>
+<h3 id="step-8---release-it">Step 8 - release it</h3>
+<p>Some people like to leave their packages as candidates for a while to find bugs etc. The quality on hackage is generally pretty high so you want to avoid throwing things up there half-baked. Generally if you’ve followed the previous steps you should be in pretty good shape to release your package for real though.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> upload dist/your-pkg-x.y.z.tar.gz</code></pre>
+<p>All done, right? Time to celebrate! Not necessarily. Recently Hackage has been failing to run haddock remotely to generate documentation. The maintainers claim there is a small delay but I have found sometimes it never happens. Thankfully <a href="https://twitter.com/kmett">Edward Kmett</a> created a script to build your own docs and push them to Hackage.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
+<span class="kw">set</span> <span class="kw">-e</span>
+
+<span class="kw">if [</span> <span class="st">&quot;</span><span class="ot">$#</span><span class="st">&quot;</span> <span class="ot">-ne</span> 1<span class="kw"> ]</span>; <span class="kw">then</span>
+  <span class="kw">echo</span> <span class="st">&quot;Usage: scripts/hackage-docs.sh HACKAGE_USER&quot;</span>
+  <span class="kw">exit</span> 1
+<span class="kw">fi</span>
+
+<span class="ot">user=$1</span>
+
+<span class="ot">cabal_file=$(</span><span class="kw">find</span> . -maxdepth 1 -name <span class="st">&quot;*.cabal&quot;</span> -print -quit<span class="ot">)</span>
+<span class="kw">if [</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">&quot;</span><span class="ot">$cabal_file</span><span class="st">&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span>
+  <span class="kw">echo</span> <span class="st">&quot;Run this script in the top-level package directory&quot;</span>
+  <span class="kw">exit</span> 1
+<span class="kw">fi</span>
+
+<span class="ot">pkg=$(</span><span class="kw">awk</span> -F <span class="st">&quot;:[[:space:]]*&quot;</span> <span class="st">&#39;tolower($1)==&quot;name&quot;    { print $2 }&#39;</span> <span class="kw">&lt;</span> <span class="st">&quot;</span><span class="ot">$cabal_file</span><span class="st">&quot;</span><span class="ot">)</span>
+<span class="ot">ver=$(</span><span class="kw">awk</span> -F <span class="st">&quot;:[[:space:]]*&quot;</span> <span class="st">&#39;tolower($1)==&quot;version&quot; { print $2 }&#39;</span> <span class="kw">&lt;</span> <span class="st">&quot;</span><span class="ot">$cabal_file</span><span class="st">&quot;</span><span class="ot">)</span>
+
+<span class="kw">if [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="ot">$pkg</span><span class="st">&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span>
+  <span class="kw">echo</span> <span class="st">&quot;Unable to determine package name&quot;</span>
+  <span class="kw">exit</span> 1
+<span class="kw">fi</span>
+
+<span class="kw">if [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="ot">$ver</span><span class="st">&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span>
+  <span class="kw">echo</span> <span class="st">&quot;Unable to determine package version&quot;</span>
+  <span class="kw">exit</span> 1
+<span class="kw">fi</span>
+
+<span class="kw">echo</span> <span class="st">&quot;Detected package: </span><span class="ot">$pkg</span><span class="st">-</span><span class="ot">$ver</span><span class="st">&quot;</span>
+
+<span class="ot">dir=$(</span><span class="kw">mktemp</span> -d build-docs.XXXXXX<span class="ot">)</span>
+<span class="kw">trap</span> <span class="st">&#39;rm -r &quot;$dir&quot;&#39;</span> EXIT
+
+<span class="kw">cabal</span> haddock --hoogle --hyperlink-source --html-location=<span class="st">&#39;/package/$pkg-$version/docs&#39;</span> --contents-location=<span class="st">&#39;/package/$pkg-$version&#39;</span>
+
+<span class="kw">cp</span> -R dist/doc/html/<span class="ot">$pkg</span>/ <span class="ot">$dir</span>/<span class="ot">$pkg</span>-<span class="ot">$ver</span>-docs
+
+<span class="kw">tar</span> cvz -C <span class="ot">$dir</span> --format=ustar -f <span class="ot">$dir</span>/<span class="ot">$pkg</span>-<span class="ot">$ver</span>-docs.tar.gz <span class="ot">$pkg</span>-<span class="ot">$ver</span>-docs
+
+<span class="kw">curl</span> -X PUT \
+     <span class="kw">-H</span> <span class="st">&#39;Content-Type: application/x-tar&#39;</span> \
+     <span class="kw">-H</span> <span class="st">&#39;Content-Encoding: gzip&#39;</span> \
+     <span class="kw">-u</span> <span class="st">&quot;</span><span class="ot">$user</span><span class="st">&quot;</span> \
+     <span class="kw">--data-binary</span> <span class="st">&quot;@</span><span class="ot">$dir</span><span class="st">/</span><span class="ot">$pkg</span><span class="st">-</span><span class="ot">$ver</span><span class="st">-docs.tar.gz&quot;</span> \
+     <span class="st">&quot;https://hackage.haskell.org/package/</span><span class="ot">$pkg</span><span class="st">-</span><span class="ot">$ver</span><span class="st">/docs&quot;</span></code></pre>
+<p>Now you will have published a package that looks good and will be be easy for people to use. So get that code off your computer and onto Hackage and contribute to the glorious Haskell ecosystem!</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Writing controller specs for a Warp server</title>
     <link href="http://begriffs.com/posts/2014-10-19-warp-server-controller-test.html" />
     <id>http://begriffs.com/posts/2014-10-19-warp-server-controller-test.html</id>
@@ -838,91 +1006,6 @@ Response
 <li><strong>Deploy using Heroku.</strong> I’m not a devops expert, but I know Heroku makes things pretty easy. It handles automated database backup, and has easy Postgres scaling settings (depending on your budget). Add the New Relic <a href="https://newrelic.com/plugins/boundless/109">Postgres Plugin</a>, and autoscale your web dynos with <a href="http://hirefire.io/">HireFire</a>.</li>
 </ol>
 <p>This is my current opinion about how to create quality APIs. Please help me think through the issues and poke holes in it. Likely both Sandman and depesz/Versioning need more features to support the ideas in my list.</p>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>API embedded resources considered harmful</title>
-    <link href="http://begriffs.com/posts/2014-02-14-api-embedded-resources-considered.html" />
-    <id>http://begriffs.com/posts/2014-02-14-api-embedded-resources-considered.html</id>
-    <published>2014-02-14T00:00:00Z</published>
-    <updated>2014-02-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>API embedded resources considered harmful</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">February 14, 2014</h5>
-</div>
-
-<div class="content">
-  <div class="alert alert-warning" role="alert">
-<h4>
-Update!
-</h4>
-Another way to handle embedded resources is by including or excluding them explicitly with query parameters. For instance below we could pass a parameter like <code>?include_cast=true</code> to the <code>/movie</code> endpoint. It’s possibly a more pragmatic way to customize the response.
-</div>
-<h4 id="the-false-premise">The False Premise</h4>
-<p>If you aren’t familiar with resource embedding, it’s where an API response contains related information that a client might want. An example would be to include cast information in a response about a movie:</p>
-<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
-  <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Stalker&quot;</span><span class="fu">,</span>
-  <span class="dt">&quot;year&quot;</span><span class="fu">:</span> <span class="st">&quot;1979&quot;</span><span class="fu">,</span>
-  <span class="dt">&quot;director&quot;</span><span class="fu">:</span> <span class="st">&quot;Andrei Tarkovsky&quot;</span><span class="fu">,</span>
-  <span class="dt">&quot;language&quot;</span><span class="fu">:</span> <span class="st">&quot;Russian&quot;</span><span class="fu">,</span>
- 
-  <span class="dt">&quot;_embedded&quot;</span><span class="fu">:</span> <span class="fu">{</span>
-    <span class="dt">&quot;cast&quot;</span><span class="fu">:</span> <span class="ot">[</span>
-      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Alisa Brunovna Freyndlikh&quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;December 8, 1934&quot;</span> <span class="fu">}</span><span class="ot">,</span>
-      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Aleksandr Leonidovich Kaydanovskiy &quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;July 23, 1946&quot;</span> <span class="fu">}</span><span class="ot">,</span>
-      <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Otto Alekseevich Solonitsyn&quot;</span><span class="fu">,</span> <span class="dt">&quot;dob&quot;</span><span class="fu">:</span> <span class="st">&quot;August 30, 1934&quot;</span> <span class="fu">}</span>
-    <span class="ot">]</span>
-  <span class="fu">}</span>
-<span class="fu">}</span></code></pre>
-<p>We’re taught that including embedded information saves the client from having to make additional HTTP requests. The only way to get more information is to make a fresh request, right?</p>
-<p>Not necessarily. For the past fifteen years the mainstream web development community has unfortunately neglected the HTTP spec. You see, by 1999 people had been using and learning from HTTP 1.0 for a few years. It had become obvious that the one-resource-per-request design was awkward. There is overhead to making web requests, from setting up TCP to querying DNS. When possible it makes sense to reuse an existing HTTP connection. Hence the HTTP 1.1 design committee invented the <em>keep-alive</em> header and <a href="https://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a>.</p>
-<p><img src="/images/pipeline.png" style="float:right" /> With pipelining you load several requests into one connection. Sadly its support has been halting and incomplete because of subtleties about slow requests holding up later ones (the “head of line” problem). That subtlety means you shouldn’t pipeline all assets by default. In a way browsers threw out the baby with the bathwater by not allowing you to pipeline selectively.</p>
-<p>Although we can’t use real HTTP pipelining to put related requests together (at least not until <a href="http://tools.ietf.org/html/draft-ietf-httpbis-http2-10#section-5">HTTP/2</a>), there is another trick we can use, and it’s a trick we can put into server middleware so it’s transparent to our application code. But before getting into that, why bother?</p>
-<h4 id="the-problems-with-embedding">The Problems with Embedding</h4>
-<p>What are the downsides with embedding, anyway? It provides helpful information and anticipates the client’s needs. If someone asks you to pass the salt, why not pass the pepper too?</p>
-<p>In the movie example the related cast information was no big deal. Pretty small. However in real requests this additional data can be large, and it’s not always needed. Also including related data is a slippery slope. We could include reviews, showtimes, historical popularity, and similar movies. There’s a limit to how much you choose to include.</p>
-<p>What some people tend to do is create multiple similar endpoints. In our example these endpoints might include a movie-with-its-reviews and a movie-with-cast. Even when developers don’t intentionally start out designing the system this way its evolution often forces the design. Developers end up creating convenience endpoints to serve particular pages. After all, the app should be efficient!</p>
-<p>However it’s not without problems. First, the backend gets harder to maintain. It accumulates similar controller actions with more tests and docs. Second, the chosen subsets are arbitrary. For (n) related datasets there are (2^n) possible embedded-subsets. So the client gets stuck with either more or less data than it needs. Third, independently limiting or filtering each embedded list is hard and might be implemented idiosyncratically and poorly in the app.</p>
-<h4 id="the-solution">The Solution</h4>
-<p>The way to avoid these problems and keep the client and server light and flexible is through <em>relational batch requests</em>. Relational in the sense that we create self-contained root-level resources that accept query parameters to filter them appropriately. Batched in the sense that we combine requests for related resources into a single HTTP request – a spontaneous request that the application code doesn’t need to name or prepare for in any special way.</p>
-<p>If we have an identifier (in this example numerical) for a movie imagine we could send all these requests at once</p>
-<pre><code>Single request:
- 
-GET /movies/12
-GET /cast?movie=12
-GET /reviews?movie=12</code></pre>
-<p>In fact you can, using a server middleware such as <a href="https://github.com/arsduo/batch_api">arsduo/batch_api</a> which replays the batched requests one by one locally on the server and combines the results. Your server code can’t tell the difference. And each request is allowed to use unrestricted HTTP, with headers and params and all. I’ll show you my idea for a clean Angular module to send the batch requests. But first let’s consider a knee-jerk reaction to these kind of routes.</p>
-<p>Why are we routing to <code>/cast?movie=12</code> rather than <code>/movies/12/cast</code>? The former is not as conventional, at least in the Rails community. But remember this is an API. The endpoint URLs are not providing a visible sense of structure in a visitor’s address bar. I don’t see any benefits from nesting <code>cast</code> under <code>movies/:id</code>. All it does is make the queries less expressive. If you want a list of cast filtered in some other way you will need the root-level <code>cast</code> route anyway, and now you have two routes to maintain.</p>
-<p>Note that relational batch requests can’t handle every kind of request efficiently. For instance aggregate queries should happen on the server. If you want the average rating of a movie it’s overkill to request <code>/reviews?movie=12</code> (even in parallel) and do the math when a fast backend database could do that. Unless someone develops a kind of “APIQL” like <code>l/reviews?movie=12&amp;amp;select=avg(rating)</code>. Interesting, does anyone know of a library for this?</p>
-<p>To make it easy to consume batched APIs we could turn to Angular with its tools to abstract the traditional browser Javascript platform. One might write an extension of Angular’s <code>$resource</code> object that is built from other resources. The key is easy composition like this:</p>
-<pre class="sourceCode javascript"><code class="sourceCode javascript">b = <span class="fu">batch</span>(<span class="st">&#39;/batch_endpoint&#39;</span>, {
-  <span class="dt">movie</span>:   [<span class="st">&#39;get&#39;</span>,   <span class="fu">$resource</span>(<span class="st">&#39;/movies/:movieId&#39;</span>, { <span class="dt">movieId</span>: <span class="st">&#39;@id&#39;</span> }) ],
-  <span class="dt">cast</span>:    [<span class="st">&#39;query&#39;</span>, <span class="fu">$resource</span>(<span class="st">&#39;/cast?movie=:movieId&#39;</span>, { <span class="dt">movieId</span>: <span class="st">&#39;@id&#39;</span> }) ],
-  <span class="dt">reviews</span>: [<span class="st">&#39;query&#39;</span>, <span class="fu">$resource</span>(<span class="st">&#39;/reviews?movie=:movieId&#39;</span>, { <span class="dt">movieId</span>: <span class="st">&#39;@id&#39;</span> }) ]
-});
-
-<span class="co">// b.execute() returns</span>
-<span class="co">// { movie: { ... }, cast: [ ... ], reviews: [ ... ] }</span></code></pre>
-<p>It could work by briefly registering an <code>$http</code> request interceptor and running the quoted verb against each resource. The interceptor will sniff the urls and headers and save them to hidden variables. Then when <code>execute()</code> is called on the batch it will make a request to the batch endpoint properly formatted for the batch middleware.</p>
-<p>Ultimately the client interface will be most pleasant if it is compositional. In other words if I can take regular resources and build more interesting things out of them recursively. There’s nothing stopping a batch from containing other batches. Or containing a <a href="https://github.com/begriffs/angular-paginated-resource">paginated resource</a> rather than a plain one. Finally notice how in this approach the client is in charge of the format of the response. It can pull together any resources and assign them to arbitrary keys. I think with this approach we can create nimbler APIs that are fun to use and easy to maintain without sacrificing performance.</p>
 </div>
 
 <div id="disqus_thread"></div>
