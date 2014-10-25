@@ -59,7 +59,7 @@
 <li>a source distribution can be generated</li>
 <li>docs build cleanly</li>
 </ul>
-<p>Here’s a nice Travis config adapted from <a href="https://twitter.com/bitemyapp">bytemyapp</a> who got it from <a href="https://github.com/hvr">hvr</a>.</p>
+<p>Here’s a nice Travis config adapted from <a href="https://twitter.com/bitemyapp">bitemyapp</a> who got it from <a href="https://github.com/hvr">hvr</a>.</p>
 <pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
 
 <span class="fu">ghc:</span>
