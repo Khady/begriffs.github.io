@@ -91,7 +91,7 @@ Enable continuous integration. You want to ensure that
 * docs build cleanly
 
 Here's a nice Travis config adapted from
-[bytemyapp](https://twitter.com/bitemyapp) who got it from
+[bitemyapp](https://twitter.com/bitemyapp) who got it from
 [hvr](https://github.com/hvr).
 
 ```yaml
