@@ -2,11 +2,9 @@
 title: An Interview with Brent Beer
 ---
 
-<div id="wistia_sx7cidk4to" class="wistia_embed" style="width:640px;height:360px;"> </div>
-<script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js"></script>
-<script>
-wistiaEmbed = Wistia.embed("sx7cidk4to", { videoFoam: true });
-</script>
+<div class="flowplayer" data-embed="false">
+  <video src="http://player.vimeo.com/external/111263308.hd.mp4?s=1324c7809d590df11e04620305ee9203"></video>
+</div>
 
 ###
 

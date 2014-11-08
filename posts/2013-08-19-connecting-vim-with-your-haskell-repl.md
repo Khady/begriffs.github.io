@@ -11,11 +11,9 @@ configuration so it's easy to give it a try.
 
 Here's a screencast where I show you how I use Vim and GHCI.
 
-<div id="wistia_5lfe805pzx" class="wistia_embed" style="width:640px;height:360px;"> </div>
-<script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js"></script>
-<script>
-wistiaEmbed = Wistia.embed("5lfe805pzx", { videoFoam: true });
-</script>
+<div class="flowplayer" data-embed="false">
+  <video src="http://player.vimeo.com/external/111187520.hd.mp4?s=5588738e6d17da2cea48b39e9132c643"></video>
+</div>
 
 ###
 

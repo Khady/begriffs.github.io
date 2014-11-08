@@ -7,8 +7,6 @@ Jay [@jayferd](https://twitter.com/jayferd), an engineer at
 language and user interface, and its surprising connection to
 sustainability.
 
-<div id="wistia_qkjucm4hxa" class="wistia_embed" style="width:640px;height:360px;"> </div>
-<script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js"></script>
-<script>
-  wistiaEmbed = Wistia.embed("qkjucm4hxa", { videoFoam: true });
-</script>
+<div class="flowplayer" data-embed="false">
+  <video src="http://player.vimeo.com/external/111262120.hd.mp4?s=41ea5e3e885f655183f36fd79365e5c8"></video>
+</div>

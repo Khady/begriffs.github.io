@@ -2,11 +2,9 @@
 title: An Interview with Jack "Danger" Canty
 ---
 
-<div id="wistia_r6feqsug5b" class="wistia_embed" style="width:640px;height:360px;"> </div>
-<script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js"></script>
-<script>
-wistiaEmbed = Wistia.embed("r6feqsug5b", { videoFoam: true });
-</script>
+<div class="flowplayer" data-embed="false">
+  <video src="http://player.vimeo.com/external/111266288.hd.mp4?s=a74b6cbfb3fe9dace43ccad4427f90c9"></video>
+</div>
 
 ###
 

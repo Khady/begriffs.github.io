@@ -11,9 +11,17 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "images/flowplayer/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
+
+    match "js/*.js" $ do
+        route   idRoute
+        compile copyFileCompiler
 
     match (fromList ["about.md", "contact.markdown"]) $ do
         route   $ setExtension "html"
