@@ -186,6 +186,26 @@ overlooked composer.
 *   **Chamber Music No 1, second movement (1959)**. A touch of almost Copland. [youtube](https://www.youtube.com/watch?v=zbtmsZfpjwA)
 *   **Nonet No 2 (1959)**. Charming neoclassical work, written as a goodbye on his deathbead. [youtube](https://www.youtube.com/watch?v=7nBhO0ll_vI)
 
+### Francis Poulenc
+
+Aptly described as "half monk, half rascal," Poulenc wrote music
+that is genial, suave, and funny. He kept his style melodic and
+accessible at a time when music was being vigorously "advanced."
+While some people of the era thought it frivolous, you and I can
+smile and enjoy a good song when we hear it.
+
+*   **Trois mouvements perpétuels (1918)**. Like a little revolving machine. [youtube](https://www.youtube.com/watch?v=R7Z_3EA9pyY)
+*   **Novelette No. 1 (1927)**. ★ Warm, expansive and somehow heartbreaking. [youtube](https://www.youtube.com/watch?v=ICeEWgPWOto)
+*   **Suite française, 2nd mvmt (1935)**. (specificially Bransle de Champagne) Medieval harmonies. [youtube](https://www.youtube.com/watch?v=iEgwS8eyEzc)
+*   **Nocturnes (1938)**. ★ Especially the creepy no 4, Bal fantôme: "Not a note of the waltzes and schottisches was lost throughout the house, and as a result the
+sick man was able to take his part in the festivities, and on his bed of pain could dream of the happy times of his youth." [pt 1](https://www.youtube.com/watch?v=QfQoNDuutTs), [pt 2](https://www.youtube.com/watch?v=zJBC3M8B39I)
+*   **Orchestration of Gnossienne No.3 (1939)**. Originally by Satie, of course. [youtube](https://www.youtube.com/watch?v=R7Shg-_EJ20)
+*   **Française (1939)**. Playing with the theme in Bransle de Champagne of four years prior. [youtube](https://www.youtube.com/watch?v=EFCWc3DS5eI)
+*   **Les animaux modèles (1941)**. Thickly textured,  [youtube](https://www.youtube.com/watch?v=mlHYqwGLmq4&list=PLAB4C65AF9EA99373)
+*   **Intermezzo in A♭ (1943)**. Loquacious. [youtube](https://www.youtube.com/watch?v=1d4UPCHyoy8)
+*   **Sonata for Piano and Cello (1948)**. [pt 1](https://www.youtube.com/watch?v=dzGlnvG53hU), [pt 2](https://www.youtube.com/watch?v=m8K8kkPDvYs)
+*   **Piano Concerto (1950)**. ★ Brilliant and suspenseful. [youtube](https://www.youtube.com/watch?v=tCnctwMgceY)
+
 ### To be continued...
 
 Check back for more great music.
