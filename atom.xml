@@ -8,8 +8,67 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-11-26T00:00:00Z</updated>
+    <updated>2014-11-28T00:00:00Z</updated>
     <entry>
+    <title>Intro to Apache Mesos, the distributed systems SDK</title>
+    <link href="http://begriffs.com/posts/2014-11-28-intro-to-apache-mesos.html" />
+    <id>http://begriffs.com/posts/2014-11-28-intro-to-apache-mesos.html</id>
+    <published>2014-11-28T00:00:00Z</published>
+    <updated>2014-11-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Intro to Apache Mesos, the distributed systems SDK</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">November 28, 2014</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://twitter.com/quarfot">Niklas Nielsen</a>, distributed systems engineer at <a href="https://mesosphere.com/">Mesosphere</a> gives an overview of how <a href="https://mesos.apache.org/">Mesos</a> manages resources to ensure their fair and efficient use in a compute cluster. He also demonstrates two higher-level frameworks on top of Mesos which keep jobs alive and manage timing and dependencies.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/113052137.hd.mp4?s=7564b3ae933804f64a12ebfe42389af1"></video>
+</div>
+<h3 id="overview">Overview</h3>
+<ul>
+<li>What is Apache Mesos (and what is it not)</li>
+<li>Abstracting from physical machines to resources</li>
+<li>“Everything fails all the time”</li>
+<li>Mesos’ heuristic for the NP-Hard cloud scheduling problem</li>
+<li>Delegation to local decision-making nodes</li>
+<li>Resource offers</li>
+<li>Scheduling tasks across racks or nodes using attributes</li>
+<li>Avoiding resource starvation using reservations</li>
+<li>Mesos is a kernel with which you rarely interact directly
+<ul>
+<li>You use frameworks on top</li>
+<li><strong>Marathon</strong> starts processes in a mesos cluster and does deployments and upgrades</li>
+<li><strong>Chronos</strong> is a distributed cron with dependencies</li>
+</ul></li>
+<li>Twitter uses Mesos to handle
+<ul>
+<li>240 million monthly users</li>
+<li>150k tweets per second</li>
+<li>100TB per day of compressed data</li>
+</ul></li>
+</ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Robot programming in APL</title>
     <link href="http://begriffs.com/posts/2014-11-26-robots-in-apl.html" />
     <id>http://begriffs.com/posts/2014-11-26-robots-in-apl.html</id>
@@ -941,70 +1000,6 @@ len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</s
 <img src="/images/hash-chart.png" alt="Hash collisions" /><p class="caption">Hash collisions</p>
 </div>
 <p>For the best \(b\) a whole 89% of keys are collision-free. At the worst end all but six collide. Apparently there is some deeper stuff going on. That’s as far as I’m going to take it for now.</p>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>Beyond HTTP Header Links</title>
-    <link href="http://begriffs.com/posts/2014-03-06-beyond-http-header-links.html" />
-    <id>http://begriffs.com/posts/2014-03-06-beyond-http-header-links.html</id>
-    <published>2014-03-06T00:00:00Z</published>
-    <updated>2014-03-06T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Beyond HTTP Header Links</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">March  6, 2014</h5>
-</div>
-
-<div class="content">
-  <p>The idea of <em>Hypertext As The Engine Of Application State</em> is that each hypermedia resource provides links to related resources. These links are typically called affordances. Clients can decouple themselves from a server by following affordances rather than constructing – or memorizing – URLs. Servers are then free to change URLs or gracefully degrade service.</p>
-<p>One of the more popularly adopted affordances are pagination link headers. The server includes links to the <em>prev</em>, <em>next</em>, <em>first</em>, and <em>last</em> pages at each page in a series. The client can disregard the URL scheme and just follow the links to access the pages as a doubly-linked list.</p>
-<p>Problem: pagination is often random-access. Look familiar?</p>
-<div class="figure">
-<img src="/images/pagination-1.png" alt="Linked list" /><p class="caption">Linked list</p>
-</div>
-<p>Sure, it has previous and next links but there are also links to go directly to numbered pages. Some interfaces embrace random access even more directly.</p>
-<div class="figure">
-<img src="/images/pagination-2.png" alt="Random access" /><p class="caption">Random access</p>
-</div>
-<p>In a potentially unbounded sequence we can’t include a header link to each page. What link relations would we use, and how would the client know what they mean? Ideally we would like a content agnostic way to paginate large resources, a standards-compliant way that doesn’t have to adjust the URL.</p>
-<p>If we can find a way to expose affordances for random-access pagination then why include the traditional four links? I’d prefer a standard way to access any page at all, which would make the first, last, next and prev links superfluous.</p>
-<p>The solution is, I think, range headers. They were originally constructed to resume big downloads. Perfect! What is pagination but a slow download into human eyes? The HTTP 1.1 spec provides a standard way to request part of a resource and to discover how much is left to go. Let’s see how it works.</p>
-<pre><code>Request
-  GET /resource
-Response
-  Status 206 (partial content)
-  Accept-Ranges: items
-  Range-Unit: items
-  Content-Range: 0-249/1000000</code></pre>
-<p>Here the client asks for a resource. The server doesn’t want to send more than two hundred and fifty items at once, so it sends a partial response. A client that understands the “Accept-Ranges” affordance can now request specific ranges.</p>
-<p>The client needn’t inspect or adjust the URL to select a new range. It just sets a header</p>
-<pre><code>Request
-  GET /resource
-  Range-Unit: items
-  Range: 0-24
-Response
-  Status: 206
-  Range-Unit: items
-  Content-Range: 0-24/1000000</code></pre>
-<p>Notice the negotiation. Both the client and server have limited numbers of items they want to consume or serve at once. In the first request the server limited the response, and in the second it honored the client’s request to further limit it. At this point the client knows what range it has been given, along with the total number of items. Requesting any page is just math.</p>
-<p>I’d suggest this supersedes the classic pagination link headers. It’s equally restful yet more powerful.</p>
 </div>
 
 <div id="disqus_thread"></div>
