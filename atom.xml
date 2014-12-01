@@ -8,8 +8,165 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-11-28T00:00:00Z</updated>
+    <updated>2014-11-30T00:00:00Z</updated>
     <entry>
+    <title>A Survey of Data Science</title>
+    <link href="http://begriffs.com/posts/2014-11-30-survey-of-data-science.html" />
+    <id>http://begriffs.com/posts/2014-11-30-survey-of-data-science.html</id>
+    <published>2014-11-30T00:00:00Z</published>
+    <updated>2014-11-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>A Survey of Data Science</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">November 30, 2014</h5>
+</div>
+
+<div class="content">
+  <p>What does it take to be an outstanding data scientist? I decided to find out and reviewed syllabi from every data science bootcamp, the requirements for dozens of data jobs, and scores of slideshares and wikipedia articles. I think I’ve identified and classified the core skills.</p>
+<p>Fundamentally there are six abilities of a competent data scientist.</p>
+<ul>
+<li>acquiring data in a highly-available distributed pipeline</li>
+<li>cleaning it of duplication and errors</li>
+<li>enhancing it with knowledge gained from unsupervised learning and nlp</li>
+<li>inferring properties of a population from a sample, and finding relations of statistical variables</li>
+<li>predicting future events through supervised learning and statistical models</li>
+<li>communicating my findings to people and external programs</li>
+</ul>
+<p>As many articles mentioned, dealing with data is a team job and no single individual is expected to know everything. There are two distinct specializations though, data <em>science</em> and <em>engineering</em>. The latter deails with pipelines, wrangling, availability, and cluster management. The former with asking the right questions, designing experiments, and statistical analysis.</p>
+<p>I compiled a list of specific technologies and techniques and fit them into the sixfold classification of abilities. These appear to be the core skills of the profession.</p>
+<ul>
+<li>Acquire
+<ul>
+<li>workers and other pieces are managed by mesos</li>
+<li>web scrapers and other events as kafka producers</li>
+<li>mesos runs them in docker containers with the marathon framework</li>
+<li>feeds into a “lambda architecture”
+<ul>
+<li>the master dataset accumulates immutably in hdfs
+<ul>
+<li>encode the data with the thrift format to add a schema</li>
+<li>thence through hadoop jobs to make precomputed views</li>
+<li>store views in elephantdb and recalculate periodically</li>
+<li>client access is read-only from elephant</li>
+</ul></li>
+<li>data forks into storm for real time “speed layer” processing
+<ul>
+<li>which redundantly calculates the views we are doing on hadoop</li>
+<li>the results go into cassandra which is read/write</li>
+<li>the realtime layer relies on incremental algorithms to update the state in that database</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Clean
+<ul>
+<li>record linking and deduping
+<ul>
+<li>soundex</li>
+<li>jaro–winkler distance</li>
+<li>unicode normalization</li>
+</ul></li>
+<li>outlier identification
+<ul>
+<li>normality testing</li>
+<li>Grubbs’ test for outliers (given normality)</li>
+</ul></li>
+<li>correcting errors with mechanical turk</li>
+<li>create a derived hdfs dataset, the “golden master”</li>
+</ul></li>
+<li>Enhance
+<ul>
+<li>feature extraction
+<ul>
+<li>principal component analysis</li>
+<li>k-NN</li>
+</ul></li>
+<li>unsupervised clustering
+<ul>
+<li>k-means, hierarchical (agglomerative, divisive)</li>
+<li>bagging</li>
+</ul></li>
+<li>nlp
+<ul>
+<li>stemming</li>
+<li>bag of words</li>
+<li>tf–idf</li>
+<li>topic models</li>
+</ul></li>
+</ul></li>
+<li>Infer
+<ul>
+<li>point estimation
+<ul>
+<li>maximum likelihood</li>
+</ul></li>
+<li>interval estimation
+<ul>
+<li>credible intervals</li>
+</ul></li>
+<li>hypothesis testing
+<ul>
+<li>chi squared</li>
+<li>t-test</li>
+</ul></li>
+<li>correlation</li>
+</ul></li>
+<li>Predict
+<ul>
+<li>classification
+<ul>
+<li>logistic regression</li>
+<li>decision trees and random forests</li>
+<li>naive bayes</li>
+<li>variance-bias decomposition</li>
+</ul></li>
+<li>recommendations
+<ul>
+<li>collaborative filtering</li>
+<li>content filtering</li>
+</ul></li>
+</ul></li>
+<li>Communicate
+<ul>
+<li>descriptive statistics
+<ul>
+<li>measures of central tendency</li>
+<li>measures of dispersion</li>
+</ul></li>
+<li>visualization
+<ul>
+<li>d3 (vega, rickshaw)</li>
+<li>realtime dashboard</li>
+</ul></li>
+<li>exposing results in restful api
+<ul>
+<li>export to postgres with sqoop</li>
+<li>generate api with dbapi</li>
+<li>document with raml</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>This seems like the state of the art although there is some dissenting opinion such as <a href="http://radar.oreilly.com/2014/07/questioning-the-lambda-architecture.html">Questioning the Lambda Architecture</a>. Ultimately I think the engineering side will be moving to a purely functional paradigm. Perhaps it could be written in Haskell, using libraries like <a href="https://hailstorm-hs.github.io/hailstorm/">hailstorm</a>, <a href="https://github.com/cosbynator/haskakafka">haskakafka</a>, and <a href="https://github.com/Soostone/hadron">hadron</a>. Everything I read agreed that Hadoop and associated Java tools are creaky beasts that require a lot of fiddling.</p>
+<p>Although the engineering side looks exhilerating (unleashing hordes of data scrapers and coordinating a big pipeline), the science side may be a calmer career bet with its longer-lasting knowledge. However even there I discovered some fundamental disagreements between Frequentists and Bayesians. Either way it’s all fascinating stuff and I’d like to create some test compute clusters to up my game.</p>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Intro to Apache Mesos, the distributed systems SDK</title>
     <link href="http://begriffs.com/posts/2014-11-28-intro-to-apache-mesos.html" />
     <id>http://begriffs.com/posts/2014-11-28-intro-to-apache-mesos.html</id>
@@ -934,72 +1091,6 @@ editDistance xs ys <span class="fu">=</span> table <span class="fu">!</span> (m,
                         <span class="kw">else</span> <span class="dv">1</span> <span class="fu">+</span> table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j<span class="fu">-</span><span class="dv">1</span>)
     ]</code></pre>
 <p>What remains is to translate this nice memoized string edit distance to trees using tree edit operations rather than string operations. Notice the lookup table we used above is a two-dimensional array indexed by the length of segments. To translate the lookup table strategy to trees we need a way to uniquely name partial-traversals, which we could do by choosing the number of hops along the traversal to be the “index.” (We experimented with using a Haskell Map keyed off the trees but that was really slow.) Ultimately we did not complete the refactor to make the tree diff sub-exponential speed, but we discovered how it will be done.</p>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>Magic numbers in polynomial hash functions</title>
-    <link href="http://begriffs.com/posts/2014-03-28-magic-numbers-in-polynomial-hash.html" />
-    <id>http://begriffs.com/posts/2014-03-28-magic-numbers-in-polynomial-hash.html</id>
-    <published>2014-03-28T00:00:00Z</published>
-    <updated>2014-03-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Magic numbers in polynomial hash functions</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">March 28, 2014</h5>
-</div>
-
-<div class="content">
-  <p>Every time I see copypasta polynomial string hash functions on the internet I am mystified by the arcane and magical numbers they contain. Today it’s time to find out which numbers are acceptable and why. Scanning stack overflow discussions and spending some time at the blackboard has revealed the beginning of the secret.</p>
-<p>Polynomial hashes are computed from a base number and the character codes of an input string. Let \(s_0 \ldots s_{k-1}\) be the codes of each input character in string \(s\). It’s our job to choose constants \(b\) and \(n\) to minimize collisions in the hash function \(h(s) = \sum b^i s_i\ \text{mod}\ n\), where \(b\) is an arbitrary number and \(n\) is the number of buckets in our hash table.</p>
-<p>Increasing \(n\) certainly helps. If \(n=1\) then everything will collide and we needn’t worry about \(b\). So fix \(n\) as large as sensible for application memory. We’ll see that certain choices of \(b\) are statistically better than others. Certain choices are really bad.</p>
-<p>Let’s get to our conclusion the roundabout way and see what happens when we pick bad values. Assume \(n \mid b\), that is \(b = nm\) for some \(m\). In this case \(h(s) = \sum b^i s_i = s_0 + nmX \equiv s_0\ \text{mod}\ n\). Hence only the first character of the string affects the hash value. This is terrible performance.</p>
-<p>More generally if \(i \mid b\) and \(i \mid n\) for \(i &gt; 1\) then \(b = ij\), \(n = ik\) for some \(j\) and \(k\). Thus each \(\sum b^i s_i\) can be written \(s_0 + ijX\). As in the previous case the \(s_0\) term turns out to be more important than the others. Notice \(s_0 + ijX \equiv s_0 + ijY\ \text{mod}\ ik\) iff \(ij(X-Y) \equiv 0\ \text{mod}\ ik\) iff \(j(X-Y) \equiv 0\ \text{mod}\ k\). That’s not good – the final terms, whatever they may be, are modded by \(k\) which is \(i\) times smaller than \(n\). Smaller modding means fewer bucket choices which makes collisions more likely.</p>
-<p>Which brings us to the first conclusion: choose \(b\) and \(n\) to be relatively prime. Beware that integer arithmetic is already modular, so \(h(s)\) is really \(h(s)\ \text{mod}\ 2^{32}\). Don’t choose \(b\) as a power of two (in fact choose it to be odd) or else \(\gcd{(b, 2^{32})} &gt; 1\).</p>
-<p>This is why the typical hash function snippet on stack overflow uses a prime for \(b\). The author doesn’t know what you’ll pick for \(n\) so they play it safe. However there is still an interesting question about which prime to pick. Sadly coprimality, while necessary, is not sufficient to guard against collisions. I wrote some code to test various strings and constants.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Control.Monad</span> (replicateM)
-<span class="kw">import </span><span class="dt">Data.Char</span> (ord)
-<span class="kw">import </span><span class="dt">Data.List</span> (group, sort)
-
-<span class="ot">allStrings ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Char</span>] <span class="ot">-&gt;</span> [ [<span class="dt">Char</span>] ]
-allStrings from to alphabet <span class="fu">=</span> [from<span class="fu">..</span>to] <span class="fu">&gt;&gt;=</span> (<span class="ot">`replicateM`</span> alphabet)
-
-<span class="ot">numCollisions ::</span> <span class="dt">Ord</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-numCollisions <span class="fu">=</span> sum <span class="fu">.</span> (filter (<span class="fu">&gt;</span> <span class="dv">1</span>)) <span class="fu">.</span> (map length) <span class="fu">.</span> group <span class="fu">.</span> sort
-
-<span class="ot">coprimes ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
-coprimes n <span class="fu">=</span> [m <span class="fu">|</span> m <span class="ot">&lt;-</span> [<span class="dv">2</span><span class="fu">..</span>n], (gcd m n) <span class="fu">==</span> <span class="dv">1</span>]
-
-<span class="co">-- Horner&#39;s method for polynomial evaluation</span>
-<span class="ot">horner ::</span> (<span class="dt">Num</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> a
-horner x <span class="fu">=</span> foldr (\a b <span class="ot">-&gt;</span> a <span class="fu">+</span> b<span class="fu">*</span>x) <span class="dv">0</span>
-
-<span class="ot">hash ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Char</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-hash n b s <span class="fu">=</span> (horner b (map ord s)) <span class="ot">`mod`</span> n
-
-<span class="ot">len3collisions ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</span> map (hash n b) <span class="fu">$</span> allStrings <span class="dv">3</span> <span class="dv">3</span> [<span class="ch">&#39;a&#39;</span><span class="fu">..</span><span class="ch">&#39;z&#39;</span>]</code></pre>
-<p>There are \(26^3 = 17576\) length three strings of lowercase letters. If we let \(n = 17576\) and run through all relatively prime choices of \(b &lt; n\) there are plenty of bad values. To get a feel for how the performance varies, I sorted the number of keys that collide with any other keys as \(b\) varies. (The x-axis below is <strong>not</strong> \(b\).) The graph gives a feeling for the range of success.</p>
-<div class="figure">
-<img src="/images/hash-chart.png" alt="Hash collisions" /><p class="caption">Hash collisions</p>
-</div>
-<p>For the best \(b\) a whole 89% of keys are collision-free. At the worst end all but six collide. Apparently there is some deeper stuff going on. That’s as far as I’m going to take it for now.</p>
 </div>
 
 <div id="disqus_thread"></div>
