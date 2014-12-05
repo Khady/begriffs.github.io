@@ -8,8 +8,118 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-11-30T00:00:00Z</updated>
+    <updated>2014-12-04T00:00:00Z</updated>
     <entry>
+    <title>Datacenter to AWS Cloud Migration</title>
+    <link href="http://begriffs.com/posts/2014-12-04-datacenter-to-aws.html" />
+    <id>http://begriffs.com/posts/2014-12-04-datacenter-to-aws.html</id>
+    <published>2014-12-04T00:00:00Z</published>
+    <updated>2014-12-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Datacenter to AWS Cloud Migration</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">December  4, 2014</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://twitter.com/theotypes">Theo Kim</a>, senior director of SaaS at <a href="http://www.jobvite.com/">Jobvite</a> describes the experience of migrating the entire company infrastructure from a dedicated data center to Amazon Web Services.</p>
+<p>He is joined onstage by <a href="https://plus.google.com/+ScottGust/posts">Scott Gust</a> and <a href="https://plus.google.com/108124405312975902364/posts">Brian Morehead</a> to describe Jobvite’s three biggest migration challenges and their solutions.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/113586351.hd.mp4?s=fc198dd18083a28ef5d171eef732c10f"></video>
+</div>
+<h3 id="overview">Overview</h3>
+<h4 id="theo-kim">Theo Kim</h4>
+<ul>
+<li>The pain of the old data center model</li>
+<li>Thinking of services rather than servers</li>
+<li>Recap of gains with AWS</li>
+<li>Cutting costs with reserve- and spot-instances</li>
+</ul>
+<h4 id="scott-gust">Scott Gust</h4>
+<ul>
+<li>Three main architectural challenges
+<ul>
+<li>uri load balancing</li>
+<li>autoscaling adoption</li>
+<li>network attached storage migration</li>
+</ul></li>
+<li>Way to work around the elastic load balancer’s uri support
+<ul>
+<li>Used HAProxy behind ELB to do the matching</li>
+<li>Important to insulate IP changes caused by ELB</li>
+</ul></li>
+<li>Injecting headers with the load balancer</li>
+<li>As servers become available they recreate the HAProxy config</li>
+</ul>
+<h4 id="brian-morehead">Brian Morehead</h4>
+<ul>
+<li>The migration was fun!</li>
+<li>Autoscaling made them reconsider how to automate datacenter processes</li>
+<li>Moving beyond the problem of the “snowflake server”</li>
+<li>Config management
+<ul>
+<li>All ec2 instances are constructed from a repo in s3</li>
+<li>Chose puppet over chef or ansible</li>
+<li>Standardizing hostname</li>
+<li>LDAP auth</li>
+</ul></li>
+<li>Puppet installs a cron job to register machines with HAProxy</li>
+<li>Monitoring with Nagios and CheckMK</li>
+<li>NAS migration
+<ul>
+<li>At the time of migration they had 8TB of storage and 40M+ files (resumes, attachments etc)</li>
+<li>How about S3? Not really a NAS, and no metadata</li>
+<li>They chose Zadara Storage to avoid stitching together EBS volumes</li>
+<li>But they’re moving to an all-s3 solution</li>
+</ul></li>
+<li>Copying files to s3 can be slow
+<ul>
+<li>Even multithreaded copies and bigger instances didn’t help</li>
+<li>Solution: spot instances</li>
+<li>Spun up 15-20 instances and it blasted the 40M files copied in three days</li>
+</ul></li>
+</ul>
+<h4 id="theo">Theo</h4>
+<ul>
+<li>Results</li>
+<li>Ended up with a 20% cost savings by moving off a managed service provider</li>
+<li>Great uptime</li>
+<li>Fast patches to security vulnerabilities</li>
+<li>Gets to have Christmas and Thanksgiving with the family (!)</li>
+<li>Ephemeral servers to do quick tests (load etc)</li>
+<li>Cheap services
+<ul>
+<li>sending 275000 emails per day for $150 per month</li>
+</ul></li>
+<li>Mountains of metrics from CloudWatch and CloudTrail</li>
+<li>Q&amp;A
+<ul>
+<li>Network attached storage…don’t use it!</li>
+<li>Stop worrying about encryption-at-rest in the cloud</li>
+<li>Data centers have a “red zone” where equipment coming out literally goes through a wood chipper</li>
+<li>Intentionally undersize staging resources to force devs to make leaner code (heh heh)</li>
+</ul></li>
+</ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>A Survey of Data Science</title>
     <link href="http://begriffs.com/posts/2014-11-30-survey-of-data-science.html" />
     <id>http://begriffs.com/posts/2014-11-30-survey-of-data-science.html</id>
@@ -957,140 +1067,6 @@ _site</code></pre></li>
 </ul>
 <h3 id="to-be-continued">To be continued…</h3>
 <p>Check back for more great music.</p>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>Tikhon Jelvis' ideas about Structural Merging</title>
-    <link href="http://begriffs.com/posts/2014-04-08-pilgrimage-report-structural-merging.html" />
-    <id>http://begriffs.com/posts/2014-04-08-pilgrimage-report-structural-merging.html</id>
-    <published>2014-04-08T00:00:00Z</published>
-    <updated>2014-04-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Tikhon Jelvis' ideas about Structural Merging</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">April  8, 2014</h5>
-</div>
-
-<div class="content">
-  <p>This afternoon I paired with Tikhon. He’s a Haskeller, researcher, and the organizer of the SF Types, Theorems, and Programming Languages group. His <a href="https://github.com/TikhonJelvis/Cow">project</a> is to extend the unix commands <code>diff</code> and <code>merge</code> to understand and work better on JavaScript code.</p>
-<p>As a product of the Unix tradition the standard <code>diff</code> program operates line by line between files. This affects not just diff itself but programs like git that rely on it. Have you ever changed a program in a way that does not affect its operation such as changing indentation and then been forced to make a big git commit? Have you ever changed the name of a variable and caused a big fragmented commit? Tikhon believes that small changes of meaning should appear as small diffs and the reason that they currently don’t is that we still think in terms of teletypes rather than syntax.</p>
-<p>Most importantly Tikhon realized that operating crudely on lines can create merge conflicts when there needn’t be any. For instance, consider this original file:</p>
-<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span> (a, b) {
-  <span class="kw">return</span> a + b;
-}
-
-<span class="kw">function</span> <span class="fu">foo2</span> (a, b) {
-  <span class="kw">return</span> a - b;
-}</code></pre>
-<p>One person edits it by moving one function inside the scope of the other.</p>
-<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span> (a, b) {
-  <span class="kw">return</span> a + b;
-
-  <span class="kw">function</span> <span class="fu">foo2</span> (a, b) {
-    <span class="kw">return</span> a - b;
-  }
-}</code></pre>
-<p>Another edits it by changing variable names.</p>
-<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="fu">foo</span> (a, b) {
-  <span class="kw">return</span> a + b;
-}
-
-<span class="kw">function</span> <span class="fu">foo2</span> (c, d) {
-  <span class="kw">return</span> c - d;
-}</code></pre>
-<p>The merge fails! Resolution requires accepting one version and manually adding the changes from the other.</p>
-<pre class="sourceCode diff"><code class="sourceCode diff">function foo (a, b) {
-  return a + b;
-
-<span class="st">&lt;&lt;&lt;&lt;&lt;&lt;&lt; move.js</span>
-  function foo2 (a, b) {
-    return a - b;
-  }
-<span class="kw">=======</span>
-function foo2 (c, d) {
-  return c - d;
-<span class="ot">&gt;&gt;&gt;&gt;&gt;&gt;&gt; rename.js</span>
-}</code></pre>
-<p>His solution: a <em>structural</em> merge. A traditional diff sees each of these changes as many lines, whereas each of the files being merged differs by only a single structural change, and those changes can be harmlessly resolved. In terms of syntax, the first change (moving foo2 inside foo) looks like this</p>
-<div class="figure">
-<img src="/images/tree-1.png" alt="Moving foo" /><p class="caption">Moving foo</p>
-</div>
-<p>The second (renaming the variables) looks like this</p>
-<div class="figure">
-<img src="/images/tree-2.png" alt="Renaming variables" /><p class="caption">Renaming variables</p>
-</div>
-<p>These representations are created using the Zhang-Shasha tree edit-distance algorithm. It indicates “tree diff” in terms of the node operations <em>move</em>, <em>relabel</em>, <em>add</em>, and <em>delete</em>. The algorithm finds the minimum number of applications of these rules to transform one tree into another.</p>
-<p>Interestingly if we create a tree diff of tree diffs themselves we can use it to display more meaningful merge conflicts. The diff of the two diff trees above looks like this</p>
-<div class="figure">
-<img src="/images/tree-diff.png" alt="Tree diff" /><p class="caption">Tree diff</p>
-</div>
-<p>A second pass with a simplifying algorithm shows there is exactly one edit operation introduced by each change. A structural merge program can interactively ask the user which edit operation to apply (and can do them both if requested).</p>
-<p>Tikhon’s big hurdle is to make his tree diff fast. As he quipped, “[it runs in] exponential time…I’m not a fan.” The solution is dynamic programming, and in a lazy language like Haskell with immutable data structures it only takes a tiny change in a program to automatically memoize functions and enable dynamic programming. We spent the day investigating how to do it for his tree diff function, but began by playing with it in the simpler problem of string edit distance.</p>
-<p>Let me show you the trick first. It uses laziness and co-recursion to make the function and its lookup table always keep one step ahead of each other in a magical circle. Observe how it is used to generate Fibonacci numbers.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">fibs <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:</span> <span class="dv">1</span> <span class="fu">:</span> zipWith (<span class="fu">+</span>) fibs (drop <span class="dv">1</span> fibs)
-
-<span class="co">-- take 10 fibs</span>
-<span class="co">-- [0,1,1,2,3,5,8,13,21,34]</span></code></pre>
-<p>Let’s see a naive implementation of string edit distance and how to transform it with The Trick. It’s a Haskell implementation of the Wagner–Fischer algorithm which recursively calculates the edit distance of every initial segment of the two strings eventually working up to the original strings. Using the edit operations insert, delete, and substitute it can be expressed succinctly as</p>
-<div class="figure">
-<img src="/images/wagner-fischer.png" alt="Wagner fischer" /><p class="caption">Wagner fischer</p>
-</div>
-<p>Translated to Haskell it becomes</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">editDistance ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-editDistance xs ys <span class="fu">=</span> dist m n
-  <span class="kw">where</span>
-  (m,n) <span class="fu">=</span> (length xs, length ys)
-  x <span class="fu">=</span> array (<span class="dv">1</span>,m) (zip [<span class="dv">1</span><span class="fu">..</span>] xs)
-  y <span class="fu">=</span> array (<span class="dv">1</span>,n) (zip [<span class="dv">1</span><span class="fu">..</span>] ys)
-
-<span class="ot">  dist ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-  dist <span class="dv">0</span> j <span class="fu">=</span> j
-  dist i <span class="dv">0</span> <span class="fu">=</span> i
-  dist i j <span class="fu">=</span> minimum [
-      (dist (i<span class="fu">-</span><span class="dv">1</span>) j    ) <span class="fu">+</span> <span class="dv">1</span>,
-      (dist i     (j<span class="fu">-</span><span class="dv">1</span>)) <span class="fu">+</span> <span class="dv">1</span>,
-      <span class="kw">if</span> x <span class="fu">!</span> i <span class="fu">==</span> y <span class="fu">!</span> j <span class="kw">then</span>     dist (i<span class="fu">-</span><span class="dv">1</span>) (j<span class="fu">-</span><span class="dv">1</span>)
-                        <span class="kw">else</span> <span class="dv">1</span> <span class="fu">+</span> dist (i<span class="fu">-</span><span class="dv">1</span>) (j<span class="fu">-</span><span class="dv">1</span>)
-    ]</code></pre>
-<p>The trick to make it fast is to co-recursively fill in a lookup table with the edit distances of initial segments, and to calculate edit distances…by referencing the table. Mind = blown.</p>
-<p>After implementing the function above that returns merely the minimum edit distance, we augmented it to return an array of the actual edit actions needed. Got into some performance problems of repeatedly calculating the length of those arrays when checking for the minimum, but found a way around that problem.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">editDistance ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-editDistance xs ys <span class="fu">=</span> table <span class="fu">!</span> (m,n)
-  <span class="kw">where</span>
-  (m,n) <span class="fu">=</span> (length xs, length ys)
-  x     <span class="fu">=</span> array (<span class="dv">1</span>,m) (zip [<span class="dv">1</span><span class="fu">..</span>] xs)
-  y     <span class="fu">=</span> array (<span class="dv">1</span>,n) (zip [<span class="dv">1</span><span class="fu">..</span>] ys)
-
-<span class="ot">  table ::</span> <span class="dt">Array</span> (<span class="dt">Int</span>,<span class="dt">Int</span>) <span class="dt">Int</span>
-  table <span class="fu">=</span> array bnds [(ij, dist ij) <span class="fu">|</span> ij <span class="ot">&lt;-</span> range bnds]
-  bnds  <span class="fu">=</span> ((<span class="dv">0</span>,<span class="dv">0</span>),(m,n))
-
-  dist (<span class="dv">0</span>,j) <span class="fu">=</span> j
-  dist (i,<span class="dv">0</span>) <span class="fu">=</span> i
-  dist (i,j) <span class="fu">=</span> minimum [
-      table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j) <span class="fu">+</span> <span class="dv">1</span>,
-      table <span class="fu">!</span> (i,j<span class="fu">-</span><span class="dv">1</span>) <span class="fu">+</span> <span class="dv">1</span>,
-      <span class="kw">if</span> x <span class="fu">!</span> i <span class="fu">==</span> y <span class="fu">!</span> j <span class="kw">then</span>     table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j<span class="fu">-</span><span class="dv">1</span>)
-                        <span class="kw">else</span> <span class="dv">1</span> <span class="fu">+</span> table <span class="fu">!</span> (i<span class="fu">-</span><span class="dv">1</span>,j<span class="fu">-</span><span class="dv">1</span>)
-    ]</code></pre>
-<p>What remains is to translate this nice memoized string edit distance to trees using tree edit operations rather than string operations. Notice the lookup table we used above is a two-dimensional array indexed by the length of segments. To translate the lookup table strategy to trees we need a way to uniquely name partial-traversals, which we could do by choosing the number of hops along the traversal to be the “index.” (We experimented with using a Haskell Map keyed off the trees but that was really slow.) Ultimately we did not complete the refactor to make the tree diff sub-exponential speed, but we discovered how it will be done.</p>
 </div>
 
 <div id="disqus_thread"></div>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Datacenter to AWS Cloud Migration</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="../css/minimalist.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Datacenter to AWS Cloud Migration</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">December  4, 2014</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://twitter.com/theotypes">Theo Kim</a>, senior director of SaaS at <a href="http://www.jobvite.com/">Jobvite</a> describes the experience of migrating the entire company infrastructure from a dedicated data center to Amazon Web Services.</p>
+<p>He is joined onstage by <a href="https://plus.google.com/+ScottGust/posts">Scott Gust</a> and <a href="https://plus.google.com/108124405312975902364/posts">Brian Morehead</a> to describe Jobvite’s three biggest migration challenges and their solutions.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/113586351.hd.mp4?s=fc198dd18083a28ef5d171eef732c10f"></video>
+</div>
+<h3 id="overview">Overview</h3>
+<h4 id="theo-kim">Theo Kim</h4>
+<ul>
+<li>The pain of the old data center model</li>
+<li>Thinking of services rather than servers</li>
+<li>Recap of gains with AWS</li>
+<li>Cutting costs with reserve- and spot-instances</li>
+</ul>
+<h4 id="scott-gust">Scott Gust</h4>
+<ul>
+<li>Three main architectural challenges
+<ul>
+<li>uri load balancing</li>
+<li>autoscaling adoption</li>
+<li>network attached storage migration</li>
+</ul></li>
+<li>Way to work around the elastic load balancer’s uri support
+<ul>
+<li>Used HAProxy behind ELB to do the matching</li>
+<li>Important to insulate IP changes caused by ELB</li>
+</ul></li>
+<li>Injecting headers with the load balancer</li>
+<li>As servers become available they recreate the HAProxy config</li>
+</ul>
+<h4 id="brian-morehead">Brian Morehead</h4>
+<ul>
+<li>The migration was fun!</li>
+<li>Autoscaling made them reconsider how to automate datacenter processes</li>
+<li>Moving beyond the problem of the “snowflake server”</li>
+<li>Config management
+<ul>
+<li>All ec2 instances are constructed from a repo in s3</li>
+<li>Chose puppet over chef or ansible</li>
+<li>Standardizing hostname</li>
+<li>LDAP auth</li>
+</ul></li>
+<li>Puppet installs a cron job to register machines with HAProxy</li>
+<li>Monitoring with Nagios and CheckMK</li>
+<li>NAS migration
+<ul>
+<li>At the time of migration they had 8TB of storage and 40M+ files (resumes, attachments etc)</li>
+<li>How about S3? Not really a NAS, and no metadata</li>
+<li>They chose Zadara Storage to avoid stitching together EBS volumes</li>
+<li>But they’re moving to an all-s3 solution</li>
+</ul></li>
+<li>Copying files to s3 can be slow
+<ul>
+<li>Even multithreaded copies and bigger instances didn’t help</li>
+<li>Solution: spot instances</li>
+<li>Spun up 15-20 instances and it blasted the 40M files copied in three days</li>
+</ul></li>
+</ul>
+<h4 id="theo">Theo</h4>
+<ul>
+<li>Results</li>
+<li>Ended up with a 20% cost savings by moving off a managed service provider</li>
+<li>Great uptime</li>
+<li>Fast patches to security vulnerabilities</li>
+<li>Gets to have Christmas and Thanksgiving with the family (!)</li>
+<li>Ephemeral servers to do quick tests (load etc)</li>
+<li>Cheap services
+<ul>
+<li>sending 275000 emails per day for $150 per month</li>
+</ul></li>
+<li>Mountains of metrics from CloudWatch and CloudTrail</li>
+<li>Q&amp;A
+<ul>
+<li>Network attached storage…don’t use it!</li>
+<li>Stop worrying about encryption-at-rest in the cloud</li>
+<li>Data centers have a “red zone” where equipment coming out literally goes through a wood chipper</li>
+<li>Intentionally undersize staging resources to force devs to make leaner code (heh heh)</li>
+</ul></li>
+</ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="../js/flowplayer.min.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>begriffs:&nbsp;&nbsp;<a href="mailto:joe@begriffs.com" role="button">hire me</a> → get data → analyze → api → ◕‿◕</p>
+    </footer>
+  </body>
+</html>
