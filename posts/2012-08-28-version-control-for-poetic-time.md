@@ -2,12 +2,11 @@
 title: Version control for poetic time travelers
 ---
 
-Matthew McCullough ([@matthewmccull](http://twitter.com/matthewmccull))
-leads Git workshops across the world. He recently visited Madison,
-Wisconsin to discuss and demonstrate advanced topics such as rerere
-merging, the reflog, interactive rebase, cherry-pick, show-branch,
-branch filtering, submodules, querying the log, refspecs, and path
-aliases.
+[Matthew McCullough](http://twitter.com/matthewmccull) leads Git
+workshops across the world. He recently visited Madison, Wisconsin
+to discuss and demonstrate advanced topics such as rerere merging,
+the reflog, interactive rebase, cherry-pick, show-branch, branch
+filtering, submodules, querying the log, refspecs, and path aliases.
 
 However, to me, Matthew's most fascinating observation is that Git
 excels at representing changes independently of time. It allows
