@@ -1,5 +1,6 @@
 ---
 title: An Interview with Jack "Danger" Canty
+video: true
 ---
 
 <div class="flowplayer" data-embed="false">

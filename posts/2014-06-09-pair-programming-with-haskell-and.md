@@ -1,5 +1,6 @@
 ---
 title: Pair programming with Haskell and Digital Ocean
+video: true
 ---
 
 Here's an overview of using

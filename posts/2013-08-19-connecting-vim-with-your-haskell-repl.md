@@ -1,5 +1,6 @@
 ---
 title: Connecting Vim with your Haskell repl
+video: true
 ---
 
 Only a few days in and typing code right into GHCI is getting old.

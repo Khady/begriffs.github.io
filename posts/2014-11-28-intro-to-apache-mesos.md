@@ -1,5 +1,6 @@
 ---
 title: Intro to Apache Mesos, the distributed systems SDK
+video: true
 ---
 
 [Niklas Nielsen](https://twitter.com/quarfot), distributed systems

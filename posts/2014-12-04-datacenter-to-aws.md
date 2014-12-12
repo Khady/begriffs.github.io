@@ -1,5 +1,6 @@
 ---
 title: Datacenter to AWS Cloud Migration
+video: true
 ---
 
 [Theo Kim](https://twitter.com/theotypes), senior director of SaaS

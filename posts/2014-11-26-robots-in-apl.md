@@ -1,5 +1,6 @@
 ---
 title: Robot programming in APL
+video: true
 ---
 
 [Morten Kromberg](https://twitter.com/mkromberg), CTO at

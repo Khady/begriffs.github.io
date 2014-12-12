@@ -1,5 +1,6 @@
 ---
 title: Intro to the Jut Dataflow Platform
+video: true
 ---
 
 [Michael Demmer](https://github.com/demmer), VP Enginnering at

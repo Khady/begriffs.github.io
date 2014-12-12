@@ -1,7 +1,7 @@
 <ul class="list-unstyled posts">
   $for(posts)$
   <li class="row">
-    <a class="col-sm-9" href="$url$">$title$</a>
+    <a class="col-sm-9" href="$url$">$if(video)$<i title="begriffs tv" class="fa fa-play-circle-o"></i> $endif$$title$</a>
     <div class="col-sm-3">$date$</div>
   </li>
   $endfor$

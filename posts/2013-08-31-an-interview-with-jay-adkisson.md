@@ -1,5 +1,6 @@
 ---
 title: An Interview with Jay Adkisson
+video: true
 ---
 
 Jay [@jayferd](https://twitter.com/jayferd), an engineer at

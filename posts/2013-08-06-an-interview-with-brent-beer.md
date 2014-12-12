@@ -1,5 +1,6 @@
 ---
 title: An Interview with Brent Beer
+video: true
 ---
 
 <div class="flowplayer" data-embed="false">
