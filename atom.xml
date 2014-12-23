@@ -27,7 +27,7 @@
 <p>In this video Mike gives some demos of the system and shares how they think about modeling timeseries data along with unstructured events in a complex system.</p>
 <div class="flowplayer" data-embed="false">
 <video src="http://player.vimeo.com/external/114224611.hd.mp4?s=76850f410b1202d175397f1db626fc15"
-         poster="https://i.vimeocdn.com/video/499957414.webp?mw=1200&q=70"
+         poster="https://i.vimeocdn.com/video/499957414.png?mw=700"
   ></video>
 </div>
 <h3 id="overview">Overview</h3>
@@ -100,7 +100,7 @@
 <p>He is joined onstage by <a href="https://plus.google.com/+ScottGust/posts">Scott Gust</a> and <a href="https://plus.google.com/108124405312975902364/posts">Brian Morehead</a> to describe Jobvite’s three biggest migration challenges and their solutions.</p>
 <div class="flowplayer" data-embed="false">
 <video src="http://player.vimeo.com/external/113586351.hd.mp4?s=fc198dd18083a28ef5d171eef732c10f"
-         poster="https://i.vimeocdn.com/video/499956612.webp?mw=1200&q=70"
+         poster="https://i.vimeocdn.com/video/499956612.png?mw=700"
   ></video>
 </div>
 <h3 id="overview">Overview</h3>
@@ -368,7 +368,7 @@
   <p><a href="https://twitter.com/quarfot">Niklas Nielsen</a>, distributed systems engineer at <a href="https://mesosphere.com/">Mesosphere</a> gives an overview of how <a href="https://mesos.apache.org/">Mesos</a> manages resources to ensure their fair and efficient use in a compute cluster. He also demonstrates two higher-level frameworks on top of Mesos which keep jobs alive and manage timing and dependencies.</p>
 <div class="flowplayer" data-embed="false">
 <video src="http://player.vimeo.com/external/113052137.hd.mp4?s=7564b3ae933804f64a12ebfe42389af1"
-         poster="https://i.vimeocdn.com/video/499956815.webp?mw=1200&q=70"
+         poster="https://i.vimeocdn.com/video/499956815.png?mw=700"
   ></video>
 </div>
 <h3 id="overview">Overview</h3>
@@ -429,7 +429,7 @@
   <p><a href="https://twitter.com/mkromberg">Morten Kromberg</a>, CTO at <a href="http://www.dyalog.com">Dyalog</a> shows two robots that communicate wirelessly, navigate, and explore. And they’re written in a language little changed since the 1960s, <a href="http://www.computerhistory.org/atchm/the-apl-programming-language-source-code">APL</a>.</p>
 <div class="flowplayer" data-embed="false">
 <video src="http://player.vimeo.com/external/112894665.hd.mp4?s=468260e4674c6f6024d86d373d93473d"
-         poster="https://i.vimeocdn.com/video/499956995.webp?mw=1200&q=70"
+         poster="https://i.vimeocdn.com/video/499956995.png?mw=700"
   ></video>
 </div>
 <p>Throughout the night Morten showed the hieroglyphic language doing web scraping, writing servers, 3d simulations, and runnings robots. The language has a small fervent userbase, mainly European. They’re in a fascinating parallel universe of computing, one which talks about those “new additions” to the language in the early 90s.</p>
