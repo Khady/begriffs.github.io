@@ -12,7 +12,7 @@ little changed since the 1960s,
 
 <div class="flowplayer" data-embed="false">
   <video src="http://player.vimeo.com/external/112894665.hd.mp4?s=468260e4674c6f6024d86d373d93473d"
-         poster="https://i.vimeocdn.com/video/499956995.webp?mw=1200&q=70"
+         poster="https://i.vimeocdn.com/video/499956995.png?mw=700"
   ></video>
 </div>
 

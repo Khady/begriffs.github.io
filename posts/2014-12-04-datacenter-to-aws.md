@@ -14,7 +14,7 @@ describe Jobvite's three biggest migration challenges and their solutions.
 
 <div class="flowplayer" data-embed="false">
   <video src="http://player.vimeo.com/external/113586351.hd.mp4?s=fc198dd18083a28ef5d171eef732c10f"
-         poster="https://i.vimeocdn.com/video/499956612.webp?mw=1200&q=70"
+         poster="https://i.vimeocdn.com/video/499956612.png?mw=700"
   ></video>
 </div>
 
