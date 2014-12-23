@@ -78,3 +78,12 @@ README for installation instructions and list of key mappings.
 
 If you work with text every day then you owe yourself a bespoke
 vim. Take a cue from craftsmen of old and use a tool that fits you.
+
+<div class="alert alert-info" role="alert">
+<h4>
+Try my updated vim config
+</h4>
+Since writing this article I have created a next-gen vim config
+specially designed for Haskell programming:
+[haskell-vim-now](https://github.com/begriffs/haskell-vim-now)
+</div>
