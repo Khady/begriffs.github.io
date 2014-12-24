@@ -206,6 +206,29 @@ sick man was able to take his part in the festivities, and on his bed of pain co
 *   **Sonata for Piano and Cello (1948)**. [pt 1](https://www.youtube.com/watch?v=dzGlnvG53hU), [pt 2](https://www.youtube.com/watch?v=m8K8kkPDvYs)
 *   **Piano Concerto (1950)**. ★ Brilliant and suspenseful. [youtube](https://www.youtube.com/watch?v=tCnctwMgceY)
 
+### Igor Stravinsky
+
+I first heard his _Rite of Spring_ and was eager to hear the rest
+of his works. I imagined more wild and savage ear battles, but I
+was surprised to learn that the Rite is unique. His other songs
+form a neat little garden of neoclassical topiary, often with saucy
+instrumental combinations and some fiery piano arrangements thrown
+in for good measure.
+
+*   **Pastorale (1907)**. ★ Mesmerizing. [youtube](https://www.youtube.com/watch?v=UbYPD1CE5eg)
+*   **Rite of Spring (1913)**. ★ Primitive and strident. [orchestral](https://www.youtube.com/watch?v=5UJOaGIhG7A), [piano duet](https://www.youtube.com/watch?v=VXx7dHDl0nI)
+*   **Ragtime for Eleven Instruments (1918)**. Like an hillbilly circus. [youtube](https://www.youtube.com/watch?v=QLwqVJ-owtg)
+*   **Concertino for String Quartet (1920)**. Ornery. [youtube](https://www.youtube.com/watch?v=opWyv1nqfBk)
+*   **Pulcinella Suite (1922)**. A brisk classical composition. [youtube](https://www.youtube.com/watch?v=a_MFvRBS3z4)
+*   **Prélude et ronde des princesses (1929)**. Lithe but suspicious. [youtube](https://www.youtube.com/watch?v=XAyDUplwmRQ)
+*   **Petrouschka (1932)**. Hands are flying off the piano. [youtube](https://www.youtube.com/watch?v=-DD77HzhRB4)
+*   **Suite italienne (1932)**. It's Pulcinella take two, 10 years later. [youtube](https://www.youtube.com/watch?v=gG1ULobLBTY)
+*   **Ebony Concerto (1945)**. Jazzy. [youtube](https://www.youtube.com/watch?v=ccwFZ6-COec)
+*   **Cantata on Medieval English Verses (1952)**. ★ Fascinating melodies. I find them hard to describe. [youtube](https://www.youtube.com/watch?v=CthL1uh2X2I)
+*   **Concertino for Twelve Instruments (1952)**. An arrangement of the quartet from 1920. [youtube](https://www.youtube.com/watch?v=39IuoXQ8UZQ)
+*   **Tango (1953)**. With verve. [youtube](https://www.youtube.com/watch?v=VcXTFRXenwI)
+*   **Greeting Prelude (1955)**. The most epic version of _Happy Birthday_ ever nade. [youtube](https://www.youtube.com/watch?v=0z815Kqiy1Q)
+
 ### To be continued...
 
 Check back for more great music.
