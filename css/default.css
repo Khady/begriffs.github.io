@@ -100,3 +100,11 @@ footer {
   border-top: 1px solid #b3b3b3;
   text-align: center;
 }
+
+.calm {
+  padding-bottom: 2em;
+}
+
+figcaption {
+  margin-top: 1em;
+}
