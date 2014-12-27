@@ -20,3 +20,6 @@ My previous work includes
 * Automating compilation of circuit court records for Thomson Reuters
 * Realtime collaborative editing API at the Public Library of Science
 * Statistical analysis of respondent privacy at the Wisconsin Longitudinal Study
+
+<i class="fa fa-bitcoin" />
+<a href="bitcoin:1CN3RgTXYESXnSeZRM1NiaDQtVpF395ybX">1CN3RgTXYESXnSeZRM1NiaDQtVpF395ybX</a>
