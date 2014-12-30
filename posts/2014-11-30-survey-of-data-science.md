@@ -60,7 +60,9 @@ be the core skills of the profession.
         - principal component analysis
         - k-NN
     - unsupervised clustering
-        - k-means, hierarchical (agglomerative, divisive)
+        - k-means and finding k with the gap statistic
+        - hierarchical (agglomerative, divisive)
+        - density (DBSCAN)
         - bagging
     - nlp
         - stemming
@@ -72,6 +74,8 @@ be the core skills of the profession.
         - maximum likelihood
     - interval estimation
         - credible intervals
+    - survival analysis
+        - kaplan-meier estimator
     - hypothesis testing
         - chi squared
         - t-test
