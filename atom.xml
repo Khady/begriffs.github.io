@@ -8,8 +8,48 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-12-11T00:00:00Z</updated>
+    <updated>2014-12-30T00:00:00Z</updated>
     <entry>
+    <title>Declaring RESTful APIs with PostgREST</title>
+    <link href="http://begriffs.com/posts/2014-12-30-intro-to-postgrest.html" />
+    <id>http://begriffs.com/posts/2014-12-30-intro-to-postgrest.html</id>
+    <published>2014-12-30T00:00:00Z</published>
+    <updated>2014-12-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Declaring RESTful APIs with PostgREST</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">December 30, 2014</h5>
+</div>
+
+<div class="content">
+  <h3 id="design-philosophy">Design Philosophy</h3>
+<p>In this video I explain the design philosophy for my recently-released API server, <a href="https://github.com/begriffs/postgrest">PostgREST</a>. This server creates a complete and RESTful API for any existing PostgreSQL database by inspecting the db schema.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/115668217.hd.mp4?s=7360aebb5727439aceb71202c4d4c775"
+         poster="https://i.vimeocdn.com/video/501761918.png?mw=700"
+  ></video>
+</div>
+<h3 id="begriffspostgrest"><a href="https://github.com/begriffs/postgrest">begriffs/postgrest</a></h3>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Intro to the Jut Dataflow Platform</title>
     <link href="http://begriffs.com/posts/2014-12-11-jut-dataflow-platform.html" />
     <id>http://begriffs.com/posts/2014-12-11-jut-dataflow-platform.html</id>
@@ -932,56 +972,6 @@ _site</code></pre></li>
 <div class="flowplayer" data-embed="false">
 <video src="http://player.vimeo.com/external/111187521.hd.mp4?s=7599e8632f58128eda596ff769c04ff7"></video>
 </div>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>Database migrations without merge conflicts</title>
-    <link href="http://begriffs.com/posts/2014-04-30-database-migrations-without-merge.html" />
-    <id>http://begriffs.com/posts/2014-04-30-database-migrations-without-merge.html</id>
-    <published>2014-04-30T00:00:00Z</published>
-    <updated>2014-04-30T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Database migrations without merge conflicts</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">April 30, 2014</h5>
-</div>
-
-<div class="content">
-  <p>Ever discover an open source project that makes you overjoyed? That moment when you feel like <em>somebody gets it</em>, and things are getting better? That’s how I felt tonight:</p>
-<div style="text-align: center;">
-[ <a href="https://github.com/theory/sqitch">theory/sqitch</a> ]
-</div>
-<p>This is a database migration system built for the git era. It supports non-linear patch history and a system of detailed logging, reversion, and tagging. Oh, and it’s built around test driven database design.</p>
-<p>Here’s one ingenious property of the system. It has a special format for the so-called “plan file” it updates as you apply or revert migrations. People are free to work on multiple branches of a codebase and change the plan file willy nilly. You might be used to getting merge conflicts in your database schema, but the plan file format is designed to merge cleanly and automatically in git with the <a href="http://git-scm.com/docs/gitattributes#_built-in_merge_drivers">union merge strategy</a>. Just put <code>sqitch.plan merge=union</code> into your <code>.gitattributes</code> file and relax.</p>
-<p>Sqitch is under active development for “better integration with version control systems…to make managing idempotent reworkings even easier.”</p>
-<div style="text-align: center;">
-[ <a href="https://github.com/theory/sqitch/blob/master/lib/sqitchtutorial.pod">try the tutorial</a> ]
-</div>
-<h4 id="objections">Objections</h4>
-<ul>
-<li>“It’s written in Perl, eww!” Yeah I don’t write perl either, but the project is easy to install (even has a homebrew <a
-  href="https://github.com/theory/homebrew-sqitch/">tap</a>) and you don’t have to worry about it. That’s like complaining about the fuel used in a hyperdimensional warp drive as you ride in your horse-drawn buggy.</li>
-<li>“It wants me to write crusty stored procedures?” No, not at all. Write the SQL of your choice to match the architecture of your app.</li>
-<li>“Is that an unsalted md5 password in the documentation example?” Don’t worry, read the whole documentation. Some examples intentionally show the wrong ways of doing things in order to correct them later and demonstrate concepts.</li>
-</ul>
-<script async class="speakerdeck-embed" data-id="ad105ed0ac490130d6a626f5cde8fd08" data-ratio="1.2994923857868" src="//speakerdeck.com/assets/embed.js"></script>
 </div>
 
 <div id="disqus_thread"></div>
