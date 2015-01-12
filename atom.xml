@@ -8,8 +8,72 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2014-12-30T00:00:00Z</updated>
+    <updated>2015-01-12T00:00:00Z</updated>
     <entry>
+    <title>Writing a React JS front-end in Haskell</title>
+    <link href="http://begriffs.com/posts/2015-01-12-reactjs-in-haskell.html" />
+    <id>http://begriffs.com/posts/2015-01-12-reactjs-in-haskell.html</id>
+    <published>2015-01-12T00:00:00Z</published>
+    <updated>2015-01-12T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Writing a React JS front-end in Haskell</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">January 12, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="http://joelburget.com/">Joel Burget</a>, Developer at <a href="https://www.khanacademy.org/">Khan Academy</a> explains the design of his new <a href="https://hackage.haskell.org/package/react-haskell">react-haskell</a> library.</p>
+<p>It allows you to write a front-end app in Haskell which you compile to JavaScript via Haste and render using React JS.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/116516127.hd.mp4?s=69cd6b66fe5bff69a43e1b4375482edc"
+         poster="https://i.vimeocdn.com/video/502970736.png?mw=700"
+  ></video>
+</div>
+<h3 id="overview">Overview</h3>
+<ul>
+<li>Overview of React itself (without the Haskell)
+<ul>
+<li>The virtual dom</li>
+<li>Partial diffing</li>
+</ul></li>
+<li>Haste: turning Haskell into JavaScript</li>
+<li>Inspiration for React-Haskell
+<ul>
+<li>Blaze-HTML builder provided the general flavor of the API</li>
+<li>Recently Joel has been switching to the Lucid library instead of Blaze</li>
+<li>Building the eventual DOM happens inside a monad</li>
+<li>It could be considered an abuse of a monad, but provides nice do-notation</li>
+</ul></li>
+<li>Examples of react html written in Haskell</li>
+<li>Event handlers</li>
+<li>Principles of interruptible animations (inspired by UIKit)
+<ul>
+<li>the model is discrete</li>
+<li>we apply updates immediately</li>
+<li>use additive animation by default</li>
+</ul></li>
+<li>Performance observations</li>
+</ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Declaring RESTful APIs with PostgREST</title>
     <link href="http://begriffs.com/posts/2014-12-30-intro-to-postgrest.html" />
     <id>http://begriffs.com/posts/2014-12-30-intro-to-postgrest.html</id>
@@ -936,42 +1000,6 @@ _site</code></pre></li>
     <span class="fu">branch:</span> source
   <span class="fu">secret_access_key:</span>
     <span class="fu">secure:</span> YOUR_SECURE_KEY</code></pre>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>Pair programming with Haskell and Digital Ocean</title>
-    <link href="http://begriffs.com/posts/2014-06-09-pair-programming-with-haskell-and.html" />
-    <id>http://begriffs.com/posts/2014-06-09-pair-programming-with-haskell-and.html</id>
-    <published>2014-06-09T00:00:00Z</published>
-    <updated>2014-06-09T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Pair programming with Haskell and Digital Ocean</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">June  9, 2014</h5>
-</div>
-
-<div class="content">
-  <p>Here’s an overview of using <a href="https://github.com/begriffs/haskell-pair">hakell-pair</a>, a vagrant image for pair programming with Haskell. It allows you to roll out a standardized development environment for your team. Check out the screencast below to get an idea how it works.</p>
-<div class="flowplayer" data-embed="false">
-<video src="http://player.vimeo.com/external/111187521.hd.mp4?s=7599e8632f58128eda596ff769c04ff7"></video>
-</div>
 </div>
 
 <div id="disqus_thread"></div>
