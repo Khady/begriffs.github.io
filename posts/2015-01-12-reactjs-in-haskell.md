@@ -17,6 +17,8 @@ to JavaScript via Haste and render using React JS.
   ></video>
 </div>
 
+Check out the code at [joelburget.com/react-haskell](http://joelburget.com/react-haskell/).
+
 ### Overview
 
 * Overview of React itself (without the Haskell)
