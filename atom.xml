@@ -8,8 +8,110 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-01-12T00:00:00Z</updated>
+    <updated>2015-01-28T00:00:00Z</updated>
     <entry>
+    <title>Virtualizing a Hadoop Cluster (two videos)</title>
+    <link href="http://begriffs.com/posts/2015-01-28-virtualizing-hadoop.html" />
+    <id>http://begriffs.com/posts/2015-01-28-virtualizing-hadoop.html</id>
+    <published>2015-01-28T00:00:00Z</published>
+    <updated>2015-01-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Virtualizing a Hadoop Cluster (two videos)</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">January 28, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="http://joelburget.com/">Tom Phelan</a>, Chief Architect at <a href="https://www.linkedin.com/pub/tom-phelan/0/749/61b">BlueData</a> talks about the appropriate situations in which to virtualize Hadoop, either in containers or in virtual machines. In evaluating the situations he explains what questions you should and should not be asking.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/117907449.hd.mp4?s=de0ba4566372c0f6ae14d8bb51f50497"
+         poster="https://i.vimeocdn.com/video/504771461.png?mw=700"
+  ></video>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>What BlueData has learned about running Hadoop jobs</li>
+<li>Under what situations should one virtualize a Hadoop cluster</li>
+<li>The shape and components of a physical cluster
+<ul>
+<li>Both master and worker controllers contain</li>
+<li>Disks, server, named node, and resource manager</li>
+</ul></li>
+<li>Types of virtualization:
+<ul>
+<li>public cloud</li>
+<li>private cloud / hypervisor (strong fault isolation)</li>
+<li>private cloud / containers (weak fault isolation)</li>
+<li>paravirtualization</li>
+</ul></li>
+<li>The appropriate infrastructure for various situations
+<ul>
+<li>Questions NOT to ask</li>
+<li>Questions to ask</li>
+</ul></li>
+<li>Performance and Data Locality</li>
+<li>Five use-cases and their infrastructure needs</li>
+</ul>
+<h3 id="pt-2-orchestration-with-docker">Pt 2: Orchestration with Docker</h3>
+<p><a href="https://twitter.com/joel_k_baxter">Joel Baxter</a>, also at BlueData, leads a breakout session about what an ideal orchestration manager would look like for managing Hadoop clusters and associated data. The state of the art is evolving but not there yet.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/118047022.hd.mp4?s=91cfdf09dcdfcc374d31c69c3008ce3a"
+         poster="https://i.vimeocdn.com/video/504974721.png?mw=700"
+  ></video>
+</div>
+<h3 id="summary-1">Summary</h3>
+<ul>
+<li>Hadoop Cluster orchestration with Docker</li>
+<li>Wishlist for an ideal orchestration manager
+<ul>
+<li>Add/remove a host from a list of peers</li>
+<li>Track resource consumption/availability per host</li>
+<li>Library of pre-prepared application images</li>
+<li>Multi-tenant protection
+<ul>
+<li>Performance isolation and data security</li>
+<li>Containers are less secure than virtual machines</li>
+<li>Quotas and priority</li>
+</ul></li>
+<li>Matching containers with physical hosts</li>
+<li>Spreading containers across fault-zones</li>
+<li>Packing containers in contiguous memory</li>
+</ul></li>
+<li>Migrations vs stateless servers</li>
+<li>Circumventing docker and doing IP address allocation</li>
+<li>DNS settings for bidirectional Hadoop communication</li>
+<li>Wishlist for storage
+<ul>
+<li>Docker volumes</li>
+<li>Volumes for fragments of HDFS are hard to reconstruct on container resurrection</li>
+<li>Ship your data to another db, or paravirtualize the storage</li>
+</ul></li>
+<li>Solutions?
+<ul>
+<li>There is not yet a turn-key orchestration system that solves all the items in the wishlists</li>
+<li>The area is rapidly evolving</li>
+</ul></li>
+</ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'begriffs';
+
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+]]></summary>
+</entry>
+<entry>
     <title>Writing a React JS front-end in Haskell</title>
     <link href="http://begriffs.com/posts/2015-01-12-reactjs-in-haskell.html" />
     <id>http://begriffs.com/posts/2015-01-12-reactjs-in-haskell.html</id>
@@ -868,139 +970,6 @@ spec <span class="fu">=</span> around withRollback <span class="fu">$</span>
       <span class="co">-- our sql commands will be rolled back</span></code></pre>
 <p>One tiny but important detail is the choice of <code>connectPostgreSQL'</code> (with an apostrophe). The non-prime connect function in HDBC.PostgreSQL enables auto-commit. This means it peforms every statement in a transaction, which will cause surprises for you. The prime version is for manual transaction management like we are using here.</p>
 <p>Simply combine the <code>with app</code> and <code>around withRollback</code> to do controller tests that include database cleaning. And don’t forget you can perform an action before the entire suite runs inside the <code>Main.hs</code> we created.</p>
-</div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'begriffs';
-
-  (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-]]></summary>
-</entry>
-<entry>
-    <title>Create a static site with Hakyll, Github and Travis CI</title>
-    <link href="http://begriffs.com/posts/2014-08-12-create-static-site-with-hakyll-github.html" />
-    <id>http://begriffs.com/posts/2014-08-12-create-static-site-with-hakyll-github.html</id>
-    <published>2014-08-12T00:00:00Z</published>
-    <updated>2014-08-12T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Create a static site with Hakyll, Github and Travis CI</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">August 12, 2014</h5>
-</div>
-
-<div class="content">
-  <p>“Static sites are fast, secure, easy to deploy, and manageable using version control.” So states the webpage for <a
-href="http://jaspervdj.be/hakyll/">Hakyll</a>, a great way to set up a static site or blog. It allows you to write blog posts by simply editing markdown in git, all the while having access to delicious Haskell for deeper customizations.</p>
-<p>You can configure things to let you write blog posts directly on Github’s interface and use Travis CI to deploy your changes. Most day-to-day blogging will not require using Haskell at all or even having the Haskell environment installed on the blogger’s machine.</p>
-<p>I’ll show you how to set everything up, including an optimized Travis config that can deploy changes in less than a minute. There is some existing information online about doing this sort of thing, but it’s all outdated in one way or another.</p>
-<p>We’ll be using Github Pages to serve the final assets. I’ll assume you’re making a static site for a Github organization called <code>myorg</code> and want it to live at <code>myorg.io</code>.</p>
-<h3 id="installation">Installation</h3>
-<ol style="list-style-type: decimal">
-<li>Create a Github organization. E.g. <code>myorg</code></li>
-<li>Create a project <code>myorg/myorg.github.io</code></li>
-<li>The master branch will be repeatedly overwritten and committed later on by Travis, so you won’t make any edits there directly. For now add a file to the root of the master branch called <code>CNAME</code> containing the string <code>myorg.io</code></li>
-<li>Create two <code>A</code> records in the DNS for <code>myorg.io</code> pointing at 192.30.252.153 and 192.30.252.154 respectively.</li>
-<li><p>Generate the base Hakyll project.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># in an empty directory of your choice</span>
-<span class="co"># NOT in the git repo you&#39;ve been using</span>
-
-<span class="kw">cabal</span> sandbox init
-<span class="kw">cabal</span> install -j --disable-documentation hakyll
-<span class="kw">cabal</span> exec hakyll-init myorg.github.io</code></pre></li>
-<li><p>Create an orphan source branch in your git repo and copy the generated files there.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> checkout --orphan source
-<span class="kw">git</span> rm CNAME
-<span class="kw">cp</span> -r /path/to/generated/myorg/* .
-<span class="kw">git</span> add .</code></pre></li>
-<li><p>Reuse the cabal sandbox you created earlier:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> -r /where/you/ran/cabal/install/.cabal-sandbox .</code></pre></li>
-<li><p>Keep build artifacts out of git by adding these lines to <code>.gitignore</code></p>
-<pre><code>.cabal-sandbox
-cabal.sandbox.config
-dist/
-_cache
-_site</code></pre></li>
-<li><p>Run your new site locally to see that it works!</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sandbox init
-<span class="kw">cabal</span> run rebuild
-<span class="kw">cabal</span> watch
-
-<span class="co"># now load http://localhost:8000</span></code></pre></li>
-<li><p>Create <code>.travis.yml</code> and add the following boilerplate:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
-<span class="fu">ghc:</span> 7.8
-<span class="fu">branches:</span>
-  <span class="fu">only:</span>
-  <span class="kw">-</span> source
-<span class="fu">before_install:</span>
-  <span class="kw">-</span> git submodule foreach --recursive <span class="st">&#39;git checkout master; git ls-files | grep -v README | grep -v CNAME | xargs -r git rm&#39;</span>
-<span class="fu">install:</span>
-  <span class="kw">-</span> <span class="fu">curl http:</span>//bin.begriffs.com/hakyll/cabal-sandbox.tar.xz | tar xJ
-  <span class="kw">-</span> cabal sandbox init
-  <span class="kw">-</span> cabal configure --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-split-objs
-<span class="fu">before_script:</span>
-  <span class="kw">-</span> git config --global user.email <span class="st">&quot;$GIT_EMAIL&quot;</span>
-  <span class="kw">-</span> git config --global user.name <span class="st">&quot;$GIT_NAME&quot;</span>
-<span class="fu">script:</span> cabal run -j build
-<span class="fu">after_script:</span>
-  <span class="kw">-</span> cd _site
-  <span class="kw">-</span> <span class="fu">export REMOTE=$(git config remote.origin.url | sed &#39;s/.*:</span>\/\///&#39;)
-  <span class="kw">-</span> <span class="fu">git remote add github https:</span>//${GH_TOKEN}@${REMOTE}
-  <span class="kw">-</span> git add --all
-  <span class="kw">-</span> git status
-  <span class="kw">-</span> git commit -m <span class="st">&quot;Built by Travis ( build $TRAVIS_BUILD_NUMBER )&quot;</span>
-  <span class="kw">-</span> <span class="fu">git push github master:</span>master | grep -v http</code></pre></li>
-<li>Generate a Github <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use">auth token</a>.</li>
-<li><p>Set encrypted environment variables to allow Travis to commit to the master branch</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gem</span> install travis
-<span class="kw">travis</span> encrypt -r myorg/myorg.github.io --add GH_NAME=<span class="st">&quot;J. Doe&quot;</span> GH_EMAIL=jdoe@myorg.io GH_TOKEN=xxxxxxxx</code></pre></li>
-<li>Commit all the files.</li>
-<li>Enable Travis for your repo. <a href="http://docs.travis-ci.com/user/getting-started/#Step-one%3A-Sign-in">Instructions here</a>.</li>
-<li>Push the <code>source</code> branch to Github.</li>
-<li><p>Watch the deploy progress at https://travis-ci.org/myorg/myorg.github.io</p></li>
-</ol>
-<p>Now you can <a href="https://help.github.com/articles/editing-files-in-your-repository">create and edit</a> blog posts right in Github and your changes get deployed automatically.</p>
-<h4 id="optional-generating-a-custom-cabal-sandbox-for-travis">(optional) Generating a custom cabal sandbox for Travis</h4>
-<p>You can use my <a href="http://bin.begriffs.com/hakyll/cabal-sandbox.tar.xz">shared cabal sandbox</a> on Travis as done above, or you can build your own. It’s a little trickier. Use this Travis config as a start. It takes advantage of post-build deployment to S3.</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
-<span class="fu">ghc:</span> 7.8
-<span class="fu">branches:</span>
-  <span class="fu">only:</span>
-  <span class="kw">-</span> source
-<span class="fu">before_install:</span>
-  <span class="kw">-</span> <span class="fu">travis_retry sudo add-apt-repository -y ppa:</span>hvr/ghc
-  <span class="kw">-</span> travis_retry sudo apt-get update
-  <span class="kw">-</span> travis_retry sudo apt-get install --force-yes happy-1.19.3 alex-3.1.3
-  <span class="kw">-</span> <span class="fu">export PATH=/opt/alex/3.1.3/bin:</span>/opt/happy/1.19.3/bin:$PATH
-<span class="fu">install:</span>
-  <span class="kw">-</span> cabal sandbox init
-  <span class="kw">-</span> cabal install -j --disable-documentation -fhttps pandoc
-  <span class="kw">-</span> cabal install -j --disable-documentation --disable-tests --reorder-goals
-<span class="fu">deploy:</span>
-  <span class="fu">provider:</span> s3
-  <span class="fu">access_key_id:</span> AKIAIYJJY5B5UWSU3CFQ
-  <span class="fu">bucket:</span> YOUR_BUCKET
-  <span class="fu">region:</span> us-west-1
-  <span class="fu">skip_cleanup:</span> true
-  <span class="fu">local-dir:</span> <span class="st">&quot;.cabal-sandbox&quot;</span>
-  <span class="fu">upload-dir:</span> hakyll
-  <span class="fu">acl:</span> !ruby/string:HighLine::String public_read
-  <span class="fu">on:</span>
-    <span class="fu">repo:</span> myorg/myorg.github.io
-    <span class="fu">branch:</span> source
-  <span class="fu">secret_access_key:</span>
-    <span class="fu">secure:</span> YOUR_SECURE_KEY</code></pre>
 </div>
 
 <div id="disqus_thread"></div>
