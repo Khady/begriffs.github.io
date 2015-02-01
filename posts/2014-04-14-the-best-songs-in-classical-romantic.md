@@ -227,7 +227,18 @@ in for good measure.
 *   **Cantata on Medieval English Verses (1952)**. ★ Fascinating melodies. I find them hard to describe. [youtube](https://www.youtube.com/watch?v=CthL1uh2X2I)
 *   **Concertino for Twelve Instruments (1952)**. An arrangement of the quartet from 1920. [youtube](https://www.youtube.com/watch?v=39IuoXQ8UZQ)
 *   **Tango (1953)**. With verve. [youtube](https://www.youtube.com/watch?v=VcXTFRXenwI)
-*   **Greeting Prelude (1955)**. The most epic version of _Happy Birthday_ ever nade. [youtube](https://www.youtube.com/watch?v=0z815Kqiy1Q)
+*   **Greeting Prelude (1955)**. The most epic version of _Happy Birthday_ ever made. [youtube](https://www.youtube.com/watch?v=0z815Kqiy1Q)
+
+### Emmanuel Chabrier
+
+Much of his early piano music is jaunty, almost ragtime sounding.
+He surpassed that old-timey style however and created some original
+and beautiful works. They have a repetitive lilt, like turning a
+page in a book and finding something brilliant on the other side.
+
+*   **Larghetto for Horn and Orchestra (1875)**. It's starting to get interesting, including the horn arrangement. [youtube](https://www.youtube.com/watch?v=HlB8jhQr2Hc)
+*   **Pièces pittoresques (1881)** ★ A sparkling invention. [youtube](https://www.youtube.com/watch?v=uGPDgMAz5HI&list=PLC51F8410092854E3)
+*   **Suite pastorale (1888)** ★ An orchestration of some of the above Pièces. Slower, richer, more amazing. [youtube](https://www.youtube.com/watch?v=K6QnCoW6EAs)
 
 ### To be continued...
 
