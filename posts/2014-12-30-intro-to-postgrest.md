@@ -17,3 +17,6 @@ PostgreSQL database by inspecting the db schema.
 </div>
 
 ### [begriffs/postgrest](https://github.com/begriffs/postgrest)
+
+<a class="embedly-card" href="http://www.slideshare.net/begriffs/postgrest-design-philosophy">PostgREST Design Philosophy</a>
+<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
