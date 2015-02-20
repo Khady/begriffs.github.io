@@ -2,6 +2,17 @@
 title: Create a static site with Hakyll, Github and Travis CI
 ---
 
+<div class="alert alert-info" role="alert">
+  <h4>Update</h4>
+
+  I have discovered after writing this article that [Circle
+  CI](https://circleci.com/) has better built-in support for Haskell
+  than Travis CI does.  In particular Circle will cache cabal build
+  artifacts for you automatically between builds.  I'd recommend
+  using Circle for all your Haskell projects.
+</div>
+
+
 "Static sites are fast, secure, easy to deploy, and manageable using
 version control." So states the webpage for <a
 href="http://jaspervdj.be/hakyll/">Hakyll</a>, a great way to set
