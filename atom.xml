@@ -8,8 +8,55 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-02-15T00:00:00Z</updated>
+    <updated>2015-02-22T00:00:00Z</updated>
     <entry>
+    <title>How Transparent Encryption Works in HDFS</title>
+    <link href="http://begriffs.com/posts/2015-02-22-hdfs-encryption.html" />
+    <id>http://begriffs.com/posts/2015-02-22-hdfs-encryption.html</id>
+    <published>2015-02-22T00:00:00Z</published>
+    <updated>2015-02-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>How Transparent Encryption Works in HDFS</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">February 22, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://www.linkedin.com/pub/charles-lamb/0/49a/694">Charles Lamb</a>, software enginner at <a href="http://www.cloudera.com/content/cloudera/en/home.html">Cloudera</a>, describes the tradeoffs between various levels of encryption, the choices he made when designing transparent encryption in HDFS, and the concepts you need to understand to use it.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/120274127.hd.mp4?s=3d80990f0d19452f2133316671a594f2"
+         poster="https://i.vimeocdn.com/video/508061204.png?mw=700"
+  ></video>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Transparent encryption: data is read and written to an encrypted subtree on HDFS</li>
+<li>This helps helps applications be regulation-compliant</li>
+<li>Encryption/decryption is always handled by the client, HDFS itself never sees plaintext</li>
+<li>The levels of encryption:
+<ul>
+<li>Application (hard to do and to add to legacy apps)</li>
+<li>Database (prone to leaks through e.g. secondary indices)</li>
+<li>Filesystem (higher performance, transparent, less flexible for various tenants)</li>
+<li>Disk level (only protects against physical theft)</li>
+</ul></li>
+<li>HDFS transparent encryption lives somewhere between db and filesystem levels</li>
+<li>Design goals</li>
+<li>In-depth explanations of architectural concepts
+<ul>
+<li>Key-management server</li>
+<li>Encryption zones</li>
+<li>Keys</li>
+</ul></li>
+<li>HDFS encryption configuration</li>
+<li>Per-user and per-key ACLs</li>
+<li>Performance results</li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Deploying Microservices</title>
     <link href="http://begriffs.com/posts/2015-02-15-microservice-template.html" />
     <id>http://begriffs.com/posts/2015-02-15-microservice-template.html</id>
@@ -608,31 +655,6 @@
 <li>100TB per day of compressed data</li>
 </ul></li>
 </ul>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Robot programming in APL</title>
-    <link href="http://begriffs.com/posts/2014-11-26-robots-in-apl.html" />
-    <id>http://begriffs.com/posts/2014-11-26-robots-in-apl.html</id>
-    <published>2014-11-26T00:00:00Z</published>
-    <updated>2014-11-26T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Robot programming in APL</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">November 26, 2014</h5>
-</div>
-
-<div class="content">
-  <p><a href="https://twitter.com/mkromberg">Morten Kromberg</a>, CTO at <a href="http://www.dyalog.com">Dyalog</a> shows two robots that communicate wirelessly, navigate, and explore. And they’re written in a language little changed since the 1960s, <a href="http://www.computerhistory.org/atchm/the-apl-programming-language-source-code">APL</a>.</p>
-<div class="flowplayer" data-embed="false">
-<video src="http://player.vimeo.com/external/112894665.hd.mp4?s=468260e4674c6f6024d86d373d93473d"
-         poster="https://i.vimeocdn.com/video/499956995.png?mw=700"
-  ></video>
-</div>
-<p>Throughout the night Morten showed the hieroglyphic language doing web scraping, writing servers, 3d simulations, and runnings robots. The language has a small fervent userbase, mainly European. They’re in a fascinating parallel universe of computing, one which talks about those “new additions” to the language in the early 90s.</p>
-<p>They carry the APL torch in corners of industries like finance, medical records, and (real) engineering. It’s a language often wielded by people who are knowledgeable in fields other than coding, people who program incidentally to support their main activities.</p>
 </div>
 ]]></summary>
 </entry>
