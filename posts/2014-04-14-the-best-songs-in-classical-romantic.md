@@ -240,6 +240,23 @@ page in a book and finding something brilliant on the other side.
 *   **Pièces pittoresques (1881)** ★ A sparkling invention. [youtube](https://www.youtube.com/watch?v=uGPDgMAz5HI&list=PLC51F8410092854E3)
 *   **Suite pastorale (1888)** ★ An orchestration of some of the above Pièces. Slower, richer, more amazing. [youtube](https://www.youtube.com/watch?v=K6QnCoW6EAs)
 
+### Alfredo Casella
+
+Casella sought to move Italian music beyond its operatic rut and
+onto the international scene. He studied in Paris and wrote brisk
+neoclassical music that often sounds to me like it's encircling or
+twining around a theme.
+
+*   **Barcarolle et scherzo (1903)**. Fanciful. [youtube](https://www.youtube.com/watch?v=rwzLhl_Ev8c)
+*   **Sonata in C minor (1907)**. Repetitive but stylish. [part1](https://www.youtube.com/watch?v=BHGTSTvwXDI) [part2](https://www.youtube.com/watch?v=g5rvNAflsTw) [part3](https://www.youtube.com/watch?v=XLN670K4Jow)
+*   **Sicilienne et Burlesque (1914)**. Fragile. [youtube](https://www.youtube.com/watch?v=8lFlemayzm8)
+*   **A notte alta (1917)**. Dismal and oriental. [part1](https://www.youtube.com/watch?v=JuA8QOXpCFA) [part2](https://www.youtube.com/watch?v=lXG8A8NPp5g)
+*   **Concerto per Archi (1924)**. Strong. [youtube](https://www.youtube.com/watch?v=iZvKq6nb-bw)
+*   **Menuet de la Scarlattiana (1926)**. Simple and happy. [youtube](https://www.youtube.com/watch?v=l5GM5K42a_4)
+*   **Serenata op.46b, 3rd movement (1930)**. Sentimental. [youtube](https://www.youtube.com/watch?v=MZCKe_nkX_Q&t=3m4s)
+*   **Sonata da G.B. Sammartini (1934)**. Finely wrought baroque. [youtube](https://www.youtube.com/watch?v=Tt84k3ykRgM)
+*   **Concerto for Piano, Strings, Timpani, and Percussion (1943)**. Mediterranean and passionate. [part1](https://www.youtube.com/watch?v=U3GaXpfSGcY) [part2](https://www.youtube.com/watch?v=_EVhmHHGlOs) [part3](https://www.youtube.com/watch?v=rb_rqhE0b6c)
+
 ### To be continued...
 
 Check back for more great music.
