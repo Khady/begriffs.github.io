@@ -8,8 +8,91 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-02-22T00:00:00Z</updated>
+    <updated>2015-02-25T00:00:00Z</updated>
     <entry>
+    <title>Text Mining in R (Sentiment Analysis, LDA, and Syuzhet)</title>
+    <link href="http://begriffs.com/posts/2015-02-25-text-mining-in-r.html" />
+    <id>http://begriffs.com/posts/2015-02-25-text-mining-in-r.html</id>
+    <published>2015-02-25T00:00:00Z</published>
+    <updated>2015-02-25T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Text Mining in R (Sentiment Analysis, LDA, and Syuzhet)</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">February 25, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://www.linkedin.com/pub/harold-baize/4/480/529">Harold Baize</a>, researcher at the <a href="https://www.sfdph.org/dph/default.asp">San Francisco Department of Public Health</a> shows how to use the latest <a href="http://www.r-project.org/">R</a> packages to analyze sentiments and topics in text. He gives a demo of using mental health provider notes to assess the effectiveness of treatments. Along the way he shows how disciplines from psychology to literary analysis have pioneered the practices labeled under the umbrella of “text mining.”</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/120614691.hd.mp4?s=d86271a555347fc538b2084083ef16bf"
+         poster="https://i.vimeocdn.com/video/508549850.png?mw=700"
+  ></video>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Origins of “text mining” in the “content analysis” of psychology</li>
+<li>We’ll be looking at sentiment analysis of content modeling</li>
+<li>Both are bag-of-words approaches</li>
+<li>Facebook’s quasi-unethical emotion manipulation experiment using sentiment analysis</li>
+<li>Great R packages: tm, topicmodels, LDAvis, syzuhet</li>
+<li>Definition of terms used</li>
+<li>Doing some actual text mining
+<ul>
+<li>Begin with a document term matrix</li>
+<li>Built using “controls” like stop words, stemming etc</li>
+<li>Then merge the term matrix with the lexicon of emotional values</li>
+<li>There are some common sentiment lexicons ready made: ANEW, Afinn</li>
+</ul></li>
+<li>Sentiment analysis can go beyond merely positive/negative
+<ul>
+<li>We can record the holder, target, sentiment, polarity, and source of a corpus</li>
+</ul></li>
+<li>Beware that bag-of-words approach misses things like sarcasm, double entendre and negation</li>
+<li>A walkthrough of analyzing the sentiment of a psychological health review shows sometimes we need to modify an off the shelf lexicon.</li>
+<li>Comparing sentiment in this study
+<ul>
+<li>Visualizing sentiment scores on psych progress notes to compare different hospitals</li>
+<li>Different ethnicities show show differences in positivity</li>
+<li>Also little kids/toddlers are way more optimistic, then get steadily more negative toward middle age. Finally above age 60 people tend to get positive again, at the level of 5-12 year olds.</li>
+</ul></li>
+<li>Predictions using sentiment data</li>
+<li>Topic modeling
+<ul>
+<li>An unsupervised method to find latent topics</li>
+<li>LDA (latent dirichlet allocation) is a popular form of topic modeling</li>
+<li>It returns the probability that each word is found in each topic</li>
+<li>We can visualize the results with LDAvis</li>
+</ul></li>
+<li>Example of doing LDA
+<ul>
+<li>Configure params like burn-in, iterations, number of topics, method of sampling and how frequently to keep samples</li>
+<li>Sometimes the topics are difficult to interpret, and this can be exacerbated by poor data cleaning</li>
+</ul></li>
+<li>Demo of exploring the output of LDA
+<ul>
+<li>Adjusting relevance vs frequency in corpus or topic</li>
+<li>The results are probabilistic, so each run produces different topics, but some of them persist</li>
+</ul></li>
+<li>Predicting topics
+<ul>
+<li>For instance a linear model reveals topics associated with newcomers to psychiatry vs old timers</li>
+</ul></li>
+<li>Concepts from literary analysis have been encoded into algorithms to help us understand a story
+<ul>
+<li>syuzhet vs fabula</li>
+<li>A video that demonstrates the syuzhet of fictional story arcs</li>
+</ul></li>
+<li>Applying the syuzhet library in R
+<ul>
+<li>The Canadian National Research Council has created a rich measure of syuzhet along ten dimension of emotion, so you can watch e.g. disgust or anticipation change over time</li>
+</ul></li>
+<li>There is also a supervised version of LDA (SLDA) but it is not covered in this talk</li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>How Transparent Encryption Works in HDFS</title>
     <link href="http://begriffs.com/posts/2015-02-22-hdfs-encryption.html" />
     <id>http://begriffs.com/posts/2015-02-22-hdfs-encryption.html</id>
@@ -609,52 +692,6 @@
 </ul>
 <p>This seems like the state of the art although there is some dissenting opinion such as <a href="http://radar.oreilly.com/2014/07/questioning-the-lambda-architecture.html">Questioning the Lambda Architecture</a>. Ultimately I think the engineering side will be moving to a purely functional paradigm. Perhaps it could be written in Haskell, using libraries like <a href="https://hailstorm-hs.github.io/hailstorm/">hailstorm</a>, <a href="https://github.com/cosbynator/haskakafka">haskakafka</a>, and <a href="https://github.com/Soostone/hadron">hadron</a>. Everything I read agreed that Hadoop and associated Java tools are creaky beasts that require a lot of fiddling.</p>
 <p>Although the engineering side looks exhilerating (unleashing hordes of data scrapers and coordinating a big pipeline), the science side may be a calmer career bet with its longer-lasting knowledge. However even there I discovered some fundamental disagreements between Frequentists and Bayesians. Either way it’s all fascinating stuff and I’d like to create some test compute clusters to up my game.</p>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Intro to Apache Mesos, the distributed systems SDK</title>
-    <link href="http://begriffs.com/posts/2014-11-28-intro-to-apache-mesos.html" />
-    <id>http://begriffs.com/posts/2014-11-28-intro-to-apache-mesos.html</id>
-    <published>2014-11-28T00:00:00Z</published>
-    <updated>2014-11-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Intro to Apache Mesos, the distributed systems SDK</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">November 28, 2014</h5>
-</div>
-
-<div class="content">
-  <p><a href="https://twitter.com/quarfot">Niklas Nielsen</a>, distributed systems engineer at <a href="https://mesosphere.com/">Mesosphere</a> gives an overview of how <a href="https://mesos.apache.org/">Mesos</a> manages resources to ensure their fair and efficient use in a compute cluster. He also demonstrates two higher-level frameworks on top of Mesos which keep jobs alive and manage timing and dependencies.</p>
-<div class="flowplayer" data-embed="false">
-<video src="http://player.vimeo.com/external/113052137.hd.mp4?s=7564b3ae933804f64a12ebfe42389af1"
-         poster="https://i.vimeocdn.com/video/499956815.png?mw=700"
-  ></video>
-</div>
-<h3 id="overview">Overview</h3>
-<ul>
-<li>What is Apache Mesos (and what is it not)</li>
-<li>Abstracting from physical machines to resources</li>
-<li>“Everything fails all the time”</li>
-<li>Mesos’ heuristic for the NP-Hard cloud scheduling problem</li>
-<li>Delegation to local decision-making nodes</li>
-<li>Resource offers</li>
-<li>Scheduling tasks across racks or nodes using attributes</li>
-<li>Avoiding resource starvation using reservations</li>
-<li>Mesos is a kernel with which you rarely interact directly
-<ul>
-<li>You use frameworks on top</li>
-<li><strong>Marathon</strong> starts processes in a mesos cluster and does deployments and upgrades</li>
-<li><strong>Chronos</strong> is a distributed cron with dependencies</li>
-</ul></li>
-<li>Twitter uses Mesos to handle
-<ul>
-<li>240 million monthly users</li>
-<li>150k tweets per second</li>
-<li>100TB per day of compressed data</li>
-</ul></li>
-</ul>
 </div>
 ]]></summary>
 </entry>
