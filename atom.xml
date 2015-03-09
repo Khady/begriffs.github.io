@@ -8,8 +8,250 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-02-25T00:00:00Z</updated>
+    <updated>2015-03-10T00:00:00Z</updated>
     <entry>
+    <title>Better Tweets Through Data Science</title>
+    <link href="http://begriffs.com/posts/2015-03-10-better-tweets-datascience.html" />
+    <id>http://begriffs.com/posts/2015-03-10-better-tweets-datascience.html</id>
+    <published>2015-03-10T00:00:00Z</published>
+    <updated>2015-03-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Better Tweets Through Data Science</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">March 10, 2015</h5>
+</div>
+
+<div class="content">
+  <div class="figure">
+<img src="/images/bird-word.png" alt="bird words" /><p class="caption">bird words</p>
+</div>
+<p>Great tweets aren’t born; they’re made. It turns out there are practical steps anyone can take to give their tweets a boost. I’m going to share lessons I learned applying data science to Twitter to discover what sets the top performing tweets apart from the un-favorited masses. This article is basically a cookbook you can use to construct some tasty tweets no matter what their topic.</p>
+<p>First things first. To have any chance at creating top tweets you need to start with interesting and useful content. Sorry, no amount of code or statistics can make up for a fundamentally boring article.</p>
+<p>Let’s begin by assuming you have created or discovered something great to share. It is probably interesting for quite a few reasons. The trick is to recognize <em>which</em> reason most interests other people. If you emphasize the unpopular aspects of content it will appear that nobody is listening. In fact the first step is to do some listening yourself.</p>
+<p>You certainly have some intuitions of what interests others, but we can go beyond fuzzy intuition and tap into that huge record that is the internet.</p>
+<div class="alert alert-info" role="alert">
+<h4>
+Observation One
+</h4>
+What interests a large group of people today is what interested them yesterday.
+</div>
+<p>It’s our job to take the record of interest – the favorites, the retweets – and distill their topics. Not only the literal subjects under consideration but the psychological needs of the audience. This becomes more straightforward using the right algorithms.</p>
+<h3 id="finding-topics">Finding Topics</h3>
+<p>The first and most blunt tool for exploring topics is obviously the hashtag. They’re great both because people use them to self-identify topics and because there are existing tools online to judge hashtag popularity and relatedness.</p>
+<p>Let’s get started, try this along with me. Pick a broad (unspecific) hashtag related to what you want to share. I’ll pick the super generic tag #data. We want to find other tags that are fairly popular and describe our content more precisely. To explore this use hashtagify.me</p>
+<div class="figure">
+<img src="/images/hashtag-graph.png" alt="Related hashtags" /><p class="caption">Related hashtags</p>
+</div>
+<p>Sometimes you’ll find that a tag isn’t used the way you expected. For instance I found that #cluster has more to do with jewelry than it does with cloud computing.</p>
+<p>The #data graph above shows that we might want to investigate #BigData, or #privacy instead. But for this example let’s stick with #data. To really get to know the personality of this hashtag we’ll need data. So visit https://twitter.com/search-home and try #data (or your own choice of tag).</p>
+<p>You’ll notice there is “Top” or “All” mode. We want to stay within Top because we want to learn about winners, not the others. Now we could use the Twitter API to programmatically download a bunch of data but we would have to sign up for access keys etc.</p>
+<p>Let’s just do it the quick and easy way for now. Start scrolling down the search page causing new results to be loaded. Just keep scrolling for a long while until you have many pages of info.</p>
+<p>Now use a quick snippet of JavaScript to grab the tweet text for processing. Pop open the JavaScript console in your browser (Cmd-Option-J in Chrome). Paste this in and press Enter:</p>
+<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="fu">$</span>(<span class="st">&#39;.tweet-text&#39;</span>).<span class="fu">map</span>(<span class="kw">function</span> () {
+  <span class="kw">return</span> <span class="ot">$</span>.<span class="fu">trim</span>(<span class="fu">$</span>(<span class="kw">this</span>).<span class="fu">text</span>());
+}).<span class="fu">get</span>().<span class="fu">join</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre>
+<h3 id="revealing-patterns">Revealing Patterns</h3>
+<p>Select all the output and save it to a file. We’re going to extract meaning from this text. Remember that we want the essential truth contained inside so we need to remove words which would distract from or skew the essence. Save and run the following shell script on your file to remove urls, competing hash tags, and @-mentions.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">perl</span> -p -i -e <span class="st">&quot;s/@</span><span class="dt">\\</span><span class="st">w+[ ,</span><span class="dt">\\</span><span class="st">.</span><span class="dt">\\</span><span class="st">?</span><span class="dt">\&quot;</span><span class="st">:&#39;]//g&quot;</span> <span class="ot">$1</span>
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/@\w+$//g&#39;</span> <span class="ot">$1</span>
+
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/#\w+[ ,\.\?&quot;:]//g&#39;</span> <span class="ot">$1</span>
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/#\w+$//g&#39;</span> <span class="ot">$1</span>
+
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/pic.twitter[^ ]+ //g&#39;</span> <span class="ot">$1</span>
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/pic.twitter[^ ]+$//g&#39;</span> <span class="ot">$1</span>
+
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/https?:[^ ]+ //g&#39;</span> <span class="ot">$1</span>
+<span class="kw">perl</span> -p -i -e <span class="st">&#39;s/https?:[^ ]+$//g&#39;</span> <span class="ot">$1</span></code></pre>
+<p>We’ll use the R programming language to run topic detection through Latent Dirichlet Allocation (LDA). Here are the pieces of code to calculate them.</p>
+<p>First load the tweets, one on each line. They will each be considered small “documents” for topic detection, and are put together into a “corpus.”</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jsonlite)
+<span class="kw">library</span>(tm)
+
+tweets &lt;-<span class="st"> </span><span class="kw">strsplit</span>(<span class="kw">readLines</span>(<span class="st">&#39;/path/to/tweets.txt&#39;</span>), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+corp &lt;-<span class="st"> </span><span class="kw">Corpus</span>(<span class="kw">VectorSource</span>(tweets))</code></pre>
+<p>To minimize inconsequential variations we will remove stop words, small words and other detritus. The remaining words are stemmed.</p>
+<pre class="sourceCode r"><code class="sourceCode r">dtm.control &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">tolower =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">removePunctuation =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">removeNumbers =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">stopwords =</span> <span class="kw">c</span>(<span class="kw">stopwords</span>(<span class="st">&quot;SMART&quot;</span>),
+                                  <span class="kw">stopwords</span>(<span class="st">&quot;en&quot;</span>)),
+                    <span class="dt">stemming =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">wordLengths =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="st">&quot;inf&quot;</span>),
+                    <span class="dt">weighting =</span> weightTf)</code></pre>
+<p>Next we record the term occurrences per document in a sparse matrix and set up parameters. This is a “bag-of-words” approach that ignores the grammar of sentences.</p>
+<pre class="sourceCode r"><code class="sourceCode r">sparse.dtm &lt;-<span class="st"> </span><span class="kw">DocumentTermMatrix</span>(corp, <span class="dt">control =</span> dtm.control)
+dtm &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(sparse.dtm)
+<span class="kw">class</span>(dtm) &lt;-<span class="st"> &quot;integer&quot;</span>
+
+vocab &lt;-<span class="st"> </span>sparse.dtm$dimnames$Terms
+<span class="co"># Compute some statistics related to the data set:</span>
+D &lt;-<span class="st"> </span><span class="kw">length</span>(corp)  <span class="co"># number of documents</span>
+W &lt;-<span class="st"> </span><span class="kw">length</span>(vocab)  <span class="co"># number of terms in the vocab</span>
+doc.length &lt;-<span class="st"> </span><span class="kw">rowSums</span>(dtm)  <span class="co"># number of tokens per document</span>
+N &lt;-<span class="st"> </span><span class="kw">sum</span>(doc.length)  <span class="co"># total number of tokens in the data</span>
+term.frequency &lt;-<span class="st"> </span><span class="kw">colSums</span>(dtm)  <span class="co"># frequencies of terms in the corpus</span>
+
+<span class="co"># MCMC and model tuning parameters:</span>
+K &lt;-<span class="st"> </span><span class="dv">20</span>
+G &lt;-<span class="st"> </span><span class="dv">5000</span>
+alpha &lt;-<span class="st"> </span><span class="fl">0.02</span>
+eta &lt;-<span class="st"> </span><span class="fl">0.02</span></code></pre>
+<p>Using the term frequencies we attempt to find clusters or words that tend to co-occur. This is the part that really identifies topics in tweets.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit the model:</span>
+<span class="kw">library</span>(lda)
+
+lda.input &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(dtm), function (i) {
+    docfreq &lt;-<span class="st"> </span><span class="kw">t</span>(dtm[i,])
+    keepers &lt;-<span class="st"> </span>docfreq &gt;<span class="st"> </span><span class="dv">0</span>
+    <span class="kw">rbind</span>( (<span class="dv">0</span>:(<span class="kw">ncol</span>(dtm)-<span class="dv">1</span>))[keepers], <span class="kw">t</span>(dtm[i,])[keepers] )
+  } )
+
+fit &lt;-<span class="st"> </span><span class="kw">lda.collapsed.gibbs.sampler</span>(<span class="dt">documents =</span> lda.input,
+                                   <span class="dt">K =</span> K, <span class="dt">vocab =</span> vocab,
+                                   <span class="dt">num.iterations =</span> G, <span class="dt">alpha =</span> alpha,
+                                   <span class="dt">eta =</span> eta, <span class="dt">initial =</span> <span class="ot">NULL</span>, <span class="dt">burnin =</span> <span class="dv">0</span>,
+                                   <span class="dt">compute.log.likelihood =</span> <span class="ot">TRUE</span>)</code></pre>
+<p>Finally plug the topic model into an interactive visualization that we will examine with our human intuition.</p>
+<pre class="sourceCode r"><code class="sourceCode r">theta &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(fit$document_sums +<span class="st"> </span>alpha, <span class="dv">2</span>, function(x) x/<span class="kw">sum</span>(x)))
+phi &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(<span class="kw">t</span>(fit$topics) +<span class="st"> </span>eta, <span class="dv">2</span>, function(x) x/<span class="kw">sum</span>(x)))
+
+<span class="kw">library</span>(LDAvis)
+
+<span class="co"># create the JSON object to feed the visualization:</span>
+json &lt;-<span class="st"> </span><span class="kw">createJSON</span>(<span class="dt">phi =</span> phi,
+                   <span class="dt">theta =</span> theta,
+                   <span class="dt">doc.length =</span> doc.length,
+                   <span class="dt">vocab =</span> vocab,
+                   <span class="dt">term.frequency =</span> term.frequency)
+
+<span class="kw">serVis</span>(json)</code></pre>
+<p>Time for the fun. Here’s a screenshot of the topics detected in top tweets having the #data hashtag. I have selected topic number 19 to see the frequency of the words inside. Notice I set the relevance metric slider low to focus on words that are frequent exclusively in the topic rather than frequent in the corpus as a whole.</p>
+<div class="figure">
+<img src="/images/tweet-topics.png" alt="LDA topics" /><p class="caption">LDA topics</p>
+</div>
+<h3 id="extracting-meaning">Extracting Meaning</h3>
+<p>The topics can be strange. If they are too chaotic and strange it probably means the data was not sufficiently cleaned or the sample was too small. But the more you look coherent categories the more you’ll see a kind of alien logic at work picking out words with a psychological bond.</p>
+<p>At this point the algorithms have done their job and it is time for us to be creative as humans. Let me walk you through how I made sense of the topics for the #data hashtag.</p>
+<p>For each detected topic I’ll list the main word, the feelings I associate with the topic, and the other major words inside that guided my assessment.</p>
+<ul>
+<li>The first (TRIAL) topic is cajoling people to try data products. It emphasizes the ease and quickness, and how the solution will “unlock” things, make you smarter, and amaze your boss.
+<ul>
+<li>storage, team, record, train, unlock, sport, free, clean, bottom, device, amazing, quick, boss, smarter</li>
+</ul></li>
+<li>Then we have the (CAPITAL) topic, all about disrupting industries and big company speculation.
+<ul>
+<li>capital, disrupt, venture, checkout, seeker, relationship, patent, airline, google, bet, fresh, double, fund</li>
+</ul></li>
+<li>The (BITCOIN) topic deals with that currency but also with non-monetary communication
+<ul>
+<li>communication, blah, exvers, search, speak, link, bitcoin, block, discount, listen, word, library, chain, song, teach, topic, print</li>
+</ul></li>
+<li>People worry about data, and the (BREACH) topic is full of credit cards, security compromises, and how much it costs us all.
+<ul>
+<li>credit, hit, compromise, driver, uber, interpret, human, card, replace, commission, hardware, neutral, pool, cost</li>
+</ul></li>
+<li>Of course you can’t have #data without (BIG). Apparently we’re “drowning” in it and it’s a veritable “lake,” but “wow” it is so big.
+<ul>
+<li>industry, lake, reach, love, move, drown, session, loyalty, wow</li>
+</ul></li>
+<li>The (OPPORTUNITY) topic deals with vision and red-hot engineers in the valley. You can not only wrangle data, you can be a data king.
+<ul>
+<li>location-based, senior, apply, hadoop, develop, succeed, hire, engineer, need, wrangle, vision, creator, gather, king, cluster, kingdom, hot, always, valley, red</li>
+</ul></li>
+<li>Then we have (BRANDS) and their associated trust words. People want to rate them and make decisions.
+<ul>
+<li>rate, trust, begin, smart, comfort, brain, decision, healthcare, focus, true, specific, rapid, crime, machine, vital, care, attribute, past, player, influence, patient</li>
+</ul></li>
+<li>Whereas opportunity was about creative struggle and power, (ADVANTAGE) is more about reassurance. A.k.a. debunking myths, providing answers, and strategizing.
+<ul>
+<li>advertis, myth, valuable, password, fuel, answer, data-driven, tip, like, competitive, autom, raw, break, provid, deliv, strategi, integr, analysi, format</li>
+</ul></li>
+<li>Beyond the technical aspects we have (LEGAL) implications. Laws passed or killed, policities about encryption and telecommunications.
+<ul>
+<li>phone, law, talktalk, combine, benefit, energi, save, stolen, plan, summari, encrypt, communicate, kill, pass, appeal, backup, transit, fall, bus, attack</li>
+</ul></li>
+</ul>
+<div class="alert alert-info" role="alert">
+<h4>
+Observation Two
+</h4>
+Topics generated by LDA reveal strange, sometimes psychological connections in tweets.
+</div>
+<p>Is this subjective? Very much so. But I am searching for archetypal tweet structures, and some topics can be fairly conclusive. I have run this process on several hashtags and can definitely sense their distinct personalities.</p>
+<p>For instance, check out the related tag #datascience. It should be #data’s close cousin but it does reveal that there is an industry of teaching data science. It is career-oriented.</p>
+<ul>
+<li>The (HIRE) shows people want to work in the field but are overwhelmed and turn to instructors.
+<ul>
+<li>recruit, rocket, role, survey, rocket, bank, overwhelm, instructor, begin, bet, billion</li>
+</ul></li>
+<li>More specific (RESOURCES)
+<ul>
+<li>bay, behavior, education, video, school, bootcamp, hot, write</li>
+</ul></li>
+<li>This topic, (MAKE), is similar to the OPPORTUNITY topic in #data but is less power-oriented. It tells a story of a journey to a beautiful outcome.
+<ul>
+<li>journey, digital, consider, transform, data-driven, easier, qualiti, visualis, metadata, simpli, measur, beauti, outcome, effect</li>
+</ul></li>
+<li>Welcome to the breathless (FUTURE) where things are emerging, things to watch
+<ul>
+<li>social, impact, emerging, tech, database, past, watch, attract, consum, answer, chicken&amp;egg, law</li>
+</ul></li>
+<li>Data science has well paying (COMPETITIONS)
+<ul>
+<li>learn, kaggle, spend, guest, call, competition, firm, persuade, architect, rule, half, competitor</li>
+</ul></li>
+<li>Sure these fancy science topics sound great, but show me a practical (APPLICATION).
+<ul>
+<li>develop, find, practical, succeed, economi, attend, webinar, cookbook</li>
+</ul></li>
+<li>Apparently (MACHINE LEARNING) is where the hard math lives
+<ul>
+<li>math, hard, google, library, word, oxford, advanced</li>
+</ul></li>
+<li>What is the biggest (STORY) of the week that you don’t want to miss?
+<ul>
+<li>week, news, bottleneck, back, biggest, tweet, reason, miss, tell, home, demand</li>
+</ul></li>
+<li>Statisticians explain (HISTORY) with infographics
+<ul>
+<li>integral, infographic, statistician, api, century, automate, count, sexiest</li>
+</ul></li>
+<li>Not just a (PATTERN) but a deep one, found faster, bigger and smarter. Boom.
+<ul>
+<li>program, visual, deep, language, beginn, random, linear, regress, faster, explore, bigger, smarter, storytell, connect, generate</li>
+</ul></li>
+<li>I call it the (ANALYTICS) topic but you might also call it the magic topic. Realtime things for experts. It tracks stuff and never stops.
+<ul>
+<li>realtime, message, queue, test, predict, track, influence, expert, review, embrace, magic</li>
+</ul></li>
+</ul>
+<h3 id="crafting-the-tweets">Crafting the Tweets</h3>
+<p>So we found the main psychological topics in top tweets from our categories. How can we construct new irresistably sharable tweets? Use the topic words as your guide. Let’s think about this article itself. We could consider it in the cringe-worthy genre of social media marketing techniques and learn more about those hashtags, but let’s think of it as #datascience and #data.</p>
+<p>This article does deal with making things (tweets) with an anticipated outcome, so let’s cast it as a MAKE topic. Review the words in the topic again to see how I used them.</p>
+<blockquote>
+<p>My #datadriven journey to measure and transform my tweets</p>
+</blockquote>
+<p>It is also an APPLICATION of a particular algorithm, so dressing it in those clothes we get something like</p>
+<blockquote>
+<p>A cookbook for practical #datascience to make your tweets succeed</p>
+</blockquote>
+<p>But it provides OPPORTUNITIES to improve, hence</p>
+<blockquote>
+<p>How to create successful tweets by wrangling Twitter #data with #textmining</p>
+</blockquote>
+<p>Of course we’re dealing with PATTERNS and we can mimic that topic with something like,</p>
+<blockquote>
+<p>Exploring deep language patterns to tweet smarter (#datascience)</p>
+</blockquote>
+<h3 id="conclusion">Conclusion</h3>
+<p>We’ve seen how to explore the space of hashtags, find topics in each one, and use our intuition to find psychological motives in topics. We then used the topic words as inspiration for how to communicate with others in the language that has proven most effective.</p>
+<p>Certainly a bag-of-words approach such as we’ve outlined is limited, and leaning on it for every tweet will probably just sound generic. Ultimately Twitter is a place to have normal conversations with people. However I have found that algorithmically analyzing topics helps me see other people’s point of view and write more compelling content.</p>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Text Mining in R (Sentiment Analysis, LDA, and Syuzhet)</title>
     <link href="http://begriffs.com/posts/2015-02-25-text-mining-in-r.html" />
     <id>http://begriffs.com/posts/2015-02-25-text-mining-in-r.html</id>
@@ -544,154 +786,6 @@
 <li>Intentionally undersize staging resources to force devs to make leaner code (heh heh)</li>
 </ul></li>
 </ul>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>A Survey of Data Science</title>
-    <link href="http://begriffs.com/posts/2014-11-30-survey-of-data-science.html" />
-    <id>http://begriffs.com/posts/2014-11-30-survey-of-data-science.html</id>
-    <published>2014-11-30T00:00:00Z</published>
-    <updated>2014-11-30T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>A Survey of Data Science</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">November 30, 2014</h5>
-</div>
-
-<div class="content">
-  <p>What does it take to be an outstanding data scientist? I decided to find out and reviewed syllabi from every data science bootcamp, the requirements for dozens of data jobs, and scores of slideshares and wikipedia articles. I think I’ve identified and classified the core skills.</p>
-<p>Fundamentally there are six abilities of a competent data scientist.</p>
-<ul>
-<li>acquiring data in a highly-available distributed pipeline</li>
-<li>cleaning it of duplication and errors</li>
-<li>enhancing it with knowledge gained from unsupervised learning and nlp</li>
-<li>inferring properties of a population from a sample, and finding relations of statistical variables</li>
-<li>predicting future events through supervised learning and statistical models</li>
-<li>communicating my findings to people and external programs</li>
-</ul>
-<p>As many articles mentioned, dealing with data is a team job and no single individual is expected to know everything. There are two distinct specializations though, data <em>science</em> and <em>engineering</em>. The latter deails with pipelines, wrangling, availability, and cluster management. The former with asking the right questions, designing experiments, and statistical analysis.</p>
-<p>I compiled a list of specific technologies and techniques and fit them into the sixfold classification of abilities. These appear to be the core skills of the profession.</p>
-<ul>
-<li>Acquire
-<ul>
-<li>workers and other pieces are managed by mesos</li>
-<li>web scrapers and other events as kafka producers</li>
-<li>mesos runs them in docker containers with the marathon framework</li>
-<li>feeds into a “lambda architecture”
-<ul>
-<li>the master dataset accumulates immutably in hdfs
-<ul>
-<li>encode the data with the thrift format to add a schema</li>
-<li>thence through hadoop jobs to make precomputed views</li>
-<li>store views in elephantdb and recalculate periodically</li>
-<li>client access is read-only from elephant</li>
-</ul></li>
-<li>data forks into storm for real time “speed layer” processing
-<ul>
-<li>which redundantly calculates the views we are doing on hadoop</li>
-<li>the results go into cassandra which is read/write</li>
-<li>the realtime layer relies on incremental algorithms to update the state in that database</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li>Clean
-<ul>
-<li>record linking and deduping
-<ul>
-<li>soundex</li>
-<li>jaro–winkler distance</li>
-<li>unicode normalization</li>
-</ul></li>
-<li>outlier identification
-<ul>
-<li>normality testing</li>
-<li>Grubbs’ test for outliers (given normality)</li>
-</ul></li>
-<li>correcting errors with mechanical turk</li>
-<li>create a derived hdfs dataset, the “golden master”</li>
-</ul></li>
-<li>Enhance
-<ul>
-<li>feature extraction
-<ul>
-<li>principal component analysis</li>
-<li>k-NN</li>
-</ul></li>
-<li>unsupervised clustering
-<ul>
-<li>k-means and finding k with the gap statistic</li>
-<li>hierarchical (agglomerative, divisive)</li>
-<li>density (DBSCAN)</li>
-<li>bagging</li>
-</ul></li>
-<li>nlp
-<ul>
-<li>stemming</li>
-<li>bag of words</li>
-<li>tf–idf</li>
-<li>topic models</li>
-</ul></li>
-</ul></li>
-<li>Infer
-<ul>
-<li>point estimation
-<ul>
-<li>maximum likelihood</li>
-</ul></li>
-<li>interval estimation
-<ul>
-<li>credible intervals</li>
-</ul></li>
-<li>survival analysis
-<ul>
-<li>kaplan-meier estimator</li>
-</ul></li>
-<li>hypothesis testing
-<ul>
-<li>chi squared</li>
-<li>t-test</li>
-</ul></li>
-<li>correlation</li>
-</ul></li>
-<li>Predict
-<ul>
-<li>classification
-<ul>
-<li>logistic regression</li>
-<li>decision trees and random forests</li>
-<li>naive bayes</li>
-<li>variance-bias decomposition</li>
-</ul></li>
-<li>recommendations
-<ul>
-<li>collaborative filtering</li>
-<li>content filtering</li>
-</ul></li>
-</ul></li>
-<li>Communicate
-<ul>
-<li>descriptive statistics
-<ul>
-<li>measures of central tendency</li>
-<li>measures of dispersion</li>
-</ul></li>
-<li>visualization
-<ul>
-<li>d3 (vega, rickshaw)</li>
-<li>realtime dashboard</li>
-</ul></li>
-<li>exposing results in restful api
-<ul>
-<li>export to postgres with sqoop</li>
-<li>generate api with dbapi</li>
-<li>document with raml</li>
-</ul></li>
-</ul></li>
-</ul>
-<p>This seems like the state of the art although there is some dissenting opinion such as <a href="http://radar.oreilly.com/2014/07/questioning-the-lambda-architecture.html">Questioning the Lambda Architecture</a>. Ultimately I think the engineering side will be moving to a purely functional paradigm. Perhaps it could be written in Haskell, using libraries like <a href="https://hailstorm-hs.github.io/hailstorm/">hailstorm</a>, <a href="https://github.com/cosbynator/haskakafka">haskakafka</a>, and <a href="https://github.com/Soostone/hadron">hadron</a>. Everything I read agreed that Hadoop and associated Java tools are creaky beasts that require a lot of fiddling.</p>
-<p>Although the engineering side looks exhilerating (unleashing hordes of data scrapers and coordinating a big pipeline), the science side may be a calmer career bet with its longer-lasting knowledge. However even there I discovered some fundamental disagreements between Frequentists and Bayesians. Either way it’s all fascinating stuff and I’d like to create some test compute clusters to up my game.</p>
 </div>
 ]]></summary>
 </entry>
