@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Machine Learning at the Limit</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="../css/minimalist.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Machine Learning at the Limit</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">March 13, 2015</h5>
+</div>
+
+<div class="content">
+  <p>Professor <a href="http://www.cs.berkeley.edu/~jfc/">John Canny</a> presents benchmarks for the <a href="https://github.com/BIDData/BIDMach">BIDMach</a> Scala machine learning library. He and his team achieve a nearly theoretical maximum speed in this library relative to roofline analysis of the available CPU and GPU resources. They have managed to outperform entire machine learning clusters using a single computer. Check out the video below for more detailed comparisons.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/122075036.hd.mp4?s=c560edc9e62183abe4542a1f8b7a9bd2" poster="https://i.vimeocdn.com/video/510970022.png?mw=700"></video>
+</div>
+<p>This talk was delivered at <a href="http://alpinenow.com/">Alpine Data Lab</a>.</p>
+<a class="embedly-card" href="http://www.slideshare.net/ChesterChen/sf-big-analytics">Slides</a>
+<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Discovering the limits of machine learning performance using roofline design from computer architecture</li>
+<li>Taking fully accelerated single-node algorithms and scaling them up</li>
+<li>Tweaking a data model for machine learning should be quick and iterative</li>
+<li>Often prototype machine learning is done in Scikit-Learn or R. It is then translated for production code by a group that often lacks machine learning expertise, which degrades the quality of results.</li>
+<li>The reasons for developing a new ML toolkit (Bidmach):
+<ul>
+<li>GPUS now operate efficiently on sparse data</li>
+<li>minibatch and stochastic gradient descent habe become a workhorse of choice for big data processing</li>
+<li>easy customization of models</li>
+<li>quick exploration, and sharing code between prototype and production</li>
+</ul></li>
+<li>To design the framework we start with roofline design and articulating the limits of CPUs etc</li>
+<li>We build the high level operations on top of a GPU-accelerated matrix library</li>
+<li>Roofline design establishes fundamental performance limits for a computational kernel</li>
+<li>Comparison of the strengths of CPUs and GPUs</li>
+<li>Comparing performance of BIDMach vs Vowpal Wabbit vs Scikit-Learn</li>
+<li>For many tasks a single node running BIDMach outperforms a whole cluster running traditional libraries</li>
+<li>Measurements of running time for Latent Dirichlet Allocation, random forests, single-class regression, logistic regression, multilabel regression, factor models, SVMs and clustering</li>
+<li>Rooflining network bandwidth</li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="../js/flowplayer.min.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
