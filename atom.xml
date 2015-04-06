@@ -95,6 +95,13 @@
 <p>To run the system we have a daily scheduler. It picks three random times from a uniform distribution inside each user’s time preference window (the hours during which we each prefer to be solicited.)</p>
 <p>The randomness of the sampling is interesting. Sometimes I may get solicited twice within a few minutes, other times more evenly throughout the day. We have considered enforcing a more even solicitation schedule (making it impossible that they occur too close together) but we don’t have a clear justification for the change. For the time being we’re leaving it as a uniform, sometimes lumpy, distribution.</p>
 <p>We don’t yet have enough data to make statistically significant claims about how we feel, but it has sure been fun keeping an eye on the dashboard. Many companies have big screens showing web analytics, but we’re the first I’ve seen to track how we feel – and it feels good.</p>
+<div class="alert alert-info" role="alert">
+<h4>
+Russian Translation
+</h4>
+Пост доступен на сайте softdroid.net: <a
+href="http://softdroid.net/otslezhivanie-radosti-na-rabote">Softdroid: исследование производительности на работе</a>.
+</div>
 </div>
 ]]></summary>
 </entry>
