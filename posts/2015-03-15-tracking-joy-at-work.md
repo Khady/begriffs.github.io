@@ -69,3 +69,12 @@ claims about how we feel, but it has sure been fun keeping an eye
 on the dashboard. Many companies have big screens showing web
 analytics, but we're the first I've seen to track how we feel --
 and it feels good.
+
+<div class="alert alert-info" role="alert">
+<h4>
+Russian Translation
+</h4>
+Пост доступен на сайте softdroid.net: <a
+href="http://softdroid.net/otslezhivanie-radosti-na-rabote">Softdroid:
+исследование производительности на работе</a>.
+</div>
