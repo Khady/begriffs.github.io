@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deploying Predictive Models in R</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="../css/minimalist.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Deploying Predictive Models in R</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">April 10, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://www.linkedin.com/pub/nick-elprin/38/a0/b3">Nick Elprin</a>, co-founder of <a href="http://www.dominodatalab.com/">Domino Data Lab</a> talks about strategies for organizing R code to make it easier to deploy and scale as low-latency web services. He then shows how these techniques work in cooperation with his platform-as-a-service which turns R functions into API calls.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/124671402.hd.mp4?s=e2a64ba66124dc454e3d6126d2001124" poster="https://i.vimeocdn.com/video/514501213.png?mw=700"></video>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Principles of writing R code that makes it easier to deploy and operationalize predictive models you’re building</li>
+<li>An intro to Domino Data Labs (data science platform-as-a-service)</li>
+<li>What languages might you use for building a predictive model? What languages for deploying a web production app?
+<ul>
+<li>These sets form a Venn diagram with Scala, Java, Python in the intersection</li>
+<li>R is all alone in the predictive-model-only circle</li>
+</ul></li>
+<li>Increasingly the two worlds of predictive models and production applications need to talk to each other</li>
+<li>There can also be organizational friction when a development is split between data science and software engineering
+<ul>
+<li>Deploying new models can have some hurdles</li>
+<li>One approach is the software engineers porting an R model to, say, Java</li>
+<li>Out of phase release cycles</li>
+</ul></li>
+<li>This is the backdrop for Domino, which wraps an R model with a clean REST interface
+<ul>
+<li>Allows data scientists to control their own destiny. They can deploy whenever they want.</li>
+</ul></li>
+<li>Demo
+<ul>
+<li>Predicting wine quality from chemical properties</li>
+<li>Using a random forest classifier just as an example</li>
+<li>Then save the classifier to a file</li>
+<li>Another file, predict.r, requires this file to have been created</li>
+<li>So we run the training program on the cloud</li>
+<li>Then “publish” the prediction file and chosen function inside</li>
+</ul></li>
+<li>Design considerations
+<ul>
+<li>Zero downtime upgrades</li>
+<li>Only switches to new model when it is ready</li>
+<li>High availability (restarting dead R code)</li>
+<li>Versioning, rollbacks, request logging</li>
+<li>Scheduled training updates</li>
+</ul></li>
+<li>Best practices
+<ul>
+<li>Make prediction code thread-safe (don’t mutate shared state)</li>
+<li>Separate logical steps of code into scripts or functions</li>
+<li>Training/initialization vs prediction</li>
+<li>Leverage serialization tools</li>
+<li>R’s save() function is a great way to do this as RDA files</li>
+</ul></li>
+<li>Use cases
+<ul>
+<li>recommendation systems</li>
+<li>insurance</li>
+<li>Lease or credit card approvals</li>
+</ul></li>
+<li>Domino’s blog welcomes guest contributions</li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="../js/flowplayer.min.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
