@@ -108,3 +108,7 @@ footer {
 figcaption {
   margin-top: 1em;
 }
+
+blockquote {
+  padding-top: 0;
+}
