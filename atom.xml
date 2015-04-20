@@ -8,8 +8,156 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-04-10T00:00:00Z</updated>
+    <updated>2015-04-18T00:00:00Z</updated>
     <entry>
+    <title>SF CloudCamp Lightning Talks</title>
+    <link href="http://begriffs.com/posts/2015-04-18-cloudcamp-sf-lightning-talks.html" />
+    <id>http://begriffs.com/posts/2015-04-18-cloudcamp-sf-lightning-talks.html</id>
+    <published>2015-04-18T00:00:00Z</published>
+    <updated>2015-04-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>SF CloudCamp Lightning Talks</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">April 18, 2015</h5>
+</div>
+
+<div class="content">
+  <ol style="list-style-type: decimal">
+<li><a href="#intro-to-docker">Intro to Docker</a></li>
+<li><a href="#exploring-strategies-for-minimal-containerization">Exploring Strategies for Minimal Containerization</a></li>
+<li><a href="#storage-containers-and-microservices">Storage, Containers, and Microservices</a></li>
+<li><a href="#docker-networking-with-clocker-and-project-calico">Docker Networking with Clocker and Project Calico</a></li>
+<li><a href="#continuous-integration-with-docker">Continuous Integration with Docker</a></li>
+</ol>
+<h3 id="intro-to-docker">Intro to Docker</h3>
+<p><a href="http://nathanleclaire.com/">Nathan LeClaire</a>, an engineer at Docker explains the tool from first principles as it were.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
+         poster="https://i.vimeocdn.com/video/515466205.png?mw=700"
+  ></video>
+</div>
+<ul>
+<li>There is a lot of noise and media about Docker, but what is it fundamentally?</li>
+<li>The precursor to containers came from Google circa 2005 managing giant workloads of linux processes
+<ul>
+<li>A very good paper was just released about this, <a href="https://static.googleusercontent.com/media/research.google.com/en/us/pubs/archive/43438.pdf">Large-scale cluster management at Google with Borg</a></li>
+<li>So you’re Google in 2005 and you have the abstraction of unix processes</li>
+<li>How do you deal with noisy neighbors - aka processes which gobble up resources</li>
+<li>Their answer was patching the Linux kernel to improve process isolation</li>
+<li>Resources are isolated with so-called namespaces, and can assign priority</li>
+</ul></li>
+<li>All this tech was contributed to the Linux kernel and evolved over time into a project called LXC
+<ul>
+<li>However it was hard to use and inaccessible</li>
+<li>Then Dockcloud came along and made a platform-as-a-service</li>
+<li>Their PaaS did not do so hot, but it did wrap LXC in a clean way</li>
+</ul></li>
+<li>Docker’s is best thought of as an <em>interface</em>, not a container.
+<ul>
+<li>It took a bunch of esoteric things and wrapped them up in a fun interface</li>
+<li>It sets the stage for repeatability and isolation in your infrastructure</li>
+</ul></li>
+</ul>
+<h3 id="exploring-strategies-for-minimal-containerization">Exploring Strategies for Minimal Containerization</h3>
+<p>Presented by Brian “<a href="http://www.brianredbeard.com/">Redbeard</a>” Harrington.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
+         poster="https://i.vimeocdn.com/video/515477269.png?mw=700"
+  ></video>
+</div>
+<ul>
+<li>Kubernetes is a fascinating project</li>
+<li>It is based on the internal ideas of Google Borg and, later, Omega</li>
+<li>Google doesn’t traditionally release open source projects, but they did for Kubernetes</li>
+<li>Decomposing the technology
+<ul>
+<li>Applications and containers</li>
+<li>There are a number of answers to this, including Docker</li>
+<li>CoreOS made a competing product called Rocket, aka “rkt”</li>
+</ul></li>
+<li>The CoreOS folks have been informed by Omaha, a system for self-updating programs
+<ul>
+<li>Omaha is the mechanism that updates Chrome and Google Earth</li>
+</ul></li>
+<li>When you combine containerization, auto-updating and CoreOS you get <a href="https://tectonic.com/">Tectonic</a>, a version of Kubernetes designed to run on platforms other than Google Compute Engine</li>
+</ul>
+<h3 id="storage-containers-and-microservices">Storage, Containers, and Microservices</h3>
+<p><a href="https://twitter.com/lmarsden">Luke Marsden</a> CTO, Founder at ClusterHQ explains how his company is working to improve the interaction and persistence of storage with Docker.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
+         poster="https://i.vimeocdn.com/video/515499474.png?mw=700"
+  ></video>
+</div>
+<ul>
+<li>Everybody loves containers because packaging is now so easy</li>
+<li>We used to have a quagmire of install scripts and packages</li>
+<li>And pushing the images to production is easy with today’s orchestration systems like Kubernetes, Mesos, Swarm, Deis etc</li>
+<li>But what about state? How do you store databases stored inside a container like the rest of your application?
+<ul>
+<li>It would be good to put databases through the continuous integration and continuous deployment pipelines like the rest of your services</li>
+<li>Docker Volumes provides only file-based access whereas most storages services are block-level, like EBS</li>
+<li>You can’t manage block devices from within your containers</li>
+</ul></li>
+<li>Zoning
+<ul>
+<li>It can be difficult to move data between availability zones</li>
+</ul></li>
+<li>Not all orchestration managers are stateful
+<ul>
+<li>They usually subscribe to the 12-factor app manifesto</li>
+<li>So data services have to be an external thing not managed by your orchestration system</li>
+<li>Kubernetes can manage state with storage drivers, but they ignore local storage</li>
+</ul></li>
+<li>What would be cool is to have a “Docker for storage,” a unified REST interface
+<ul>
+<li>ClusterHQ is trying to solve this problem. They are building an open source project called <a href="https://github.com/ClusterHQ/flocker">Flocker</a></li>
+</ul></li>
+</ul>
+<h3 id="docker-networking-with-clocker-and-project-calico">Docker Networking with Clocker and Project Calico</h3>
+<p><a href="https://twitter.com/grkvlt">Andrew Kennedy</a> Distributed Systems Hacker at CloudSoft shares the various bits of technology they use at his company, notably the open source tool <a href="https://github.com/brooklyncentral/clocker">Clocker</a>.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
+         poster="https://i.vimeocdn.com/video/515501140.png?mw=700"
+  ></video>
+</div>
+<ul>
+<li>Clocker manages a Docker cloud, manages VMs, and installs Docker on them using whatever SDN (software defined networking) you want</li>
+<li>Multi-host multi-container apps with seamless networking</li>
+<li>The basic cloud management system is Apache Brooklyn
+<ul>
+<li>Clocker adds Docker blueprinting to Brooklyn</li>
+<li>They use Brooklyn, jclouds, weave, opendove, and calico</li>
+</ul></li>
+</ul>
+<h3 id="continuous-integration-with-docker">Continuous Integration with Docker</h3>
+<p><a href="https://twitter.com/davenielsen">Dave Nielson</a> the Co-Founder of CloudCamp and organizer of this particular event also gives a lightning talk to explain a strategy of combining the best properties of Platforms-as-a-service with containers.</p>
+<div class="flowplayer" data-embed="false">
+<video src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
+         poster="https://i.vimeocdn.com/video/515473232.png?mw=700"
+  ></video>
+</div>
+<ul>
+<li>Why am I such a big fan of the PaaS?</li>
+<li>When you do server management yourself, maybe you do a good job, but when you do it really well why keep it to yourself?</li>
+<li>Containerization kind of changed how people do cloud computing</li>
+<li>However containers can accumulate and take work</li>
+<li>It can also be forbidding to the command-line averse</li>
+<li>Mobile app creators are a different breed
+<ul>
+<li>Apps either blow up or die so fast that app builders don’t care too much about the longevity of their stack or about vendor lock-in</li>
+<li>“Us: watch out you’ll get locked in! Them: Oh yeah? 18 billion dollars!”</li>
+</ul></li>
+<li>We can get the benefits of a Platform-as-a-Service without the lock-in by developing with a buildpack stuffed inside a container
+<ul>
+<li>It feels like you’re deploying to Heroku or Cloud Foundry but it’s all inside a container</li>
+<li>But you don’t deploy the buildpack part to production, you deploy the app that it creates, all containerized</li>
+</ul></li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Deploying Predictive Models in R</title>
     <link href="http://begriffs.com/posts/2015-04-10-deploying-predictive-models-in-R.html" />
     <id>http://begriffs.com/posts/2015-04-10-deploying-predictive-models-in-R.html</id>
@@ -685,93 +833,6 @@ Topics generated by LDA reveal strange, sometimes psychological connections in t
 <li>like deriving the Functor instance for the free monad</li>
 <li>…and then the Applicative instance</li>
 <li>Success! Look how hard that would have been without help</li>
-</ul></li>
-</ul>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Virtualizing a Hadoop Cluster (two videos)</title>
-    <link href="http://begriffs.com/posts/2015-01-28-virtualizing-hadoop.html" />
-    <id>http://begriffs.com/posts/2015-01-28-virtualizing-hadoop.html</id>
-    <published>2015-01-28T00:00:00Z</published>
-    <updated>2015-01-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Virtualizing a Hadoop Cluster (two videos)</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">January 28, 2015</h5>
-</div>
-
-<div class="content">
-  <p><a href="http://joelburget.com/">Tom Phelan</a>, Chief Architect at <a href="https://www.linkedin.com/pub/tom-phelan/0/749/61b">BlueData</a> talks about the appropriate situations in which to virtualize Hadoop, either in containers or in virtual machines. In evaluating the situations he explains what questions you should and should not be asking.</p>
-<div class="flowplayer" data-embed="false">
-<video src="http://player.vimeo.com/external/117907449.hd.mp4?s=de0ba4566372c0f6ae14d8bb51f50497"
-         poster="https://i.vimeocdn.com/video/504771461.png?mw=700"
-  ></video>
-</div>
-<h3 id="summary">Summary</h3>
-<ul>
-<li>What BlueData has learned about running Hadoop jobs</li>
-<li>Under what situations should one virtualize a Hadoop cluster</li>
-<li>The shape and components of a physical cluster
-<ul>
-<li>Both master and worker controllers contain</li>
-<li>Disks, server, named node, and resource manager</li>
-</ul></li>
-<li>Types of virtualization:
-<ul>
-<li>public cloud</li>
-<li>private cloud / hypervisor (strong fault isolation)</li>
-<li>private cloud / containers (weak fault isolation)</li>
-<li>paravirtualization</li>
-</ul></li>
-<li>The appropriate infrastructure for various situations
-<ul>
-<li>Questions NOT to ask</li>
-<li>Questions to ask</li>
-</ul></li>
-<li>Performance and Data Locality</li>
-<li>Five use-cases and their infrastructure needs</li>
-</ul>
-<h3 id="pt-2-orchestration-with-docker">Pt 2: Orchestration with Docker</h3>
-<p><a href="https://twitter.com/joel_k_baxter">Joel Baxter</a>, also at BlueData, leads a breakout session about what an ideal orchestration manager would look like for managing Hadoop clusters and associated data. The state of the art is evolving but not there yet.</p>
-<div class="flowplayer" data-embed="false">
-<video src="http://player.vimeo.com/external/118047022.hd.mp4?s=91cfdf09dcdfcc374d31c69c3008ce3a"
-         poster="https://i.vimeocdn.com/video/504974721.png?mw=700"
-  ></video>
-</div>
-<h3 id="summary-1">Summary</h3>
-<ul>
-<li>Hadoop Cluster orchestration with Docker</li>
-<li>Wishlist for an ideal orchestration manager
-<ul>
-<li>Add/remove a host from a list of peers</li>
-<li>Track resource consumption/availability per host</li>
-<li>Library of pre-prepared application images</li>
-<li>Multi-tenant protection
-<ul>
-<li>Performance isolation and data security</li>
-<li>Containers are less secure than virtual machines</li>
-<li>Quotas and priority</li>
-</ul></li>
-<li>Matching containers with physical hosts</li>
-<li>Spreading containers across fault-zones</li>
-<li>Packing containers in contiguous memory</li>
-</ul></li>
-<li>Migrations vs stateless servers</li>
-<li>Circumventing docker and doing IP address allocation</li>
-<li>DNS settings for bidirectional Hadoop communication</li>
-<li>Wishlist for storage
-<ul>
-<li>Docker volumes</li>
-<li>Volumes for fragments of HDFS are hard to reconstruct on container resurrection</li>
-<li>Ship your data to another db, or paravirtualize the storage</li>
-</ul></li>
-<li>Solutions?
-<ul>
-<li>There is not yet a turn-key orchestration system that solves all the items in the wishlists</li>
-<li>The area is rapidly evolving</li>
 </ul></li>
 </ul>
 </div>
