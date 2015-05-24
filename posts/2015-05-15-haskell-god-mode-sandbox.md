@@ -40,6 +40,18 @@ which uses more memory but appears to get past that problem.
 
 ### Creating a new megasandbox
 
+<div class="alert alert-warning" role="alert">
+  <h4>Security Warning</h4>
+
+  Haskell package builds can run arbitrary code. You probably do
+  not want to build all packages on hackage right on your personal
+  computer. Use an isolated environment instead like CI or a virtual
+  machine so that your data is not exposed to random code on the
+  internet.
+</div>
+
+
+
 To build god mode for another architecture you need to get the list
 of all packages on hackage and xargs it into cabal. Here's my hacky
 little solution:
