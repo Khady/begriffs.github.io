@@ -8,8 +8,75 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-05-15T00:00:00Z</updated>
+    <updated>2015-05-24T00:00:00Z</updated>
     <entry>
+    <title>Safe Haskell</title>
+    <link href="http://begriffs.com/posts/2015-05-24-safe-haskell.html" />
+    <id>http://begriffs.com/posts/2015-05-24-safe-haskell.html</id>
+    <published>2015-05-24T00:00:00Z</published>
+    <updated>2015-05-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Safe Haskell</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">May 24, 2015</h5>
+</div>
+
+<div class="content">
+  <p>Kristen Kozak explains how the Safe Haskell language extension can be used to deal with untrusted code. She shows how certain Haskell language features create security loopholes and why Safe Haskell disallows them. The safe subset is not enabled by default but you can (and should) enable it with <code>{-# LANGUAGE Safe #-}</code> whenever possible.</p>
+<div class="flowplayer" data-embed="false">
+<p><video src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446"
+         poster="https://i.vimeocdn.com/video/519026893.png?mw=700"
+  ></video></p>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Safe Haskell has been around since ghc 7.2</li>
+<li>It supports custom security policies for running untrusted code and was designed to be unobtrusive</li>
+<li>Great for environments like tryhaskell.org that accepts wild user input</li>
+<li>Another source of safety is using <a href="https://hackage.haskell.org/package/lio">labeled IO</a> which binds labels to data for tracking provenance and restricting disclosure</li>
+<li>Safe Haskell also helps developers audit their libraries because GHC enforces levels of safety (more on this later)</li>
+<li>Using Safe Haskell improves code style because it forces you to separate the safe and unsafe parts of your modules</li>
+<li>What is “safety” then?
+<ul>
+<li>First that the types can always be trusted. For instance that pure functions cannot perform IO. UnsafePerformIO is prohibited to them.</li>
+<li>Next that the encapsulation of modules is enforced. No template haskell tricks, for instance, which could get access to private parts of other modules</li>
+</ul></li>
+<li>Isn’t this how Haskell already works? Not exactly, there are loopholes which safe haskell closes
+<ul>
+<li>SH is a language subset of Haskell</li>
+<li>Adds rules around module imports</li>
+<li>Defines a trust systems for entire packages</li>
+</ul></li>
+<li>SH trust is defined on entire modules, and each module can be one of
+<ul>
+<li>XSafe (written in the safe language, with safe or trusted imports)</li>
+<li>XTrustworthy (marked as such by user)</li>
+<li>XUnsafe (the usual)</li>
+</ul></li>
+<li>Properties of the safe language itself
+<ul>
+<li>Type safety</li>
+<li>Referential transparency</li>
+<li>Module encapsulation</li>
+<li>Modular reasoning</li>
+<li>Semantic consistency (code doesn’t change meaning just because safety is enabled)</li>
+</ul></li>
+<li>The safe language disallows some language extensions and restricts others</li>
+<li>Limitations
+<ul>
+<li>Does not address resources limits or compilation safety</li>
+<li>Use something like a virtual machine for that</li>
+<li>Relies on library authors to do the separation in their modules into safe and unsafe parts</li>
+<li>For instance the vector package has not yet been separated</li>
+</ul></li>
+<li>To use safe haskell effectively you’ll need to enable the GHC flag <code>-fpackage-trust</code> otherwise everything will be marked as trustworthy</li>
+<li>Q&amp;A</li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Haskell "God Mode" Sandbox</title>
     <link href="http://begriffs.com/posts/2015-05-15-haskell-god-mode-sandbox.html" />
     <id>http://begriffs.com/posts/2015-05-15-haskell-god-mode-sandbox.html</id>
@@ -546,54 +613,6 @@ Russian Translation
 <p>Пост доступен на сайте softdroid.net: <a
 href="http://softdroid.net/otslezhivanie-radosti-na-rabote">Softdroid: исследование производительности на работе</a>.</p>
 </div>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Machine Learning at the Limit</title>
-    <link href="http://begriffs.com/posts/2015-03-13-machine-learning-at-limit.html" />
-    <id>http://begriffs.com/posts/2015-03-13-machine-learning-at-limit.html</id>
-    <published>2015-03-13T00:00:00Z</published>
-    <updated>2015-03-13T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Machine Learning at the Limit</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">March 13, 2015</h5>
-</div>
-
-<div class="content">
-  <p>Professor <a href="http://www.cs.berkeley.edu/~jfc/">John Canny</a> presents benchmarks for the <a href="https://github.com/BIDData/BIDMach">BIDMach</a> Scala machine learning library. He and his team achieve a nearly theoretical maximum speed in this library relative to roofline analysis of the available CPU and GPU resources. They have managed to outperform entire machine learning clusters using a single computer. Check out the video below for more detailed comparisons.</p>
-<div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/122075036.hd.mp4?s=c560edc9e62183abe4542a1f8b7a9bd2"
-         poster="https://i.vimeocdn.com/video/510970022.png?mw=700"
-  ></video></p>
-</div>
-<p>This talk was delivered at <a href="http://alpinenow.com/">Alpine Data Lab</a>.</p>
-<a class="embedly-card" href="http://www.slideshare.net/ChesterChen/sf-big-analytics">Slides</a>
-<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
-<h3 id="summary">Summary</h3>
-<ul>
-<li>Discovering the limits of machine learning performance using roofline design from computer architecture</li>
-<li>Taking fully accelerated single-node algorithms and scaling them up</li>
-<li>Tweaking a data model for machine learning should be quick and iterative</li>
-<li>Often prototype machine learning is done in Scikit-Learn or R. It is then translated for production code by a group that often lacks machine learning expertise, which degrades the quality of results.</li>
-<li>The reasons for developing a new ML toolkit (Bidmach):
-<ul>
-<li>GPUS now operate efficiently on sparse data</li>
-<li>minibatch and stochastic gradient descent habe become a workhorse of choice for big data processing</li>
-<li>easy customization of models</li>
-<li>quick exploration, and sharing code between prototype and production</li>
-</ul></li>
-<li>To design the framework we start with roofline design and articulating the limits of CPUs etc</li>
-<li>We build the high level operations on top of a GPU-accelerated matrix library</li>
-<li>Roofline design establishes fundamental performance limits for a computational kernel</li>
-<li>Comparison of the strengths of CPUs and GPUs</li>
-<li>Comparing performance of BIDMach vs Vowpal Wabbit vs Scikit-Learn</li>
-<li>For many tasks a single node running BIDMach outperforms a whole cluster running traditional libraries</li>
-<li>Measurements of running time for Latent Dirichlet Allocation, random forests, single-class regression, logistic regression, multilabel regression, factor models, SVMs and clustering</li>
-<li>Rooflining network bandwidth</li>
-</ul>
 </div>
 ]]></summary>
 </entry>
