@@ -33,6 +33,12 @@
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">stackage</span> sandbox init lts-2.5</code></pre>
 <p>Building the project will use the sandbox and be fast. If <code>cabal install</code> hangs on resolving resources, try the flag <code>--solver=topdown</code> which uses more memory but appears to get past that problem.</p>
 <h3 id="creating-a-new-megasandbox">Creating a new megasandbox</h3>
+<div class="alert alert-warning" role="alert">
+<h4>
+Security Warning
+</h4>
+<p>Haskell package builds can run arbitrary code. You probably do not want to build all packages on hackage right on your personal computer. Use an isolated environment instead like CI or a virtual machine so that your data is not exposed to random code on the internet.</p>
+</div>
 <p>To build god mode for another architecture you need to get the list of all packages on hackage and xargs it into cabal. Here’s my hacky little solution:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">npm</span> install -g json
 <span class="kw">mkdir</span> -d /tmp/build <span class="kw">&amp;&amp;</span> <span class="kw">cd</span> <span class="ot">$_</span>
