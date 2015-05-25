@@ -11,8 +11,9 @@ for common programs for collecting statistics, making a dashboard,
 and managing work queues.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/119660173.hd.mp4?s=c01b34d9882a7a179c3b885b8d523e0e"
-         poster="https://i.vimeocdn.com/video/507185690.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/119660173.hd.mp4?s=c01b34d9882a7a179c3b885b8d523e0e"
+         poster="https://i.vimeocdn.com/video/507185690.jpg?mw=700"
   ></video>
 </div>
 

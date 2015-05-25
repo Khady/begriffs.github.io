@@ -12,8 +12,9 @@ the concepts you need to understand to use it.
 
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/120274127.hd.mp4?s=3d80990f0d19452f2133316671a594f2"
-         poster="https://i.vimeocdn.com/video/508061204.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/120274127.hd.mp4?s=3d80990f0d19452f2133316671a594f2"
+         poster="https://i.vimeocdn.com/video/508061204.jpg?mw=700"
   ></video>
 </div>
 

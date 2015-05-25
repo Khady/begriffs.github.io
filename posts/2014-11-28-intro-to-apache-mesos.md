@@ -11,8 +11,9 @@ demonstrates two higher-level frameworks on top of Mesos which keep
 jobs alive and manage timing and dependencies.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/113052137.hd.mp4?s=7564b3ae933804f64a12ebfe42389af1"
-         poster="https://i.vimeocdn.com/video/499956815.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/113052137.hd.mp4?s=7564b3ae933804f64a12ebfe42389af1"
+         poster="https://i.vimeocdn.com/video/499956815.jpg?mw=700"
   ></video>
 </div>
 

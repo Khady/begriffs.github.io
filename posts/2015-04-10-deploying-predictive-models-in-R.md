@@ -11,8 +11,9 @@ techniques work in cooperation with his platform-as-a-service which
 turns R functions into API calls.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/124671402.hd.mp4?s=e2a64ba66124dc454e3d6126d2001124"
-         poster="https://i.vimeocdn.com/video/514501213.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/124671402.hd.mp4?s=e2a64ba66124dc454e3d6126d2001124"
+         poster="https://i.vimeocdn.com/video/514501213.jpg?mw=700"
   ></video>
 </div>
 

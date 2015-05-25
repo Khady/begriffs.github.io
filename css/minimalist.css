@@ -57,7 +57,7 @@
 .flowplayer .fp-logo img{width:100%}
 .is-embedded.flowplayer .fp-logo{display:block}
 .fixed-controls.flowplayer .fp-logo{bottom:15px}
-.flowplayer .fp-fullscreen,.flowplayer .fp-unload,.flowplayer .fp-close{position:absolute;top:5px;left:auto;right:5px;display:block;width:30px;height:23px;background-position:12px -197px;cursor:pointer;}
+.flowplayer .fp-fullscreen,.flowplayer .fp-unload,.flowplayer .fp-close{position:absolute;top:5px;left:auto;right:5px;display:block;width:30px;height:23px;background-position:12px -190px;cursor:pointer;}
 .is-rtl.flowplayer .fp-fullscreen,.is-rtl.flowplayer .fp-unload,.is-rtl.flowplayer .fp-close{right:auto;left:5px;background-position:18px -197px}
 .flowplayer .fp-unload,.flowplayer .fp-close{background-position:14px -175px;display:none;}
 .is-rtl.flowplayer .fp-unload,.is-rtl.flowplayer .fp-close{background-position:14px -175px}
@@ -227,3 +227,5 @@
 .flowplayer.color-alt .fp-buffer{background-color:#999}
 .flowplayer.color-alt2 .fp-progress{background-color:#900}
 .flowplayer.color-alt2.is-touch.is-mouseover .fp-progress:before{background-color:#900}
+
+.fp-brand, .fp-menu, .fp-timeline-tooltip, .flowplayer > a { display: none; }

@@ -14,8 +14,9 @@ pioneered the practices labeled under the umbrella of "text mining."
 
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/120614691.hd.mp4?s=d86271a555347fc538b2084083ef16bf"
-         poster="https://i.vimeocdn.com/video/508549850.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/120614691.hd.mp4?s=d86271a555347fc538b2084083ef16bf"
+         poster="https://i.vimeocdn.com/video/508549850.jpg?mw=700"
   ></video>
 </div>
 

@@ -4,8 +4,9 @@ video: true
 ---
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/111266288.hd.mp4?s=a74b6cbfb3fe9dace43ccad4427f90c9"
-         poster="https://i.vimeocdn.com/video/499957222.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/111266288.hd.mp4?s=a74b6cbfb3fe9dace43ccad4427f90c9"
+         poster="https://i.vimeocdn.com/video/499957222.jpg?mw=700"
   ></video>
 </div>
 

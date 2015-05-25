@@ -15,8 +15,9 @@ video: true
 tool from first principles as it were.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
-         poster="https://i.vimeocdn.com/video/515466205.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
+         poster="https://i.vimeocdn.com/video/515466205.jpg?mw=700"
   ></video>
 </div>
 
@@ -40,8 +41,9 @@ tool from first principles as it were.
 Presented by Brian "[Redbeard](http://www.brianredbeard.com/)" Harrington.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
-         poster="https://i.vimeocdn.com/video/515477269.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
+         poster="https://i.vimeocdn.com/video/515477269.jpg?mw=700"
   ></video>
 </div>
 
@@ -65,8 +67,9 @@ explains how his company is working to improve the interaction and
 persistence of storage with Docker.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
-         poster="https://i.vimeocdn.com/video/515499474.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
+         poster="https://i.vimeocdn.com/video/515499474.jpg?mw=700"
   ></video>
 </div>
 
@@ -100,8 +103,9 @@ at his company, notably the open source tool
 [Clocker](https://github.com/brooklyncentral/clocker).
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
-         poster="https://i.vimeocdn.com/video/515501140.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
+         poster="https://i.vimeocdn.com/video/515501140.jpg?mw=700"
   ></video>
 </div>
 
@@ -120,8 +124,9 @@ lightning talk to explain a strategy of combining the best properties
 of Platforms-as-a-service with containers.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
-         poster="https://i.vimeocdn.com/video/515473232.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
+         poster="https://i.vimeocdn.com/video/515473232.jpg?mw=700"
   ></video>
 </div>
 

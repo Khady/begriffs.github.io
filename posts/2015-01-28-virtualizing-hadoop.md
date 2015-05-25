@@ -11,8 +11,9 @@ situations he explains what questions you should and should not be
 asking.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/117907449.hd.mp4?s=de0ba4566372c0f6ae14d8bb51f50497"
-         poster="https://i.vimeocdn.com/video/504771461.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/117907449.hd.mp4?s=de0ba4566372c0f6ae14d8bb51f50497"
+         poster="https://i.vimeocdn.com/video/504771461.jpg?mw=700"
   ></video>
 </div>
 
@@ -42,8 +43,9 @@ would look like for managing Hadoop clusters and associated data.
 The state of the art is evolving but not there yet.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/118047022.hd.mp4?s=91cfdf09dcdfcc374d31c69c3008ce3a"
-         poster="https://i.vimeocdn.com/video/504974721.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/118047022.hd.mp4?s=91cfdf09dcdfcc374d31c69c3008ce3a"
+         poster="https://i.vimeocdn.com/video/504974721.jpg?mw=700"
   ></video>
 </div>
 

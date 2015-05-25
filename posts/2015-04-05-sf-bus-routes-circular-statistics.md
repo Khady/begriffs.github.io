@@ -13,8 +13,9 @@ and statistically analyze and discuss the resulting cognitive
 dissonance.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/124132910.hd.mp4?s=f047700972c48aaaf9c1e0c47a848240"
-         poster="https://i.vimeocdn.com/video/513748329.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/124132910.hd.mp4?s=f047700972c48aaaf9c1e0c47a848240"
+         poster="https://i.vimeocdn.com/video/513748329.jpg?mw=700"
   ></video>
 </div>
 

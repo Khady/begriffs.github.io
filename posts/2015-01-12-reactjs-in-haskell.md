@@ -12,8 +12,9 @@ It allows you to write a front-end app in Haskell which you compile
 to JavaScript via Haste and render using React JS.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/116516127.hd.mp4?s=69cd6b66fe5bff69a43e1b4375482edc"
-         poster="https://i.vimeocdn.com/video/502970736.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/116516127.hd.mp4?s=69cd6b66fe5bff69a43e1b4375482edc"
+         poster="https://i.vimeocdn.com/video/502970736.jpg?mw=700"
   ></video>
 </div>
 

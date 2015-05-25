@@ -13,7 +13,7 @@ configuration so it's easy to give it a try.
 Here's a screencast where I show you how I use Vim and GHCI.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/111187520.hd.mp4?s=5588738e6d17da2cea48b39e9132c643"></video>
+  <video type="video/mp4" src="http://player.vimeo.com/external/111187520.hd.mp4?s=5588738e6d17da2cea48b39e9132c643"></video>
 </div>
 
 ###

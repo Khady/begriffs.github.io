@@ -12,8 +12,9 @@ they think about modeling timeseries data along with unstructured
 events in a complex system.
 
 <div class="flowplayer" data-embed="false">
-  <video src="http://player.vimeo.com/external/114224611.hd.mp4?s=76850f410b1202d175397f1db626fc15"
-         poster="https://i.vimeocdn.com/video/499957414.png?mw=700"
+  <video type="video/mp4"
+         src="http://player.vimeo.com/external/114224611.hd.mp4?s=76850f410b1202d175397f1db626fc15"
+         poster="https://i.vimeocdn.com/video/499957414.jpg?mw=700"
   ></video>
 </div>
 
