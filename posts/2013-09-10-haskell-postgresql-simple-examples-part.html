@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -57,7 +56,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <h4>
 Typing details and conventions – safe to ignore.
 </h4>
-The naming style of <code>query_</code> flouts Haskell conventions where a trailing underscore means that the function suppresses a return type. For instance, we’re using <code>mapM_</code> in the code. Look how it differs from its scoreless brother <code>MapM</code> is just map that burrows along through a monad. The <code>print</code> function returns <code>IO ()</code> and <code>mapM_</code> is compatible with that. The <code>query_</code> function returns <code>IO</code> of a certain type of array, which is not compatible to be chained with <code>print</code>s.
+<p>The naming style of <code>query_</code> flouts Haskell conventions where a trailing underscore means that the function suppresses a return type. For instance, we’re using <code>mapM_</code> in the code. Look how it differs from its scoreless brother <code>MapM</code> is just map that burrows along through a monad. The <code>print</code> function returns <code>IO ()</code> and <code>mapM_</code> is compatible with that. The <code>query_</code> function returns <code>IO</code> of a certain type of array, which is not compatible to be chained with <code>print</code>s.</p>
 </div>
 <p>On to the next query.</p>
 <pre class="haskll"><code>putStrLn &quot;3 + 5&quot;
@@ -69,7 +68,7 @@ mapM_ print =&lt;&lt; ( query conn &quot;select ? + ?&quot; (3 :: Int, 5 :: Int)
 <h4>
 Digression
 </h4>
-In Haskell I don’t think you can properly make recursive definitions with tuples. This library in particular allows you to make <code>FromRow</code> on <code>FromField</code> tuples of length two through ten. They actually specify the constructors for each of these eight sizes. Kind of crazy, isn’t it? From what I can gather it’s a flaw in Haskell’s design that violates the <a href="https://en.wikipedia.org/wiki/Zero_one_infinity_rule">Zero, One, Infinity Rul</a>e and is remedied in Agda using dependent types. To construct bigger <code>FromRow</code> tuples you can combine them with the library-defined <code>(:.)</code> operator.
+<p>In Haskell I don’t think you can properly make recursive definitions with tuples. This library in particular allows you to make <code>FromRow</code> on <code>FromField</code> tuples of length two through ten. They actually specify the constructors for each of these eight sizes. Kind of crazy, isn’t it? From what I can gather it’s a flaw in Haskell’s design that violates the <a href="https://en.wikipedia.org/wiki/Zero_one_infinity_rule">Zero, One, Infinity Rul</a>e and is remedied in Agda using dependent types. To construct bigger <code>FromRow</code> tuples you can combine them with the library-defined <code>(:.)</code> operator.</p>
 </div>
 <p>So much for queries with and without arguments. How about commands? (This example assumes an existing table called <code>words</code> with a column named <code>word</code>.)</p>
 <pre class="sourceCode haskell"><code class="sourceCode haskell">putStrLn <span class="st">&quot;Enter a word&quot;</span>

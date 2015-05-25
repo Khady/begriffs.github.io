@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -66,7 +65,8 @@ hash n b s <span class="fu">=</span> (horner b (map ord s)) <span class="ot">`mo
 len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</span> map (hash n b) <span class="fu">$</span> allStrings <span class="dv">3</span> <span class="dv">3</span> [<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>]</code></pre>
 <p>There are \(26^3 = 17576\) length three strings of lowercase letters. If we let \(n = 17576\) and run through all relatively prime choices of \(b &lt; n\) there are plenty of bad values. To get a feel for how the performance varies, I sorted the number of keys that collide with any other keys as \(b\) varies. (The x-axis below is <strong>not</strong> \(b\).) The graph gives a feeling for the range of success.</p>
 <div class="figure">
-<img src="../images/hash-chart.png" alt="Hash collisions" /><p class="caption">Hash collisions</p>
+<img src="../images/hash-chart.png" alt="Hash collisions" />
+<p class="caption">Hash collisions</p>
 </div>
 <p>For the best \(b\) a whole 89% of keys are collision-free. At the worst end all but six collide. Apparently there is some deeper stuff going on. That’s as far as I’m going to take it for now.</p>
 </div>

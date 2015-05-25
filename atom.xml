@@ -25,8 +25,9 @@
 <div class="content">
   <p>Kristen Kozak explains how the Safe Haskell language extension can be used to deal with untrusted code. She shows how certain Haskell language features create security loopholes and why Safe Haskell disallows them. The safe subset is not enabled by default but you can (and should) enable it with <code>{-# LANGUAGE Safe #-}</code> whenever possible.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446"
-         poster="https://i.vimeocdn.com/video/519026893.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446"
+         poster="https://i.vimeocdn.com/video/519026893.jpg?mw=700"
   ></video></p>
 </div>
 <h3 id="summary">Summary</h3>
@@ -319,8 +320,9 @@ Security Warning
 <h3 id="intro-to-docker">Intro to Docker</h3>
 <p><a href="http://nathanleclaire.com/">Nathan LeClaire</a>, an engineer at Docker explains the tool from first principles as it were.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
-         poster="https://i.vimeocdn.com/video/515466205.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
+         poster="https://i.vimeocdn.com/video/515466205.jpg?mw=700"
   ></video></p>
 </div>
 <ul>
@@ -348,8 +350,9 @@ Security Warning
 <h3 id="exploring-strategies-for-minimal-containerization">Exploring Strategies for Minimal Containerization</h3>
 <p>Presented by Brian “<a href="http://www.brianredbeard.com/">Redbeard</a>” Harrington.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
-         poster="https://i.vimeocdn.com/video/515477269.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
+         poster="https://i.vimeocdn.com/video/515477269.jpg?mw=700"
   ></video></p>
 </div>
 <ul>
@@ -371,8 +374,9 @@ Security Warning
 <h3 id="storage-containers-and-microservices">Storage, Containers, and Microservices</h3>
 <p><a href="https://twitter.com/lmarsden">Luke Marsden</a> CTO, Founder at ClusterHQ explains how his company is working to improve the interaction and persistence of storage with Docker.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
-         poster="https://i.vimeocdn.com/video/515499474.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
+         poster="https://i.vimeocdn.com/video/515499474.jpg?mw=700"
   ></video></p>
 </div>
 <ul>
@@ -403,8 +407,9 @@ Security Warning
 <h3 id="docker-networking-with-clocker-and-project-calico">Docker Networking with Clocker and Project Calico</h3>
 <p><a href="https://twitter.com/grkvlt">Andrew Kennedy</a> Distributed Systems Hacker at CloudSoft shares the various bits of technology they use at his company, notably the open source tool <a href="https://github.com/brooklyncentral/clocker">Clocker</a>.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
-         poster="https://i.vimeocdn.com/video/515501140.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
+         poster="https://i.vimeocdn.com/video/515501140.jpg?mw=700"
   ></video></p>
 </div>
 <ul>
@@ -419,8 +424,9 @@ Security Warning
 <h3 id="continuous-integration-with-docker">Continuous Integration with Docker</h3>
 <p><a href="https://twitter.com/davenielsen">Dave Nielson</a> the Co-Founder of CloudCamp and organizer of this particular event also gives a lightning talk to explain a strategy of combining the best properties of Platforms-as-a-service with containers.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
-         poster="https://i.vimeocdn.com/video/515473232.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
+         poster="https://i.vimeocdn.com/video/515473232.jpg?mw=700"
   ></video></p>
 </div>
 <ul>
@@ -459,8 +465,9 @@ Security Warning
 <div class="content">
   <p><a href="https://www.linkedin.com/pub/nick-elprin/38/a0/b3">Nick Elprin</a>, co-founder of <a href="http://www.dominodatalab.com/">Domino Data Lab</a> talks about strategies for organizing R code to make it easier to deploy and scale as low-latency web services. He then shows how these techniques work in cooperation with his platform-as-a-service which turns R functions into API calls.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/124671402.hd.mp4?s=e2a64ba66124dc454e3d6126d2001124"
-         poster="https://i.vimeocdn.com/video/514501213.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/124671402.hd.mp4?s=e2a64ba66124dc454e3d6126d2001124"
+         poster="https://i.vimeocdn.com/video/514501213.jpg?mw=700"
   ></video></p>
 </div>
 <h3 id="summary">Summary</h3>
@@ -535,8 +542,9 @@ Security Warning
 <div class="content">
   <p><a href="http://erictheise.com/">Eric Theise</a>, Senior Software Engineer at <a href="http://repairpal.com/">RepairPal</a> asks, “Which way is Inbound?” Though SF Muni routes are prefaced with the modifiers “Inbound” and “Outbound”, their use of the terms often has little to do with the commonly understood meaning. In this presentation Eric uses open data, an open source geostack, and R’s circular package to visually and statistically analyze and discuss the resulting cognitive dissonance.</p>
 <div class="flowplayer" data-embed="false">
-<p><video src="http://player.vimeo.com/external/124132910.hd.mp4?s=f047700972c48aaaf9c1e0c47a848240"
-         poster="https://i.vimeocdn.com/video/513748329.png?mw=700"
+<p><video type="video/mp4"
+         src="http://player.vimeo.com/external/124132910.hd.mp4?s=f047700972c48aaaf9c1e0c47a848240"
+         poster="https://i.vimeocdn.com/video/513748329.jpg?mw=700"
   ></video></p>
 </div>
 <h3 id="summary">Summary</h3>

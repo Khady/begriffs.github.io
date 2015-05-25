@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -101,7 +100,8 @@ equal_steps.hs:5:20:
               distance = abs (y - x)</code></pre>
 <p>It identifies the unknown functions “/”, “..”, “max” and “abs.” What inputs would be appropriate for its arguments? Certainly something numeric. Yeah, we could choose <code>Float -&gt; Float -&gt; [Float]</code>, but we don’t want to be too specific and arbitrary. The language will hold us at our word. If it helps at all to think about the Haskell98 standard options you can examine the handy chart.</p>
 <div class="figure">
-<img src="../images/typeclasses.gif" alt="Typeclasses" /><p class="caption">Typeclasses</p>
+<img src="../images/typeclasses.gif" alt="Typeclasses" />
+<p class="caption">Typeclasses</p>
 </div>
 <p>An arrow pointing from one box to another means that the target box can be used in all the situations that the source can.</p>
 <p>Based on the operations we used in our function the compiler suggests restricting the input to being an instance of Fractional, Enum, Ord and Num. This is a powerful way to think about how our function operates. It manipulates a value that can be sensibly divided, enumerated, ordered and acted upon with arithmetic. Let’s add the restriction.</p>
@@ -118,7 +118,8 @@ equal_steps x y <span class="fu">=</span> [ (a <span class="fu">-</span> smaller
 <p>In an ordered field the order interacts with the other operations in a way that people find pleasant and fertile with theorems. One property enforced is that if \(a\), \(b &gt; 0\) then \(ab &gt; 0\) too. However in complex numbers the element \(i \neq 0\). The order in an ordered field is <em>total</em> which means that in this case either \(i &gt; 0\) or \(i &lt; 0\). Can’t be the former since \(i^2 = -1 &lt; 0\). And can’t be the latter since \((-i)^2 = -1 &lt; 0\). And that’s a problem.</p>
 <p>So there you have it, that’s why the Fractional class doesn’t include the <code>&lt;</code> operator. OK, fine, but why must we specify both Fractional and Enum? Can’t we step through fractions one at a time from lower to higher? Well, depends on the order. In the usual ordering we use for fractions the answer is no. In math terms Enum would be called a well-ordering, because it means there is a single unique successor after each value. However no fraction has a “next” one, You can keep splitting finer and finer between any two fractions. Incidentally there are a few ways to well-order the rational numbers (fractions of integers) if you’re willing to invent a weird order that doesn’t play well with the other arithmetic operations. Georg Cantor discovered one way</p>
 <div class="figure">
-<img src="../images/diagonal-mapping.jpg" alt="diagonal mapping" /><p class="caption">diagonal mapping</p>
+<img src="../images/diagonal-mapping.jpg" alt="diagonal mapping" />
+<p class="caption">diagonal mapping</p>
 </div>
 <p>And that’s why Fractional doesn’t include a range-walking operator. Yeah, it’s like the Haskell98 committee actually put some educated thought into what they were building.</p>
 </div>

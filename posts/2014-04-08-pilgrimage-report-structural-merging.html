@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -76,16 +75,19 @@ function foo2 (c, d) {
 }</code></pre>
 <p>His solution: a <em>structural</em> merge. A traditional diff sees each of these changes as many lines, whereas each of the files being merged differs by only a single structural change, and those changes can be harmlessly resolved. In terms of syntax, the first change (moving foo2 inside foo) looks like this</p>
 <div class="figure">
-<img src="../images/tree-1.png" alt="Moving foo" /><p class="caption">Moving foo</p>
+<img src="../images/tree-1.png" alt="Moving foo" />
+<p class="caption">Moving foo</p>
 </div>
 <p>The second (renaming the variables) looks like this</p>
 <div class="figure">
-<img src="../images/tree-2.png" alt="Renaming variables" /><p class="caption">Renaming variables</p>
+<img src="../images/tree-2.png" alt="Renaming variables" />
+<p class="caption">Renaming variables</p>
 </div>
 <p>These representations are created using the Zhang-Shasha tree edit-distance algorithm. It indicates “tree diff” in terms of the node operations <em>move</em>, <em>relabel</em>, <em>add</em>, and <em>delete</em>. The algorithm finds the minimum number of applications of these rules to transform one tree into another.</p>
 <p>Interestingly if we create a tree diff of tree diffs themselves we can use it to display more meaningful merge conflicts. The diff of the two diff trees above looks like this</p>
 <div class="figure">
-<img src="../images/tree-diff.png" alt="Tree diff" /><p class="caption">Tree diff</p>
+<img src="../images/tree-diff.png" alt="Tree diff" />
+<p class="caption">Tree diff</p>
 </div>
 <p>A second pass with a simplifying algorithm shows there is exactly one edit operation introduced by each change. A structural merge program can interactively ask the user which edit operation to apply (and can do them both if requested).</p>
 <p>Tikhon’s big hurdle is to make his tree diff fast. As he quipped, “[it runs in] exponential time…I’m not a fan.” The solution is dynamic programming, and in a lazy language like Haskell with immutable data structures it only takes a tiny change in a program to automatically memoize functions and enable dynamic programming. We spent the day investigating how to do it for his tree diff function, but began by playing with it in the simpler problem of string edit distance.</p>
@@ -96,7 +98,8 @@ function foo2 (c, d) {
 <span class="co">-- [0,1,1,2,3,5,8,13,21,34]</span></code></pre>
 <p>Let’s see a naive implementation of string edit distance and how to transform it with The Trick. It’s a Haskell implementation of the Wagner–Fischer algorithm which recursively calculates the edit distance of every initial segment of the two strings eventually working up to the original strings. Using the edit operations insert, delete, and substitute it can be expressed succinctly as</p>
 <div class="figure">
-<img src="../images/wagner-fischer.png" alt="Wagner fischer" /><p class="caption">Wagner fischer</p>
+<img src="../images/wagner-fischer.png" alt="Wagner fischer" />
+<p class="caption">Wagner fischer</p>
 </div>
 <p>Translated to Haskell it becomes</p>
 <pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">editDistance ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span>

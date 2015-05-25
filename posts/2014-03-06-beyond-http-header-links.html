@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -39,11 +38,13 @@
 <p>One of the more popularly adopted affordances are pagination link headers. The server includes links to the <em>prev</em>, <em>next</em>, <em>first</em>, and <em>last</em> pages at each page in a series. The client can disregard the URL scheme and just follow the links to access the pages as a doubly-linked list.</p>
 <p>Problem: pagination is often random-access. Look familiar?</p>
 <div class="figure">
-<img src="../images/pagination-1.png" alt="Linked list" /><p class="caption">Linked list</p>
+<img src="../images/pagination-1.png" alt="Linked list" />
+<p class="caption">Linked list</p>
 </div>
 <p>Sure, it has previous and next links but there are also links to go directly to numbered pages. Some interfaces embrace random access even more directly.</p>
 <div class="figure">
-<img src="../images/pagination-2.png" alt="Random access" /><p class="caption">Random access</p>
+<img src="../images/pagination-2.png" alt="Random access" />
+<p class="caption">Random access</p>
 </div>
 <p>In a potentially unbounded sequence we can’t include a header link to each page. What link relations would we use, and how would the client know what they mean? Ideally we would like a content agnostic way to paginate large resources, a standards-compliant way that doesn’t have to adjust the URL.</p>
 <p>If we can find a way to expose affordances for random-access pagination then why include the traditional four links? I’d prefer a standard way to access any page at all, which would make the first, last, next and prev links superfluous.</p>
