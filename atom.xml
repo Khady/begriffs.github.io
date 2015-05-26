@@ -51,9 +51,9 @@
 </ul></li>
 <li>SH trust is defined on entire modules, and each module can be one of
 <ul>
-<li>XSafe (written in the safe language, with safe or trusted imports)</li>
-<li>XTrustworthy (marked as such by user)</li>
-<li>XUnsafe (the usual)</li>
+<li>Safe (written in the safe language, with safe or trusted imports)</li>
+<li>Trustworthy (marked as such by user)</li>
+<li>Unsafe (the usual)</li>
 </ul></li>
 <li>Properties of the safe language itself
 <ul>
@@ -71,7 +71,7 @@
 <li>Relies on library authors to do the separation in their modules into safe and unsafe parts</li>
 <li>For instance the vector package has not yet been separated</li>
 </ul></li>
-<li>To use safe haskell effectively you’ll need to enable the GHC flag <code>-fpackage-trust</code> otherwise everything will be marked as trustworthy</li>
+<li>If you’re going to use safe haskell it’s important to enable the package trust system by setting the flag <code>-fpackage-trust</code>.</li>
 <li>Q&amp;A</li>
 </ul>
 </div>
