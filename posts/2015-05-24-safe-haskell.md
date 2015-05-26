@@ -33,9 +33,9 @@ possible.
     * Adds rules around module imports
     * Defines a trust systems for entire packages
 * SH trust is defined on entire modules, and each module can be one of
-    * XSafe (written in the safe language, with safe or trusted imports)
-    * XTrustworthy (marked as such by user)
-    * XUnsafe (the usual)
+    * Safe (written in the safe language, with safe or trusted imports)
+    * Trustworthy (marked as such by user)
+    * Unsafe (the usual)
 * Properties of the safe language itself
     * Type safety
     * Referential transparency
@@ -48,5 +48,6 @@ possible.
     * Use something like a virtual machine for that
     * Relies on library authors to do the separation in their modules into safe and unsafe parts
     * For instance the vector package has not yet been separated
-* To use safe haskell effectively you’ll need to enable the GHC flag `-fpackage-trust` otherwise everything will be marked as trustworthy
+* If you're going to use safe haskell it's important to enable the package trust system
+  by setting the flag `-fpackage-trust`.
 * Q&A
