@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Continuation Passing Style in Haskell</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="../css/minimalist.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Continuation Passing Style in Haskell</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">June  3, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://github.com/rdodesigns">Ryan Orendorff</a> presents a tutorial about using continuation passing style in Haskell. He starts with an introduction that looks a lot like how other functional languages do continuations, then refactors the example to use monads. The continuation monad has been called the “mother of all monads” because of its flexibility. See it in action in the video below.</p>
+<div class="flowplayer" data-embed="false">
+<p><video type="video/mp4" src="http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f" poster="https://i.vimeocdn.com/video/520812183.jpg?mw=700"></video></p>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>The basics of Continuation Passing Style (CPS)</li>
+<li>CPS can be made into a monad, and an operator, “call with current continuation”</li>
+<li>Motivating the style using the calculation of the area of a circle</li>
+<li>Creating a suspended computation with <code>cpsify</code></li>
+<li>Manual chaining of suspended computations is a pain</li>
+<li>The pattern can be seen as a monad, with <code>cpsify</code> as <code>return</code> and <code>chain</code> as <code>&gt;&gt;=</code></li>
+<li>The <code>do</code> notation provides nice sugar for CPS</li>
+<li>We can create suspended computations, chain them together, and use a type <code>Cont</code> to help prevent mistakes</li>
+<li>callCC
+<ul>
+<li>Allows exotic control structures, anything you can imagine: Exceptions, Coroutines, Generators, Iterators</li>
+<li>An example of an “eject button” that short-circuits computation</li>
+</ul></li>
+<li>Despite their promise, continuations are generally confusing and haven’t provided practical control structures</li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="../js/flowplayer.min.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
