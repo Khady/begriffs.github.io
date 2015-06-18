@@ -41,10 +41,10 @@
 </div>
 <h3 id="section"></h3>
 <p>You’ll want to watch out when sending multi-line strings to the repl, because it greedily starts trying to execute the first line. You can instruct it that a multi-line block is a single unit by enclosing it like so</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">:</span>{
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">:</span>{
   <span class="co">-- multi line</span>
   <span class="co">-- code here</span>
-<span class="fu">:</span>}</code></pre>
+<span class="fu">:</span>}</code></pre></div>
 <p>Alternately, run <code>:set +m</code> in GHCI and it will require a blank line after each input before interpreting. Anyone else have cool ways to edit and run programs?</p>
 </div>
 

@@ -37,7 +37,7 @@
   <p>I’ve been working on a simple api server, and getting confused by the sheer number of new Haskell things I need to learn. There are many combinations of http servers, frameworks, database libraries, and json parsing to try. So I’m taking a different route. I’m learning each piece in isolation so later I can put them together easily. Starting with database access.</p>
 <p>Let’s take the magic out of talking to Postgres. How do you connect to an existing database and read/write data? The most direct way appears to be the <code>postgresql-simple</code> package. There’s an even lower level library called <code>postgresql-libpq</code> that wraps the C-based libpq, but I don’t relish the idea of managing a database connection and other low-level details.</p>
 <p>Can’t get simpler than this: add two and two in sql. No table access needed.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
 
 <span class="kw">import </span><span class="dt">Database.PostgreSQL.Simple</span>
 <span class="kw">import </span><span class="dt">Control.Monad</span>
@@ -49,7 +49,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
   }
 
   putStrLn <span class="st">&quot;2 + 2&quot;</span>
-  mapM_ print <span class="fu">=&lt;&lt;</span> ( query_ conn <span class="st">&quot;select 2 + 2&quot;</span><span class="ot"> ::</span> <span class="dt">IO</span> [<span class="dt">Only</span> <span class="dt">Int</span>] )</code></pre>
+  mapM_ print <span class="fu">=&lt;&lt;</span> ( query_ conn <span class="st">&quot;select 2 + 2&quot;</span><span class="ot"> ::</span> <span class="dt">IO</span> [<span class="dt">Only</span> <span class="dt">Int</span>] )</code></pre></div>
 <p>Some notes about this code. Notice how you can extend <code>defaultConnectInfo</code>. It’s more future-proof to do this than trying to specify an entire <code>ConnectInfo</code> yourself. This is Haskell, after all, you can’t just omit a field and the library might expect more fields in future versions. Extending the defaults will be fine because the new default will cover the new type.</p>
 <p>Also, other docs for this library show the use of <code>query</code>, but you need <code>query_</code> for queries which take no arguments. Speaking of docs in general, be careful what Google tells you. I was looking at the Hackage docs for version 0.1.5 of this library for a long time because that is what Google had indexed. The newest version as of this writing is 0.3.6! (Hackage should really display a glaring warning when you look at old versions of a package.)</p>
 <div class="alert alert-info" role="alert">
@@ -71,9 +71,9 @@ Digression
 <p>In Haskell I don’t think you can properly make recursive definitions with tuples. This library in particular allows you to make <code>FromRow</code> on <code>FromField</code> tuples of length two through ten. They actually specify the constructors for each of these eight sizes. Kind of crazy, isn’t it? From what I can gather it’s a flaw in Haskell’s design that violates the <a href="https://en.wikipedia.org/wiki/Zero_one_infinity_rule">Zero, One, Infinity Rul</a>e and is remedied in Agda using dependent types. To construct bigger <code>FromRow</code> tuples you can combine them with the library-defined <code>(:.)</code> operator.</p>
 </div>
 <p>So much for queries with and without arguments. How about commands? (This example assumes an existing table called <code>words</code> with a column named <code>word</code>.)</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">putStrLn <span class="st">&quot;Enter a word&quot;</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">putStrLn <span class="st">&quot;Enter a word&quot;</span>
 word <span class="ot">&lt;-</span> getLine
-execute conn <span class="st">&quot;insert into words (word) values (?)&quot;</span> <span class="fu">$</span> <span class="dt">Only</span> word</code></pre>
+execute conn <span class="st">&quot;insert into words (word) values (?)&quot;</span> <span class="fu">$</span> <span class="dt">Only</span> word</code></pre></div>
 <p>Not much type annotation needed here, because the way we gather input tells the compiler what type it must be. Notice we use the <code>execute</code> function now. I first tried <code>query</code>, but it gives a runtime error when you try using destructive operations from <code>query</code>. Another level of safety I guess.</p>
 <p>There you go, some pretty “normal” code for doing SQL. In part two we’ll see a more streamlined way to interact with the database, and one that helps the compiler infer more and save you typing. But it’s nice to see the non-magical way first, isn’t it?</p>
 </div>

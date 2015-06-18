@@ -57,27 +57,27 @@ Server: Status → 413 Request Entity Too Large</code></pre>
 Server: Status → 206; Content-Range: 0-99/1234</code></pre>
 <p>This is a successful result (a 2xx code) for partial content delivery. It confirms the range delivered and includes the total number of items (1234) or * if the total is unknown, hard to calculate, or infinite. The other possible responses are status 416 for incomprehensible range or those that go outside the available data, and status 413 if the range is still too large to handle.</p>
 <p>By putting metadata – such as the total number of items – in the head, we can clean up the actual data returned by an API. Putting the metadata in the JSON payload clutters the result. This is awkward:</p>
-<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
   <span class="dt">&quot;meta&quot;</span><span class="fu">:</span> <span class="fu">{</span>
     <span class="dt">&quot;pages&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span>
     <span class="dt">&quot;cur_page&quot;</span><span class="fu">:</span> <span class="dv">2</span>
   <span class="fu">},</span>
   <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="ot">[</span> <span class="er">...</span> <span class="ot">]</span>
-<span class="fu">}</span></code></pre>
+<span class="fu">}</span></code></pre></div>
 <p>It would be much nicer to get a straight array of the data as the whole response. But once the client parses this JSON, it will need to store the metadata, so how do we keep the data pure and clean? In JavaScript the answer is non-enumerable properties. I’d argue that these properties correspond roughly to HTTP headers. They won’t clutter the results of looping through a result-set, but they are there if you ask for them directly.</p>
-<pre class="sourceCode javascript"><code class="sourceCode javascript">&gt; <span class="kw">var</span> data = [<span class="st">'hello'</span>, <span class="st">'mellow'</span>, <span class="st">'yellow'</span>];
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="kw">var</span> data <span class="op">=</span> [<span class="st">'hello'</span><span class="op">,</span> <span class="st">'mellow'</span><span class="op">,</span> <span class="st">'yellow'</span>]<span class="op">;</span>
 <span class="kw">undefined</span>
-&gt; data
-[ <span class="st">'hello'</span>, <span class="st">'mellow'</span>, <span class="st">'yellow'</span> ]
-&gt; <span class="ot">Object</span>.<span class="fu">defineProperty</span>(data, <span class="st">'total_items'</span>, { <span class="dt">enumerable</span>: <span class="kw">false</span>, <span class="dt">value</span>: <span class="dv">1234</span> })
-[ <span class="st">'hello'</span>, <span class="st">'mellow'</span>, <span class="st">'yellow'</span> ]
-&gt; <span class="kw">for</span>(<span class="kw">var</span> i <span class="kw">in</span> data) { <span class="ot">console</span>.<span class="fu">log</span>(data[i]); }
+<span class="op">&gt;</span> data
+[ <span class="st">'hello'</span><span class="op">,</span> <span class="st">'mellow'</span><span class="op">,</span> <span class="st">'yellow'</span> ]
+<span class="op">&gt;</span> <span class="va">Object</span>.<span class="at">defineProperty</span>(data<span class="op">,</span> <span class="st">'total_items'</span><span class="op">,</span> <span class="op">{</span> <span class="dt">enumerable</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">1234</span> <span class="op">}</span>)
+[ <span class="st">'hello'</span><span class="op">,</span> <span class="st">'mellow'</span><span class="op">,</span> <span class="st">'yellow'</span> ]
+<span class="op">&gt;</span> <span class="cf">for</span>(<span class="kw">var</span> i <span class="kw">in</span> data) <span class="op">{</span> <span class="va">console</span>.<span class="at">log</span>(data[i])<span class="op">;</span> <span class="op">}</span>
 hello
 mellow
 yellow
 <span class="kw">undefined</span>
-&gt; <span class="ot">data</span>.<span class="fu">total_items</span>
-<span class="dv">1234</span></code></pre>
+<span class="op">&gt;</span> <span class="va">data</span>.<span class="at">total_items</span>
+<span class="dv">1234</span></code></pre></div>
 <p>Notice the loop was unaffected by the <code>total_items</code> metadata. Hence I imagine client code will send HTTP requests for paginated data, parse the headers and record the range discreetly using <code>defineProperty()</code>.</p>
 <p>Finally, how should we calculate or communicate links for the first, last, next, and previous pages? The HATEOAS constraint of RESTful design says that this information should be provided by the server as hypermedia affordances. Not to worry, headers to the rescue again. RFC5988 describes link headers which point to other URLs and describe their relation to the current document. So the server can include</p>
 <pre><code>Server: Link → &amp;lt;/biglist&amp;gt;; rel=&quot;next&quot;</code></pre>

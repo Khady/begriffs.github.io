@@ -37,7 +37,7 @@
   <p><img src="../images/heroku.png" class="right" /> I deployed my first Yesod app today! Deploying to Heroku has gotten way smoother since even a few months ago let me tell you. I read articles with crazy gymnastics like booting up a virtual machine that matches Heroku infrastructure to build a binary on a special deploy branch that you copy and… no. Not doing that.</p>
 <p>I like Yesod so far. It feels like a real framework that can make real pages. It was definitely influenced by Rails but one thing it left behind is the creepy Rails magic. Things are explicitly linked together so it makes sense (aside from some of the Haskell constructions which are still foreign to me). Plus these DSLs are startlingly clean. Cabal files are like <code>make</code> meets <code>bundler</code>. Hspec is like rspec without stuttering. But my sycophancy aside, here’s how you deploy.</p>
 <h4 id="step-1-a-basic-yesod-app-and-local-databases">Step 1: a basic Yesod app and local databases</h4>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># basic yesod stuff</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># basic yesod stuff</span>
 <span class="kw">cabal</span> update
 <span class="kw">hsenv</span> <span class="kw">&amp;&amp;</span> <span class="kw">source</span> .hsenv/bin/activate
 <span class="kw">yesod</span> init
@@ -46,24 +46,24 @@
 <span class="co"># create the db itself</span>
 <span class="kw">createuser</span> APPNAME
 <span class="kw">createdb</span> -OAPPNAME APPNAME_development
-<span class="kw">createdb</span> -OAPPNAME APPNAME_test</code></pre>
+<span class="kw">createdb</span> -OAPPNAME APPNAME_test</code></pre></div>
 <p>Now edit <code>config/postgresql.yml</code> with the username and databases you created, and remove the production database entry. We’ll be reading it from a Heroku environment variable.</p>
 <h4 id="step-2-a-new-heroku-app-and-production-database">Step 2: a new Heroku app and production database</h4>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> init . <span class="kw">&amp;&amp;</span> <span class="kw">git</span> add . <span class="kw">&amp;&amp;</span> <span class="kw">git</span> commit -m <span class="st">'Yesod init'</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> init . <span class="kw">&amp;&amp;</span> <span class="kw">git</span> add . <span class="kw">&amp;&amp;</span> <span class="kw">git</span> commit -m <span class="st">'Yesod init'</span>
 <span class="kw">heroku</span> create --stack=cedar --buildpack https://github.com/puffnfresh/heroku-buildpack-haskell.git
 <span class="kw">heroku</span> addons:add heroku-postgresql:dev
 <span class="co"># take note of the color name in the url this outputs</span>
-<span class="kw">heroku</span> pg:promote HEROKU_POSTGRESQL_[colorname]_URL</code></pre>
+<span class="kw">heroku</span> pg:promote HEROKU_POSTGRESQL_[colorname]_URL</code></pre></div>
 <h4 id="step-3-have-the-app-ask-heroku-for-db-connection-info">Step 3: have the app ask Heroku for db connection info</h4>
 <p>Follow these excellent instructions to <a href="http://pbrisbin.com/posts/parsing_database_url">add the Heroku helper</a> to your app. Two things puzzled me for a while that the article doesn’t mention. You need to modify your project .cabal file and add <code>heroku</code> to the end of the <code>build-depends</code> and <code>Helpers.Heroku</code> to the <code>exposed-modules</code>.</p>
 <h4 id="step-4-tell-heroku-how-to-run-your-app-and-deploy">Step 4: tell Heroku how to run your app and deploy!</h4>
 <p>Heroku reads a Procfile to determine how to spawn various types of processes like the web server and workers. Yesod projects come with a Procfile you can copy and modify. It’s full of scary comments about the bad old days but you can remove all the comments and keep the last line. So do this:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> deploy/Procfile .
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> deploy/Procfile .
 <span class="co"># Edit all the comments out of the file</span>
 <span class="kw">git</span> add Procfile
 <span class="co"># Also be sure you added the Heroku helpers from the previous step</span>
 <span class="kw">git</span> commit -m <span class="st">'Ready to deploy'</span>
-<span class="kw">git</span> push heroku master</code></pre>
+<span class="kw">git</span> push heroku master</code></pre></div>
 <p>This is all a one-time thing. The first deploy takes a really long time as it installs all the dependencies. To deploy in the future just do <code>git push heroku master</code> and it’s fast and works perfectly.</p>
 </div>
 

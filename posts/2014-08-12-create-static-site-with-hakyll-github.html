@@ -51,19 +51,19 @@ Update
 <li>The master branch will be repeatedly overwritten and committed later on by Travis, so you won’t make any edits there directly. For now add a file to the root of the master branch called <code>CNAME</code> containing the string <code>myorg.io</code></li>
 <li>Create two <code>A</code> records in the DNS for <code>myorg.io</code> pointing at 192.30.252.153 and 192.30.252.154 respectively.</li>
 <li><p>Generate the base Hakyll project.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># in an empty directory of your choice</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># in an empty directory of your choice</span>
 <span class="co"># NOT in the git repo you've been using</span>
 
 <span class="kw">cabal</span> sandbox init
 <span class="kw">cabal</span> install -j --disable-documentation hakyll
-<span class="kw">cabal</span> exec hakyll-init myorg.github.io</code></pre></li>
+<span class="kw">cabal</span> exec hakyll-init myorg.github.io</code></pre></div></li>
 <li><p>Create an orphan source branch in your git repo and copy the generated files there.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> checkout --orphan source
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> checkout --orphan source
 <span class="kw">git</span> rm CNAME
 <span class="kw">cp</span> -r /path/to/generated/myorg/* .
-<span class="kw">git</span> add .</code></pre></li>
+<span class="kw">git</span> add .</code></pre></div></li>
 <li><p>Reuse the cabal sandbox you created earlier:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> -r /where/you/ran/cabal/install/.cabal-sandbox .</code></pre></li>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cp</span> -r /where/you/ran/cabal/install/.cabal-sandbox .</code></pre></div></li>
 <li><p>Keep build artifacts out of git by adding these lines to <code>.gitignore</code></p>
 <pre><code>.cabal-sandbox
 cabal.sandbox.config
@@ -71,13 +71,13 @@ dist/
 _cache
 _site</code></pre></li>
 <li><p>Run your new site locally to see that it works!</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sandbox init
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sandbox init
 <span class="kw">cabal</span> run rebuild
 <span class="kw">cabal</span> watch
 
-<span class="co"># now load http://localhost:8000</span></code></pre></li>
+<span class="co"># now load http://localhost:8000</span></code></pre></div></li>
 <li><p>Create <code>.travis.yml</code> and add the following boilerplate:</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
 <span class="fu">ghc:</span> 7.8
 <span class="fu">branches:</span>
   <span class="fu">only:</span>
@@ -99,11 +99,11 @@ _site</code></pre></li>
   <span class="kw">-</span> git add --all
   <span class="kw">-</span> git status
   <span class="kw">-</span> git commit -m <span class="st">&quot;Built by Travis ( build $TRAVIS_BUILD_NUMBER )&quot;</span>
-  <span class="kw">-</span> <span class="fu">git push github master:</span>master | grep -v http</code></pre></li>
+  <span class="kw">-</span> <span class="fu">git push github master:</span>master | grep -v http</code></pre></div></li>
 <li>Generate a Github <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use">auth token</a>.</li>
 <li><p>Set encrypted environment variables to allow Travis to commit to the master branch</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gem</span> install travis
-<span class="kw">travis</span> encrypt -r myorg/myorg.github.io --add GH_NAME=<span class="st">&quot;J. Doe&quot;</span> GH_EMAIL=jdoe@myorg.io GH_TOKEN=xxxxxxxx</code></pre></li>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">gem</span> install travis
+<span class="kw">travis</span> encrypt -r myorg/myorg.github.io --add GH_NAME=<span class="st">&quot;J. Doe&quot;</span> GH_EMAIL=jdoe@myorg.io GH_TOKEN=xxxxxxxx</code></pre></div></li>
 <li>Commit all the files.</li>
 <li>Enable Travis for your repo. <a href="http://docs.travis-ci.com/user/getting-started/#Step-one%3A-Sign-in">Instructions here</a>.</li>
 <li>Push the <code>source</code> branch to Github.</li>
@@ -112,7 +112,7 @@ _site</code></pre></li>
 <p>Now you can <a href="https://help.github.com/articles/editing-files-in-your-repository">create and edit</a> blog posts right in Github and your changes get deployed automatically.</p>
 <h4 id="optional-generating-a-custom-cabal-sandbox-for-travis">(optional) Generating a custom cabal sandbox for Travis</h4>
 <p>You can use my <a href="http://bin.begriffs.com/hakyll/cabal-sandbox.tar.xz">shared cabal sandbox</a> on Travis as done above, or you can build your own. It’s a little trickier. Use this Travis config as a start. It takes advantage of post-build deployment to S3.</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
 <span class="fu">ghc:</span> 7.8
 <span class="fu">branches:</span>
   <span class="fu">only:</span>
@@ -139,7 +139,7 @@ _site</code></pre></li>
     <span class="fu">repo:</span> myorg/myorg.github.io
     <span class="fu">branch:</span> source
   <span class="fu">secret_access_key:</span>
-    <span class="fu">secure:</span> YOUR_SECURE_KEY</code></pre>
+    <span class="fu">secure:</span> YOUR_SECURE_KEY</code></pre></div>
 </div>
 
     </div>

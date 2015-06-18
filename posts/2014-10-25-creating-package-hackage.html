@@ -39,14 +39,14 @@
 <p><a href="http://hackage.haskell.org/users/register-request">Register</a> a user account. Like many steps in Hackage, this is a somewhat human and manual process. A person has to review your submission and deem you worthy. So I guess don’t pick a profile name like <code>javascriptFTW</code> that would anger them.</p>
 <h3 id="step-2---package-structure">Step 2 - package structure</h3>
 <p>Structure your package in a standard way. Source directories are nested and named after the exposed module path. Your test suite lives in its own place and needs some boilerplate configuration. And of course you’ll need a good cabal file. <em>Want the shortcut?</em> Run <a href="https://github.com/fujimura/hi">fujimura/hi</a> to generate your project structure. By default it will choose a BSD license and use <code>hspec</code> for tests. Speaking for myself I changed it to an MIT license and <a href="http://hackage.haskell.org/package/hspec2">hspec2</a>.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">hi</span> --module-name <span class="st">&quot;Foo.Bar.Baz&quot;</span> --author <span class="st">&quot;J Doe&quot;</span> --email <span class="st">&quot;jdoe@me.com&quot;</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">hi</span> --module-name <span class="st">&quot;Foo.Bar.Baz&quot;</span> --author <span class="st">&quot;J Doe&quot;</span> --email <span class="st">&quot;jdoe@me.com&quot;</span></code></pre></div>
 <h3 id="step-3---cabal">Step 3 - cabal</h3>
 <p>Customize the package cabal file. If you’re wondering whether it includes enough information, check with</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> check</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> check</code></pre></div>
 <p>which will point out any problems. In fact Hackage will refuse a package upload that fails the check. However there are fields you might like to add beyond the bare minimum, such as the <code>Homepage</code> field with a link to the project on Github. See this <a href="http://www.haskell.org/ghc/docs/7.0.3/html/Cabal/authors.html#general-fields">reference</a> of all the fields.</p>
 <h3 id="step-4---docs">Step 4 - docs</h3>
 <p>Add Haddock documentation to your code as comments. There is more to Haddock than can reasonably fit in a little guide like this, but a good way to go is copy what people do in a popular package you admire. Generally the structure of generated docs is determined in your module declaration. Be sure to include some example code since it gives a quick overview to would-be users.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Foo.Bar.Baz</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Foo.Bar.Baz</span>
   (
     <span class="co">-- * Example usage</span>
     <span class="co">-- $use</span>
@@ -57,9 +57,9 @@
     <span class="co">-- * More stuff</span>
   , fun
   , joy
-  ) <span class="kw">where</span></code></pre>
+  ) <span class="kw">where</span></code></pre></div>
 <p>Notice you can create chunks by name like <code>$use</code> and interpolate them at the right place in the module declaration. To preview your docs locally run</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> haddock</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> haddock</code></pre></div>
 <p>which will build the docs in <code>dist/doc/html/your-pkg/index.html</code>. Note that unlike the custom in other languages, Haskellers usually don’t put much info into READMEs. At first I thought they were being negligent but I learned that the combination of strong types and Haddock’s structure provide a standardized documentation experience that works better. I like to add a link in my Github readme to point at the Hackage docs to help those unfamiliar with the convention.</p>
 <h3 id="step-5---ci">Step 5 - CI</h3>
 <p>Enable continuous integration. You want to ensure that</p>
@@ -71,7 +71,7 @@
 <li>docs build cleanly</li>
 </ul>
 <p>Here’s a nice Travis config adapted from <a href="https://twitter.com/bitemyapp">bitemyapp</a> who got it from <a href="https://github.com/hvr">hvr</a>.</p>
-<pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">language:</span> haskell
 
 <span class="fu">ghc:</span>
  <span class="kw">-</span> 7.6
@@ -111,19 +111,19 @@
    else
       echo <span class="st">&quot;expected '$SRC_TGZ' not found&quot;</span>;
       exit 1;
-   fi</code></pre>
+   fi</code></pre></div>
 <h3 id="step-6---dependencies">Step 6 - dependencies</h3>
 <p>Add some constraints to your library’s dependencies in the cabal file. Locking major versions of dependencies will help prevent surprise Cabal build failures by your users. This is about the only rule of thumb I know. Setting constraints more intelligently is certainly possible, and I welcome your comments about your own strategies.</p>
 <h3 id="step-7---candidate-package">Step 7 - candidate package</h3>
 <p>Your tests pass, your docs look good. It’s time to upload a “package candidate” for a last check that things are OK on the real Hackage.</p>
 <p>Create a source distribution</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sdist</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> sdist</code></pre></div>
 <p>This will generate <code>dist/your-pkg-x.y.z.tar.gz</code>. Select this file in the <a href="https://hackage.haskell.org/packages/candidates/upload">candidate uploader</a> and give it a go.</p>
 <h3 id="step-8---release-it">Step 8 - release it</h3>
 <p>Some people like to leave their packages as candidates for a while to find bugs etc. The quality on hackage is generally pretty high so you want to avoid throwing things up there half-baked. Generally if you’ve followed the previous steps you should be in pretty good shape to release your package for real though.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> upload dist/your-pkg-x.y.z.tar.gz</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cabal</span> upload dist/your-pkg-x.y.z.tar.gz</code></pre></div>
 <p>All done, right? Time to celebrate! Not necessarily. Recently Hackage has been failing to run haddock remotely to generate documentation. The maintainers claim there is a small delay but I have found sometimes it never happens. Thankfully <a href="https://twitter.com/kmett">Edward Kmett</a> created a script to build your own docs and push them to Hackage.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
 <span class="kw">set</span> <span class="kw">-e</span>
 
 <span class="kw">if [</span> <span class="st">&quot;</span><span class="ot">$#</span><span class="st">&quot;</span> <span class="ot">-ne</span> 1<span class="kw"> ]</span>; <span class="kw">then</span>
@@ -168,7 +168,7 @@
      -H <span class="st">'Content-Encoding: gzip'</span> \
      -u <span class="st">&quot;</span><span class="ot">$user</span><span class="st">&quot;</span> \
      --data-binary <span class="st">&quot;@</span><span class="ot">$dir</span><span class="st">/</span><span class="ot">$pkg</span><span class="st">-</span><span class="ot">$ver</span><span class="st">-docs.tar.gz&quot;</span> \
-     <span class="st">&quot;https://hackage.haskell.org/package/</span><span class="ot">$pkg</span><span class="st">-</span><span class="ot">$ver</span><span class="st">/docs&quot;</span></code></pre>
+     <span class="st">&quot;https://hackage.haskell.org/package/</span><span class="ot">$pkg</span><span class="st">-</span><span class="ot">$ver</span><span class="st">/docs&quot;</span></code></pre></div>
 <p>Now you will have published a package that looks good and will be be easy for people to use. So get that code off your computer and onto Hackage and contribute to the glorious Haskell ecosystem!</p>
 </div>
 

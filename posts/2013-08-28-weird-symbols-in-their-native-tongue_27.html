@@ -36,7 +36,7 @@
 <div class="content">
   <p>Shh! Words get in your way. Let’s play functional charades, where you will understand a function by watching it in silence.</p>
 <h4 id="section">&lt;$&gt;</h4>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">$</span> <span class="dv">2</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">$</span> <span class="dv">2</span>
 <span class="dv">7</span>
 <span class="fu">&gt;</span> (<span class="dv">5</span><span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dv">2</span>
 <span class="dt">Just</span> <span class="dv">7</span>
@@ -66,9 +66,9 @@
 <span class="fu">&gt;</span> getZipList <span class="fu">$</span> <span class="dt">ZipList</span> [<span class="dv">1</span>,<span class="dv">2</span>]
 [<span class="dv">1</span>,<span class="dv">2</span>]
 <span class="fu">&gt;</span> getZipList <span class="fu">$</span> (<span class="fu">+</span><span class="dv">5</span>) <span class="fu">&lt;$&gt;</span> <span class="dt">ZipList</span> [<span class="dv">1</span>,<span class="dv">2</span>]
-[<span class="dv">6</span>,<span class="dv">7</span>]</code></pre>
+[<span class="dv">6</span>,<span class="dv">7</span>]</code></pre></div>
 <h4 id="section-1">&lt;*&gt;</h4>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Just</span> <span class="dv">5</span>)
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> (<span class="dt">Just</span> <span class="dv">5</span>)
 <span class="dt">Just</span> (<span class="fu">+</span><span class="dv">5</span>)
 <span class="fu">&gt;</span> <span class="dt">Just</span> (<span class="fu">+</span><span class="dv">5</span>) <span class="fu">&lt;*&gt;</span> (<span class="dt">Just</span> <span class="dv">2</span>)
 <span class="dt">Just</span> <span class="dv">7</span>
@@ -106,9 +106,9 @@
 <span class="fu">&gt;</span> (<span class="fu">++</span>) <span class="fu">&lt;$&gt;</span> getLine <span class="fu">&lt;*&gt;</span> getLine
 ab<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
 cd<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
-<span class="st">&quot;abcd&quot;</span></code></pre>
+<span class="st">&quot;abcd&quot;</span></code></pre></div>
 <h4 id="pure">pure</h4>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> <span class="dv">5</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> <span class="dv">5</span>
 <span class="dv">5</span>
 <span class="fu">&gt;</span> (pure <span class="dv">5</span>)<span class="ot"> ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
 <span class="dt">Just</span> <span class="dv">5</span>
@@ -131,7 +131,7 @@ cd<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;
 hi<span class="fu">&lt;</span><span class="dt">Enter</span><span class="fu">&gt;</span>
 <span class="st">&quot;hi!&quot;</span>
 <span class="fu">&gt;</span> (<span class="fu">+</span><span class="dv">2</span>) <span class="fu">&lt;$&gt;</span> pure <span class="dv">5</span>
-<span class="dv">7</span></code></pre>
+<span class="dv">7</span></code></pre></div>
 <p>Now you know.</p>
 </div>
 

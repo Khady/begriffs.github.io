@@ -41,7 +41,7 @@
 <p>More generally if \(i \mid b\) and \(i \mid n\) for \(i &gt; 1\) then \(b = ij\), \(n = ik\) for some \(j\) and \(k\). Thus each \(\sum b^i s_i\) can be written \(s_0 + ijX\). As in the previous case the \(s_0\) term turns out to be more important than the others. Notice \(s_0 + ijX \equiv s_0 + ijY\ \text{mod}\ ik\) iff \(ij(X-Y) \equiv 0\ \text{mod}\ ik\) iff \(j(X-Y) \equiv 0\ \text{mod}\ k\). That’s not good – the final terms, whatever they may be, are modded by \(k\) which is \(i\) times smaller than \(n\). Smaller modding means fewer bucket choices which makes collisions more likely.</p>
 <p>Which brings us to the first conclusion: choose \(b\) and \(n\) to be relatively prime. Beware that integer arithmetic is already modular, so \(h(s)\) is really \(h(s)\ \text{mod}\ 2^{32}\). Don’t choose \(b\) as a power of two (in fact choose it to be odd) or else \(\gcd{(b, 2^{32})} &gt; 1\).</p>
 <p>This is why the typical hash function snippet on stack overflow uses a prime for \(b\). The author doesn’t know what you’ll pick for \(n\) so they play it safe. However there is still an interesting question about which prime to pick. Sadly coprimality, while necessary, is not sufficient to guard against collisions. I wrote some code to test various strings and constants.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Control.Monad</span> (replicateM)
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Control.Monad</span> (replicateM)
 <span class="kw">import </span><span class="dt">Data.Char</span> (ord)
 <span class="kw">import </span><span class="dt">Data.List</span> (group, sort)
 
@@ -62,7 +62,7 @@ horner x <span class="fu">=</span> foldr (\a b <span class="ot">-&gt;</span> a <
 hash n b s <span class="fu">=</span> (horner b (map ord s)) <span class="ot">`mod`</span> n
 
 <span class="ot">len3collisions ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</span> map (hash n b) <span class="fu">$</span> allStrings <span class="dv">3</span> <span class="dv">3</span> [<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>]</code></pre>
+len3collisions n b <span class="fu">=</span> numCollisions <span class="fu">$</span> map (hash n b) <span class="fu">$</span> allStrings <span class="dv">3</span> <span class="dv">3</span> [<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>]</code></pre></div>
 <p>There are \(26^3 = 17576\) length three strings of lowercase letters. If we let \(n = 17576\) and run through all relatively prime choices of \(b &lt; n\) there are plenty of bad values. To get a feel for how the performance varies, I sorted the number of keys that collide with any other keys as \(b\) varies. (The x-axis below is <strong>not</strong> \(b\).) The graph gives a feeling for the range of success.</p>
 <div class="figure">
 <img src="../images/hash-chart.png" alt="Hash collisions" />

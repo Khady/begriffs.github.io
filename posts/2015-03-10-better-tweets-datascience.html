@@ -61,12 +61,12 @@ Observation One
 <p>You’ll notice there is “Top” or “All” mode. We want to stay within Top because we want to learn about winners, not the others. Now we could use the Twitter API to programmatically download a bunch of data but we would have to sign up for access keys etc.</p>
 <p>Let’s just do it the quick and easy way for now. Start scrolling down the search page causing new results to be loaded. Just keep scrolling for a long while until you have many pages of info.</p>
 <p>Now use a quick snippet of JavaScript to grab the tweet text for processing. Pop open the JavaScript console in your browser (Cmd-Option-J in Chrome). Paste this in and press Enter:</p>
-<pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="fu">$</span>(<span class="st">'.tweet-text'</span>).<span class="fu">map</span>(<span class="kw">function</span> () {
-  <span class="kw">return</span> <span class="ot">$</span>.<span class="fu">trim</span>(<span class="fu">$</span>(<span class="kw">this</span>).<span class="fu">text</span>());
-}).<span class="fu">get</span>().<span class="fu">join</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">$</span>(<span class="st">'.tweet-text'</span>).<span class="at">map</span>(<span class="kw">function</span> () <span class="op">{</span>
+  <span class="cf">return</span> <span class="va">$</span>.<span class="at">trim</span>(<span class="at">$</span>(<span class="kw">this</span>).<span class="at">text</span>())<span class="op">;</span>
+<span class="op">}</span>).<span class="at">get</span>().<span class="at">join</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</code></pre></div>
 <h3 id="revealing-patterns">Revealing Patterns</h3>
 <p>Select all the output and save it to a file. We’re going to extract meaning from this text. Remember that we want the essential truth contained inside so we need to remove words which would distract from or skew the essence. Save and run the following shell script on your file to remove urls, competing hash tags, and @-mentions.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">perl</span> -p -i -e <span class="st">&quot;s/@</span><span class="dt">\\</span><span class="st">w+[ ,</span><span class="dt">\\</span><span class="st">.</span><span class="dt">\\</span><span class="st">?</span><span class="dt">\&quot;</span><span class="st">:']//g&quot;</span> <span class="ot">$1</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">perl</span> -p -i -e <span class="st">&quot;s/@</span><span class="dt">\\</span><span class="st">w+[ ,</span><span class="dt">\\</span><span class="st">.</span><span class="dt">\\</span><span class="st">?</span><span class="dt">\&quot;</span><span class="st">:']//g&quot;</span> <span class="ot">$1</span>
 <span class="kw">perl</span> -p -i -e <span class="st">'s/@\w+$//g'</span> <span class="ot">$1</span>
 
 <span class="kw">perl</span> -p -i -e <span class="st">'s/#\w+[ ,\.\?&quot;:]//g'</span> <span class="ot">$1</span>
@@ -76,25 +76,25 @@ Observation One
 <span class="kw">perl</span> -p -i -e <span class="st">'s/pic.twitter[^ ]+$//g'</span> <span class="ot">$1</span>
 
 <span class="kw">perl</span> -p -i -e <span class="st">'s/https?:[^ ]+ //g'</span> <span class="ot">$1</span>
-<span class="kw">perl</span> -p -i -e <span class="st">'s/https?:[^ ]+$//g'</span> <span class="ot">$1</span></code></pre>
+<span class="kw">perl</span> -p -i -e <span class="st">'s/https?:[^ ]+$//g'</span> <span class="ot">$1</span></code></pre></div>
 <p>We’ll use the R programming language to run topic detection through Latent Dirichlet Allocation (LDA). Here are the pieces of code to calculate them.</p>
 <p>First load the tweets, one on each line. They will each be considered small “documents” for topic detection, and are put together into a “corpus.”</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jsonlite)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jsonlite)
 <span class="kw">library</span>(tm)
 
 tweets &lt;-<span class="st"> </span><span class="kw">strsplit</span>(<span class="kw">readLines</span>(<span class="st">'/path/to/tweets.txt'</span>), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
-corp &lt;-<span class="st"> </span><span class="kw">Corpus</span>(<span class="kw">VectorSource</span>(tweets))</code></pre>
+corp &lt;-<span class="st"> </span><span class="kw">Corpus</span>(<span class="kw">VectorSource</span>(tweets))</code></pre></div>
 <p>To minimize inconsequential variations we will remove stop words, small words and other detritus. The remaining words are stemmed.</p>
-<pre class="sourceCode r"><code class="sourceCode r">dtm.control &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">tolower =</span> <span class="ot">TRUE</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dtm.control &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">tolower =</span> <span class="ot">TRUE</span>,
                     <span class="dt">removePunctuation =</span> <span class="ot">TRUE</span>,
                     <span class="dt">removeNumbers =</span> <span class="ot">TRUE</span>,
                     <span class="dt">stopwords =</span> <span class="kw">c</span>(<span class="kw">stopwords</span>(<span class="st">&quot;SMART&quot;</span>),
                                   <span class="kw">stopwords</span>(<span class="st">&quot;en&quot;</span>)),
                     <span class="dt">stemming =</span> <span class="ot">TRUE</span>,
                     <span class="dt">wordLengths =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="st">&quot;inf&quot;</span>),
-                    <span class="dt">weighting =</span> weightTf)</code></pre>
+                    <span class="dt">weighting =</span> weightTf)</code></pre></div>
 <p>Next we record the term occurrences per document in a sparse matrix and set up parameters. This is a “bag-of-words” approach that ignores the grammar of sentences.</p>
-<pre class="sourceCode r"><code class="sourceCode r">sparse.dtm &lt;-<span class="st"> </span><span class="kw">DocumentTermMatrix</span>(corp, <span class="dt">control =</span> dtm.control)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sparse.dtm &lt;-<span class="st"> </span><span class="kw">DocumentTermMatrix</span>(corp, <span class="dt">control =</span> dtm.control)
 dtm &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(sparse.dtm)
 <span class="kw">class</span>(dtm) &lt;-<span class="st"> &quot;integer&quot;</span>
 
@@ -110,9 +110,9 @@ term.frequency &lt;-<span class="st"> </span><span class="kw">colSums</span>(dtm
 K &lt;-<span class="st"> </span><span class="dv">20</span>
 G &lt;-<span class="st"> </span><span class="dv">5000</span>
 alpha &lt;-<span class="st"> </span><span class="fl">0.02</span>
-eta &lt;-<span class="st"> </span><span class="fl">0.02</span></code></pre>
+eta &lt;-<span class="st"> </span><span class="fl">0.02</span></code></pre></div>
 <p>Using the term frequencies we attempt to find clusters or words that tend to co-occur. This is the part that really identifies topics in tweets.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit the model:</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit the model:</span>
 <span class="kw">library</span>(lda)
 
 lda.input &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(dtm), function (i) {
@@ -125,9 +125,9 @@ fit &lt;-<span class="st"> </span><span class="kw">lda.collapsed.gibbs.sampler</
                                    <span class="dt">K =</span> K, <span class="dt">vocab =</span> vocab,
                                    <span class="dt">num.iterations =</span> G, <span class="dt">alpha =</span> alpha,
                                    <span class="dt">eta =</span> eta, <span class="dt">initial =</span> <span class="ot">NULL</span>, <span class="dt">burnin =</span> <span class="dv">0</span>,
-                                   <span class="dt">compute.log.likelihood =</span> <span class="ot">TRUE</span>)</code></pre>
+                                   <span class="dt">compute.log.likelihood =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Finally plug the topic model into an interactive visualization that we will examine with our human intuition.</p>
-<pre class="sourceCode r"><code class="sourceCode r">theta &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(fit$document_sums +<span class="st"> </span>alpha, <span class="dv">2</span>, function(x) x/<span class="kw">sum</span>(x)))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(fit$document_sums +<span class="st"> </span>alpha, <span class="dv">2</span>, function(x) x/<span class="kw">sum</span>(x)))
 phi &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(<span class="kw">t</span>(fit$topics) +<span class="st"> </span>eta, <span class="dv">2</span>, function(x) x/<span class="kw">sum</span>(x)))
 
 <span class="kw">library</span>(LDAvis)
@@ -139,7 +139,7 @@ json &lt;-<span class="st"> </span><span class="kw">createJSON</span>(<span clas
                    <span class="dt">vocab =</span> vocab,
                    <span class="dt">term.frequency =</span> term.frequency)
 
-<span class="kw">serVis</span>(json)</code></pre>
+<span class="kw">serVis</span>(json)</code></pre></div>
 <p>Time for the fun. Here’s a screenshot of the topics detected in top tweets having the #data hashtag. I have selected topic number 19 to see the frequency of the words inside. Notice I set the relevance metric slider low to focus on words that are frequent exclusively in the topic rather than frequent in the corpus as a whole.</p>
 <div class="figure">
 <img src="../images/tweet-topics.png" alt="LDA topics" />

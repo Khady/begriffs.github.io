@@ -36,11 +36,11 @@
 <div class="content">
   <p>Nesting ambidextrous quotes requires either escaping <code>&quot;he said \&quot;hi\&quot;&quot;</code> or alternating with single quotes <code>&quot;he said 'hi'&quot;</code>. Wouldn’t using book-style quotes <code>“he said “hi””</code>i be easier? If this all seems unimportant, think of it this way: imagine how awkward it is to use the pipe character <code>|</code> as ambidextrous parentheses. <code>|2*\|3+4\|| = 14</code>.</p>
 <p>Not only does it seem easier to use left and right quotes, it might even improve application security. SQL injection often uses quoting tricks, which are easily unmasked when properly expressed. Injecting value =</p>
-<pre class="sourceCode sql"><code class="sourceCode sql">anything<span class="st">' OR '</span>x<span class="st">'='</span>x</code></pre>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql">anything<span class="st">' OR '</span>x<span class="st">'='</span>x</code></pre></div>
 <p>in</p>
-<pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="kw">table</span> <span class="kw">WHERE</span> <span class="kw">column</span> = <span class="st">'value'</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="kw">table</span> <span class="kw">WHERE</span> <span class="kw">column</span> = <span class="st">'value'</span></code></pre></div>
 <p>will create an unrestricted listing of the table. However, that malicious value’s quotes fail to balance when expressed as left and right quotes:</p>
-<pre class="sourceCode sql"><code class="sourceCode sql">anything” <span class="kw">OR</span> “x”=“x</code></pre>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql">anything” <span class="kw">OR</span> “x”=“x</code></pre></div>
 </div>
 
     </div>

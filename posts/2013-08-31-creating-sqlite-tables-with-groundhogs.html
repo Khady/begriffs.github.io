@@ -35,11 +35,11 @@
 
 <div class="content">
   <p>I simplified a Groundhog code example to see how it behaves with its default settings. To make this code work you’ll need to install some cabal packages.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> install groundhog
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cabal</span> install groundhog
 <span class="kw">cabal</span> install groundhog-sqlite
-<span class="kw">cabal</span> install groundhog-th</code></pre>
+<span class="kw">cabal</span> install groundhog-th</code></pre></div>
 <p>Now for the code. We’ll declare tables for Machines and Parts, and create a relationship to say that machines have many parts. Then migrate out in-memory database, insert some sample data and query it.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving #-}</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving #-}</span>
 <span class="kw">import </span><span class="dt">Control.Monad.IO.Class</span> (liftIO)
 <span class="kw">import </span><span class="dt">Database.Groundhog.TH</span>
 <span class="kw">import </span><span class="dt">Database.Groundhog.Sqlite</span>
@@ -66,20 +66,20 @@ main <span class="fu">=</span> withSqliteConn <span class="st">&quot;:memory:&qu
   insert <span class="fu">$</span> <span class="dt">Part</span> <span class="st">&quot;Insignificonium&quot;</span> <span class="dv">2</span> microtron
 
   partsForMegatron <span class="ot">&lt;-</span> select <span class="fu">$</span> (<span class="dt">MachineField</span> <span class="fu">==.</span> megatron) <span class="ot">`orderBy`</span> [<span class="dt">Asc</span> <span class="dt">PartNameField</span>]
-  liftIO <span class="fu">$</span> putStrLn <span class="fu">$</span> <span class="st">&quot;Parts for the Megatron: &quot;</span> <span class="fu">++</span> show partsForMegatron</code></pre>
+  liftIO <span class="fu">$</span> putStrLn <span class="fu">$</span> <span class="st">&quot;Parts for the Megatron: &quot;</span> <span class="fu">++</span> show partsForMegatron</code></pre></div>
 <p>Declaring the data types is standard Haskell. Just some data types that derive <code>Show</code>. I did notice that I needed to declare <code>cost</code> as a <code>Double</code>. I tried <code>Float</code> initially but it failed.</p>
 <p>The first magic appears with <code>mkPersist</code>. Notice it takes a quasiquoted groundhog DSL. I stripped down the declaration here to declare tables with the default settings. If you remove this code then things break. The <code>mkPersist</code> function writes code for you. Its DSL supports <em>a lot</em> of options, and we’ll (dis)cover them in later posts.</p>
 <p>Given our declarations we can now run migrations. Here’s is the SQL it generates:</p>
-<pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="ot">&quot;Machine&quot;</span> (<span class="ot">&quot;id&quot;</span> <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;modelName&quot;</span> <span class="dt">VARCHAR</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;cost&quot;</span> <span class="dt">REAL</span> <span class="kw">NOT</span> <span class="kw">NULL</span>)
-<span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="ot">&quot;Part&quot;</span> (<span class="ot">&quot;id&quot;</span> <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;partName&quot;</span> <span class="dt">VARCHAR</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;weight&quot;</span> <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;machine&quot;</span> <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="kw">FOREIGN</span> <span class="kw">KEY</span>(<span class="ot">&quot;machine&quot;</span>) <span class="kw">REFERENCES</span> <span class="ot">&quot;Machine&quot;</span>(<span class="ot">&quot;id&quot;</span>))</code></pre>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="ot">&quot;Machine&quot;</span> (<span class="ot">&quot;id&quot;</span> <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;modelName&quot;</span> <span class="dt">VARCHAR</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;cost&quot;</span> <span class="dt">REAL</span> <span class="kw">NOT</span> <span class="kw">NULL</span>)
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="ot">&quot;Part&quot;</span> (<span class="ot">&quot;id&quot;</span> <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;partName&quot;</span> <span class="dt">VARCHAR</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;weight&quot;</span> <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="ot">&quot;machine&quot;</span> <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="kw">FOREIGN</span> <span class="kw">KEY</span>(<span class="ot">&quot;machine&quot;</span>) <span class="kw">REFERENCES</span> <span class="ot">&quot;Machine&quot;</span>(<span class="ot">&quot;id&quot;</span>))</code></pre></div>
 <p>Not bad! It adds NULL constraints, declares keys, and links the tables together with references.</p>
 <p>Next we insert some sample data into the tables. Straightforward. Notice how it then builds a query, but you don’t write SQL directly. Writing the queries in Haskell prevents injection and supposedly allows the queries to easily compose. Groundhog introduces its own operators to connect SQL conditions (called <code>Conds</code>). One such is <code>==.</code>.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">==.</span>)
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">&gt;</span> <span class="fu">:</span>t (<span class="fu">==.</span>)
 (<span class="fu">==.</span>)
 <span class="ot">  ::</span> (<span class="dt">Database.Groundhog.Expression.Unifiable</span> a b,
       <span class="dt">Database.Groundhog.Expression.Expression</span> db r a,
       <span class="dt">Database.Groundhog.Expression.Expression</span> db r b) <span class="ot">=&gt;</span>
-     a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Cond</span> db r</code></pre>
+     a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Cond</span> db r</code></pre></div>
 <p>Try building and running the code. Seems to work fine.</p>
 </div>
 
