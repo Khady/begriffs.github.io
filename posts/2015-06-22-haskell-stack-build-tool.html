@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stack, the Haskell Build Tool</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="../css/minimalist.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Stack, the Haskell Build Tool</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">June 22, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://unknownparallel.wordpress.com/">Dan Burton</a> gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. In it he introduces Stack, a candidate replacement for Cabal. The tool provides an easy one line command to install Haskell packages. It also installs any missing tools onto the system (GHC, Cabal, and libraries like alex, happy and cpphs). By default it uses the curated Stackage long-term support databases to choose packages known to build and coexist together. Finally it reuses previously installed packages whenever possible to avoid unnecessary recompilation.</p>
+<div class="flowplayer" data-embed="false">
+<p><video type="video/mp4" src="https://player.vimeo.com/external/131463587.hd.mp4?s=027fe40cde79f1e2b7ce47e6eed66a06" poster="https://i.vimeocdn.com/video/523723567.jpg?mw=700"></video></p>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li><a href="https://github.com/commercialhaskell/stack">Stack</a> is a build tool for developers, currently in beta
+<ul>
+<li>The spiritual successor to stackage-cli</li>
+<li>It can install packages and also prereqs like GHC itself</li>
+</ul></li>
+<li>Stack builds on top of <a href="https://www.stackage.org/lts">LTS Haskell</a> which is a curated set of packages from package
+<ul>
+<li>alleviates dependency hell</li>
+<li>upgrading minor version of LTS implies upgrading only up to minor versions of each package</li>
+<li>To get your package added to stackage, follow these <a href="http://www.stackage.org/authors">instructions</a></li>
+</ul></li>
+<li>Each project needs a stack.yaml</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml">   <span class="co"># stack.yaml</span>
+   <span class="fu">resolver:</span> lts-2.15</code></pre></div>
+<ul>
+<li>LTS resolver versions imply a version of GHC
+<ul>
+<li>the 2.x series implies GHC 7.8</li>
+<li>the upcoming 3.x series implies GHC 7.10</li>
+</ul></li>
+<li>Running <code>stack build</code> examines your cabal file and generates a stack.yaml that fits</li>
+<li>Stack can share dependencies between projects
+<ul>
+<li>it improves the cabal sandboxing state of the art</li>
+<li>avoids reinstalling things for every project</li>
+</ul></li>
+<li>You can supplement LTS snapshots
+<ul>
+<li>with newer package versions on package</li>
+<li>patched version on the disk</li>
+<li>or straight from a github repo</li>
+</ul></li>
+<li>Stackage projects can contain multiple packages
+<ul>
+<li>Example of how Yesod uses multiple packages</li>
+</ul></li>
+<li>Discussion of custom scripts in builds</li>
+<li>Stack reimplements the features of cabal-install, and uses the cabal library underneath</li>
+<li>Stack prefers to use a GHC found on your path but will suggest <code>stack setup</code> if the version does not match the resolver
+<ul>
+<li>it will also install other tools as needed like alex, happy and cpphs</li>
+</ul></li>
+<li>Q&amp;A</li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="../js/flowplayer.min.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
