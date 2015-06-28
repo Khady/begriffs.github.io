@@ -8,8 +8,71 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-06-22T00:00:00Z</updated>
+    <updated>2015-06-28T00:00:00Z</updated>
     <entry>
+    <title>From Haskell to Hardware</title>
+    <link href="http://begriffs.com/posts/2015-06-28-haskell-to-hardware.html" />
+    <id>http://begriffs.com/posts/2015-06-28-haskell-to-hardware.html</id>
+    <published>2015-06-28T00:00:00Z</published>
+    <updated>2015-06-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>From Haskell to Hardware</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">June 28, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="http://conal.net/blog/">Conal Elliott</a> uses a reformulated interpretation of lambda calculus to transform Haskell programs into highly parallelized circuits. He gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. His approach allows him to structure parallel programming using a richer set of data structures than the usual array-based thinking.</p>
+<div class="flowplayer" data-embed="false">
+<p><video type="video/mp4"
+         src="https://player.vimeo.com/external/131952196.hd.mp4?s=7038f182348196c3cc0e87bf7d4170bf"
+         poster="https://i.vimeocdn.com/video/524462436.jpg?mw=700"
+  ></video></p>
+</div>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>We turn Haskell into a tree structure of operations and thence to Verilog</li>
+<li>The same code generates different circuits depending on which types we specify for the polymorphism</li>
+<li>Guiding intuition: overloading lambda and application by using type classes</li>
+<li>The technical steps
+<ul>
+<li>Compile Haskell to the Core language</li>
+<li>Monomorphize</li>
+<li>Convert to abstract vocabulary</li>
+<li>Interpret as circuits</li>
+<li>Synthesize with existing HDL machinery</li>
+</ul></li>
+<li>It is within the abstract vocabulary that lambdas are overloaded</li>
+<li>The abstract form is not combinatory logic, it is cartesian closed categories</li>
+<li>The idea comes from J. Lambek who showed that there are interpretations of the lambda calculus other than the standard one of functions</li>
+<li>Examples of Haskell programs and the circuits they generate</li>
+<li>Going beyond arrays for parallel programming
+<ul>
+<li>uniform pairs</li>
+<li>vectors of known length</li>
+<li>depth-typed trees, bottom-up and top-down</li>
+</ul></li>
+<li>Implementing dot products and matrix multiplication</li>
+<li>Generalizing them by relaxing type constraints
+<ul>
+<li>Generates more parallelism, log depth trees rather than linear depth</li>
+</ul></li>
+<li>Implementing bitonic sort
+<ul>
+<li>Generates fantastically complicated circuits but ones which are certainly correct</li>
+</ul></li>
+<li>Implementing parallel scan</li>
+<li>Implementing polynomial evaluation in log time</li>
+<li>Combinational circuits have no state, but we can generate stateful ones too
+<ul>
+<li>Using a data type that models a Mealy machine</li>
+</ul></li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Stack, the Haskell Build Tool</title>
     <link href="http://begriffs.com/posts/2015-06-22-haskell-stack-build-tool.html" />
     <id>http://begriffs.com/posts/2015-06-22-haskell-stack-build-tool.html</id>
@@ -468,159 +531,6 @@ Security Warning
 <p>There should be long obedience in the same direction, there thereby results, and has always resulted in the long run, something which has made life worth living.</p>
 </blockquote>
 <p>I choose living among quality old things for the sake of creation, hoping by their example to attain quality of my own. Check back on this blog to see how it goes for me – unless of course I’ve inspired you to go write-only too.</p>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>SF CloudCamp Lightning Talks</title>
-    <link href="http://begriffs.com/posts/2015-04-18-cloudcamp-sf-lightning-talks.html" />
-    <id>http://begriffs.com/posts/2015-04-18-cloudcamp-sf-lightning-talks.html</id>
-    <published>2015-04-18T00:00:00Z</published>
-    <updated>2015-04-18T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>SF CloudCamp Lightning Talks</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">April 18, 2015</h5>
-</div>
-
-<div class="content">
-  <ol style="list-style-type: decimal">
-<li><a href="#intro-to-docker">Intro to Docker</a></li>
-<li><a href="#exploring-strategies-for-minimal-containerization">Exploring Strategies for Minimal Containerization</a></li>
-<li><a href="#storage-containers-and-microservices">Storage, Containers, and Microservices</a></li>
-<li><a href="#docker-networking-with-clocker-and-project-calico">Docker Networking with Clocker and Project Calico</a></li>
-<li><a href="#continuous-integration-with-docker">Continuous Integration with Docker</a></li>
-</ol>
-<h3 id="intro-to-docker">Intro to Docker</h3>
-<p><a href="http://nathanleclaire.com/">Nathan LeClaire</a>, an engineer at Docker explains the tool from first principles as it were.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
-         poster="https://i.vimeocdn.com/video/515466205.jpg?mw=700"
-  ></video></p>
-</div>
-<ul>
-<li>There is a lot of noise and media about Docker, but what is it fundamentally?</li>
-<li>The precursor to containers came from Google circa 2005 managing giant workloads of linux processes
-<ul>
-<li>A very good paper was just released about this, <a href="https://static.googleusercontent.com/media/research.google.com/en/us/pubs/archive/43438.pdf">Large-scale cluster management at Google with Borg</a></li>
-<li>So you’re Google in 2005 and you have the abstraction of unix processes</li>
-<li>How do you deal with noisy neighbors - aka processes which gobble up resources</li>
-<li>Their answer was patching the Linux kernel to improve process isolation</li>
-<li>Resources are isolated with so-called namespaces, and can assign priority</li>
-</ul></li>
-<li>All this tech was contributed to the Linux kernel and evolved over time into a project called LXC
-<ul>
-<li>However it was hard to use and inaccessible</li>
-<li>Then Dockcloud came along and made a platform-as-a-service</li>
-<li>Their PaaS did not do so hot, but it did wrap LXC in a clean way</li>
-</ul></li>
-<li>Docker’s is best thought of as an <em>interface</em>, not a container.
-<ul>
-<li>It took a bunch of esoteric things and wrapped them up in a fun interface</li>
-<li>It sets the stage for repeatability and isolation in your infrastructure</li>
-</ul></li>
-</ul>
-<h3 id="exploring-strategies-for-minimal-containerization">Exploring Strategies for Minimal Containerization</h3>
-<p>Presented by Brian “<a href="http://www.brianredbeard.com/">Redbeard</a>” Harrington.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
-         poster="https://i.vimeocdn.com/video/515477269.jpg?mw=700"
-  ></video></p>
-</div>
-<ul>
-<li>Kubernetes is a fascinating project</li>
-<li>It is based on the internal ideas of Google Borg and, later, Omega</li>
-<li>Google doesn’t traditionally release open source projects, but they did for Kubernetes</li>
-<li>Decomposing the technology
-<ul>
-<li>Applications and containers</li>
-<li>There are a number of answers to this, including Docker</li>
-<li>CoreOS made a competing product called Rocket, aka “rkt”</li>
-</ul></li>
-<li>The CoreOS folks have been informed by Omaha, a system for self-updating programs
-<ul>
-<li>Omaha is the mechanism that updates Chrome and Google Earth</li>
-</ul></li>
-<li>When you combine containerization, auto-updating and CoreOS you get <a href="https://tectonic.com/">Tectonic</a>, a version of Kubernetes designed to run on platforms other than Google Compute Engine</li>
-</ul>
-<h3 id="storage-containers-and-microservices">Storage, Containers, and Microservices</h3>
-<p><a href="https://twitter.com/lmarsden">Luke Marsden</a> CTO, Founder at ClusterHQ explains how his company is working to improve the interaction and persistence of storage with Docker.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
-         poster="https://i.vimeocdn.com/video/515499474.jpg?mw=700"
-  ></video></p>
-</div>
-<ul>
-<li>Everybody loves containers because packaging is now so easy</li>
-<li>We used to have a quagmire of install scripts and packages</li>
-<li>And pushing the images to production is easy with today’s orchestration systems like Kubernetes, Mesos, Swarm, Deis etc</li>
-<li>But what about state? How do you store databases stored inside a container like the rest of your application?
-<ul>
-<li>It would be good to put databases through the continuous integration and continuous deployment pipelines like the rest of your services</li>
-<li>Docker Volumes provides only file-based access whereas most storages services are block-level, like EBS</li>
-<li>You can’t manage block devices from within your containers</li>
-</ul></li>
-<li>Zoning
-<ul>
-<li>It can be difficult to move data between availability zones</li>
-</ul></li>
-<li>Not all orchestration managers are stateful
-<ul>
-<li>They usually subscribe to the 12-factor app manifesto</li>
-<li>So data services have to be an external thing not managed by your orchestration system</li>
-<li>Kubernetes can manage state with storage drivers, but they ignore local storage</li>
-</ul></li>
-<li>What would be cool is to have a “Docker for storage,” a unified REST interface
-<ul>
-<li>ClusterHQ is trying to solve this problem. They are building an open source project called <a href="https://github.com/ClusterHQ/flocker">Flocker</a></li>
-</ul></li>
-</ul>
-<h3 id="docker-networking-with-clocker-and-project-calico">Docker Networking with Clocker and Project Calico</h3>
-<p><a href="https://twitter.com/grkvlt">Andrew Kennedy</a> Distributed Systems Hacker at CloudSoft shares the various bits of technology they use at his company, notably the open source tool <a href="https://github.com/brooklyncentral/clocker">Clocker</a>.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
-         poster="https://i.vimeocdn.com/video/515501140.jpg?mw=700"
-  ></video></p>
-</div>
-<ul>
-<li>Clocker manages a Docker cloud, manages VMs, and installs Docker on them using whatever SDN (software defined networking) you want</li>
-<li>Multi-host multi-container apps with seamless networking</li>
-<li>The basic cloud management system is Apache Brooklyn
-<ul>
-<li>Clocker adds Docker blueprinting to Brooklyn</li>
-<li>They use Brooklyn, jclouds, weave, opendove, and calico</li>
-</ul></li>
-</ul>
-<h3 id="continuous-integration-with-docker">Continuous Integration with Docker</h3>
-<p><a href="https://twitter.com/davenielsen">Dave Nielson</a> the Co-Founder of CloudCamp and organizer of this particular event also gives a lightning talk to explain a strategy of combining the best properties of Platforms-as-a-service with containers.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
-         poster="https://i.vimeocdn.com/video/515473232.jpg?mw=700"
-  ></video></p>
-</div>
-<ul>
-<li>Why am I such a big fan of the PaaS?</li>
-<li>When you do server management yourself, maybe you do a good job, but when you do it really well why keep it to yourself?</li>
-<li>Containerization kind of changed how people do cloud computing</li>
-<li>However containers can accumulate and take work</li>
-<li>It can also be forbidding to the command-line averse</li>
-<li>Mobile app creators are a different breed
-<ul>
-<li>Apps either blow up or die so fast that app builders don’t care too much about the longevity of their stack or about vendor lock-in</li>
-<li>“Us: watch out you’ll get locked in! Them: Oh yeah? 18 billion dollars!”</li>
-</ul></li>
-<li>We can get the benefits of a Platform-as-a-Service without the lock-in by developing with a buildpack stuffed inside a container
-<ul>
-<li>It feels like you’re deploying to Heroku or Cloud Foundry but it’s all inside a container</li>
-<li>But you don’t deploy the buildpack part to production, you deploy the app that it creates, all containerized</li>
-</ul></li>
-</ul>
 </div>
 ]]></summary>
 </entry>
