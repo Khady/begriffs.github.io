@@ -9,6 +9,7 @@ into highly parallelized circuits. He gave this talk at [Bayhac
 2015](http://bayhac.org/). His approach allows him to structure
 parallel programming using a richer set of data structures than the
 usual array-based thinking.
+([slides](https://github.com/conal/talk-2015-haskell-to-hardware))
 
 <div class="flowplayer" data-embed="false">
   <video type="video/mp4"
