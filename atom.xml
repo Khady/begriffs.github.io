@@ -24,12 +24,9 @@
 
 <div class="content">
   <p><a href="http://functorial.com/">Phil Freeman</a>, the author of Purescript, explains the design of <a href="https://github.com/slamdata/purescript-halogen">Halogen</a>, a declarative, type-safe UI library.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="https://player.vimeo.com/external/132859139.hd.mp4?s=5cecdf40c05e5562be23e38fdc97021a"
-         poster="https://i.vimeocdn.com/video/525705269.jpg?mw=700"
-  ></video></p>
-</div>
+<video poster="https://i.vimeocdn.com/video/525705269.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/132859139.hd.mp4?s=5cecdf40c05e5562be23e38fdc97021a" type="video/mp4">
+</video>
 <h3 id="summary">Summary</h3>
 <ul>
 <li>Purescript-halogen
@@ -92,12 +89,9 @@
 
 <div class="content">
   <p><a href="http://conal.net/blog/">Conal Elliott</a> uses a reformulated interpretation of lambda calculus to transform Haskell programs into highly parallelized circuits. He gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. His approach allows him to structure parallel programming using a richer set of data structures than the usual array-based thinking. (<a href="https://github.com/conal/talk-2015-haskell-to-hardware">slides</a>)</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="https://player.vimeo.com/external/131952196.hd.mp4?s=7038f182348196c3cc0e87bf7d4170bf"
-         poster="https://i.vimeocdn.com/video/524462436.jpg?mw=700"
-  ></video></p>
-</div>
+<video poster="https://i.vimeocdn.com/video/524462436.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/131952196.hd.mp4?s=7038f182348196c3cc0e87bf7d4170bf" type="video/mp4">
+</video>
 <h3 id="summary">Summary</h3>
 <ul>
 <li>We turn Haskell into a tree structure of operations and thence to Verilog</li>
@@ -155,12 +149,9 @@
 
 <div class="content">
   <p><a href="https://unknownparallel.wordpress.com/">Dan Burton</a> gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. In it he introduces Stack, a candidate replacement for Cabal. The tool provides an easy one line command to install Haskell packages. It also installs any missing tools onto the system (GHC, Cabal, and libraries like alex, happy and cpphs). By default it uses the curated Stackage long-term support databases to choose packages known to build and coexist together. Finally it reuses previously installed packages whenever possible to avoid unnecessary recompilation.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="https://player.vimeo.com/external/131463587.hd.mp4?s=027fe40cde79f1e2b7ce47e6eed66a06"
-         poster="https://i.vimeocdn.com/video/523723567.jpg?mw=700"
-  ></video></p>
-</div>
+<video poster="https://i.vimeocdn.com/video/523723567.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/131463587.hd.mp4?s=027fe40cde79f1e2b7ce47e6eed66a06" type="video/mp4">
+</video>
 <h3 id="summary">Summary</h3>
 <ul>
 <li><a href="https://github.com/commercialhaskell/stack">Stack</a> is a build tool for developers, currently in beta
@@ -226,12 +217,9 @@
 
 <div class="content">
   <p><a href="http://jelv.is/">Tikhon Jelvis</a> gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. He describes how lazy evaluation supports deeper kinds of program modularity and suggests we embrace it for what it really is. [<a href="http://jelv.is/talks/thinking-with-laziness/#slide1">slides</a>]</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="https://player.vimeo.com/external/130846004.hd.mp4?s=86274ac953fba73bbb7ecad0359a298d"
-         poster="https://i.vimeocdn.com/video/522904112.jpg?mw=700"
-  ></video></p>
-</div>
+<video poster="https://i.vimeocdn.com/video/522904112.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/130846004.hd.mp4?s=86274ac953fba73bbb7ecad0359a298d" type="video/mp4">
+</video>
 <h3 id="summary">Summary</h3>
 <ul>
 <li>Stop thinking of Haskell like a strict language which happens to be lazy</li>
@@ -289,12 +277,9 @@
 
 <div class="content">
   <p><a href="https://github.com/rdodesigns">Ryan Orendorff</a> presents a tutorial about using continuation passing style in Haskell. He starts with an introduction that looks a lot like how other functional languages do continuations, then refactors the example to use monads. The continuation monad has been called the “mother of all monads” because of its flexibility. See it in action in the video below.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f"
-         poster="https://i.vimeocdn.com/video/520812183.jpg?mw=700"
-  ></video></p>
-</div>
+<video poster="https://i.vimeocdn.com/video/520812183.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f" type="video/mp4">
+</video>
 <h3 id="summary">Summary</h3>
 <ul>
 <li>The basics of Continuation Passing Style (CPS)</li>
@@ -330,12 +315,9 @@
 
 <div class="content">
   <p>Kristen Kozak explains how the Safe Haskell language extension can be used to deal with untrusted code. She shows how certain Haskell language features create security loopholes and why Safe Haskell disallows them. The safe subset is not enabled by default but you can (and should) enable it with <code>{-# LANGUAGE Safe #-}</code> whenever possible.</p>
-<div class="flowplayer" data-embed="false">
-<p><video type="video/mp4"
-         src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446"
-         poster="https://i.vimeocdn.com/video/519026893.jpg?mw=700"
-  ></video></p>
-</div>
+<video poster="https://i.vimeocdn.com/video/519026893.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446" type="video/mp4">
+</video>
 <h3 id="summary">Summary</h3>
 <ul>
 <li>Safe Haskell has been around since ghc 7.2</li>
