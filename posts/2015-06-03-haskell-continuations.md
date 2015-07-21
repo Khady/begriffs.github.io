@@ -1,6 +1,7 @@
 ---
 title: Continuation Passing Style in Haskell
 video: true
+videoUrl: http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f
 ---
 
 [Ryan Orendorff](https://github.com/rdodesigns) presents a tutorial

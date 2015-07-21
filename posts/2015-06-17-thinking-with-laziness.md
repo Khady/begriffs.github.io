@@ -1,6 +1,7 @@
 ---
 title: Thinking with Laziness
 video: true
+videoUrl: https://player.vimeo.com/external/130846004.hd.mp4?s=86274ac953fba73bbb7ecad0359a298d
 ---
 
 [Tikhon Jelvis](http://jelv.is/) gave this talk at [Bayhac

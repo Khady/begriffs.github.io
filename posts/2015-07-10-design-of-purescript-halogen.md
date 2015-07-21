@@ -1,14 +1,15 @@
 ---
 title: The Design of Purescript Halogen
 video: true
+twitpic: https://i.vimeocdn.com/video/525705269.jpg?mw=700
+desc: Phil Freeman, the author of Purescript, explains the design of Halogen, a declarative type-safe UI library.
 ---
 
 [Phil Freeman](http://functorial.com/), the author of Purescript,
 explains the design of [Halogen](https://github.com/slamdata/purescript-halogen),
 a declarative, type-safe UI library.
 
-<video poster="https://i.vimeocdn.com/video/525705269.jpg?mw=700"
-       class="video-js vjs-default-skin" controls preload="auto">
+<video poster="https://i.vimeocdn.com/video/525705269.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
   <source src="https://player.vimeo.com/external/132859139.hd.mp4?s=5cecdf40c05e5562be23e38fdc97021a" type="video/mp4">
 </video>
 

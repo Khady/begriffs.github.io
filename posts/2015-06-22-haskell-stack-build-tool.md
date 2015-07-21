@@ -1,6 +1,7 @@
 ---
 title: Stack, the Haskell Build Tool
 video: true
+videoUrl: https://player.vimeo.com/external/131463587.hd.mp4?s=027fe40cde79f1e2b7ce47e6eed66a06
 ---
 
 [Dan Burton](https://unknownparallel.wordpress.com/) gave this talk
