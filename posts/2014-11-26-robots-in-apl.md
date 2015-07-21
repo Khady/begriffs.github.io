@@ -10,12 +10,10 @@ little changed since the 1960s,
 [APL](http://www.computerhistory.org/atchm/the-apl-programming-language-source-code).
 
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/112894665.hd.mp4?s=468260e4674c6f6024d86d373d93473d"
-         poster="https://i.vimeocdn.com/video/499956995.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/499956995.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/112894665.hd.mp4?s=468260e4674c6f6024d86d373d93473d" type="video/mp4">
+</video>
 
 Throughout the night Morten showed the hieroglyphic language doing
 web scraping, writing servers, 3d simulations, and runnings robots.

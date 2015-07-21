@@ -12,12 +12,10 @@ He is joined onstage by [Scott Gust](https://plus.google.com/+ScottGust/posts)
 and [Brian Morehead](https://plus.google.com/108124405312975902364/posts) to
 describe Jobvite's three biggest migration challenges and their solutions.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/113586351.hd.mp4?s=fc198dd18083a28ef5d171eef732c10f"
-         poster="https://i.vimeocdn.com/video/499956612.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/499956612.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/113586351.hd.mp4?s=fc198dd18083a28ef5d171eef732c10f" type="video/mp4">
+</video>
 
 ### Overview
 

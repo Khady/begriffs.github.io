@@ -10,12 +10,10 @@ either in containers or in virtual machines. In evaluating the
 situations he explains what questions you should and should not be
 asking.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/117907449.hd.mp4?s=de0ba4566372c0f6ae14d8bb51f50497"
-         poster="https://i.vimeocdn.com/video/504771461.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/504771461.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/117907449.hd.mp4?s=de0ba4566372c0f6ae14d8bb51f50497" type="video/mp4">
+</video>
 
 ### Summary
 

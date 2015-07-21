@@ -10,12 +10,10 @@ disallows them. The safe subset is not enabled by default but you
 can (and should) enable it with `{-# LANGUAGE Safe #-}` whenever
 possible.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446"
-         poster="https://i.vimeocdn.com/video/519026893.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/519026893.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/128024210.hd.mp4?s=edb4c23d14c4f532c26c37da58e0f446" type="video/mp4">
+</video>
 
 ### Summary
 

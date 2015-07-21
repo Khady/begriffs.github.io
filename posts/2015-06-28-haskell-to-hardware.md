@@ -11,12 +11,10 @@ parallel programming using a richer set of data structures than the
 usual array-based thinking.
 ([slides](https://github.com/conal/talk-2015-haskell-to-hardware))
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="https://player.vimeo.com/external/131952196.hd.mp4?s=7038f182348196c3cc0e87bf7d4170bf"
-         poster="https://i.vimeocdn.com/video/524462436.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/524462436.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="https://player.vimeo.com/external/131952196.hd.mp4?s=7038f182348196c3cc0e87bf7d4170bf" type="video/mp4">
+</video>
 
 ### Summary
 

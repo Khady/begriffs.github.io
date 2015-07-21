@@ -14,12 +14,10 @@ video: true
 [Nathan LeClaire](http://nathanleclaire.com/), an engineer at Docker explains the
 tool from first principles as it were.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a"
-         poster="https://i.vimeocdn.com/video/515466205.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/515466205.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/125381777.hd.mp4?s=9e70068e605126b306f77cb0be7d8a7a" type="video/mp4">
+</video>
 
 * There is a lot of noise and media about Docker, but what is it fundamentally?
 * The precursor to containers came from Google circa 2005 managing giant workloads of linux processes
@@ -40,12 +38,10 @@ tool from first principles as it were.
 
 Presented by Brian "[Redbeard](http://www.brianredbeard.com/)" Harrington.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa"
-         poster="https://i.vimeocdn.com/video/515477269.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/515477269.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/125385727.hd.mp4?s=175a6d052a48e690466d3c2c3b5f3dfa" type="video/mp4">
+</video>
 
 * Kubernetes is a fascinating project
 * It is based on the internal ideas of Google Borg and, later, Omega
@@ -66,12 +62,10 @@ Presented by Brian "[Redbeard](http://www.brianredbeard.com/)" Harrington.
 explains how his company is working to improve the interaction and
 persistence of storage with Docker.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4"
-         poster="https://i.vimeocdn.com/video/515499474.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/515499474.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/125409828.hd.mp4?s=b19c6ea1230404dbaadc5eb4e88e71e4" type="video/mp4">
+</video>
 
 * Everybody loves containers because packaging is now so easy
 * We used to have a quagmire of install scripts and packages
@@ -102,12 +96,10 @@ Hacker at CloudSoft shares the various bits of technology they use
 at his company, notably the open source tool
 [Clocker](https://github.com/brooklyncentral/clocker).
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38"
-         poster="https://i.vimeocdn.com/video/515501140.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/515501140.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/125411064.hd.mp4?s=00c723162f77b8e68695572418948c38" type="video/mp4">
+</video>
 
 * Clocker manages a Docker cloud, manages VMs, and installs Docker
   on them using whatever SDN (software defined networking) you want
@@ -123,12 +115,10 @@ CloudCamp and organizer of this particular event also gives a
 lightning talk to explain a strategy of combining the best properties
 of Platforms-as-a-service with containers.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b"
-         poster="https://i.vimeocdn.com/video/515473232.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/515473232.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/125385728.hd.mp4?s=637d5b8d46a95703612941d609c2377b" type="video/mp4">
+</video>
 
 * Why am I such a big fan of the PaaS?
 * When you do server management yourself, maybe you do a good job, but when you do it really well why keep it to yourself?

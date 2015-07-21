@@ -13,12 +13,10 @@ shows how disciplines from psychology to literary analysis have
 pioneered the practices labeled under the umbrella of "text mining."
 
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/120614691.hd.mp4?s=d86271a555347fc538b2084083ef16bf"
-         poster="https://i.vimeocdn.com/video/508549850.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/508549850.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/120614691.hd.mp4?s=d86271a555347fc538b2084083ef16bf" type="video/mp4">
+</video>
 
 ### Summary
 

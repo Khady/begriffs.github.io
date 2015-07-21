@@ -11,12 +11,10 @@ In this video Mike gives some demos of the system and shares how
 they think about modeling timeseries data along with unstructured
 events in a complex system.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/114224611.hd.mp4?s=76850f410b1202d175397f1db626fc15"
-         poster="https://i.vimeocdn.com/video/499957414.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/499957414.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/114224611.hd.mp4?s=76850f410b1202d175397f1db626fc15" type="video/mp4">
+</video>
 
 ### Overview
 

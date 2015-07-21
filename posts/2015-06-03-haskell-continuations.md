@@ -10,12 +10,10 @@ do continuations, then refactors the example to use monads. The
 continuation monad has been called the "mother of all monads" because
 of its flexibility. See it in action in the video below.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f"
-         poster="https://i.vimeocdn.com/video/520812183.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/520812183.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f" type="video/mp4">
+</video>
 
 ### Summary
 

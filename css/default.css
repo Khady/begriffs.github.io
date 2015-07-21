@@ -112,3 +112,12 @@ figcaption {
 blockquote {
   padding-top: 0;
 }
+
+video {
+  position:relative;
+  width:100%;
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center center;
+  display:inline-block;
+}

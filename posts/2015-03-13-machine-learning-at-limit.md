@@ -11,12 +11,10 @@ analysis of the available CPU and GPU resources. They have managed
 to outperform entire machine learning clusters using a single
 computer. Check out the video below for more detailed comparisons.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/122075036.hd.mp4?s=c560edc9e62183abe4542a1f8b7a9bd2"
-         poster="https://i.vimeocdn.com/video/510970022.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/510970022.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/122075036.hd.mp4?s=c560edc9e62183abe4542a1f8b7a9bd2" type="video/mp4">
+</video>
 This talk was delivered at [Alpine Data Lab](http://alpinenow.com/).
 
 <a class="embedly-card" href="http://www.slideshare.net/ChesterChen/sf-big-analytics">Slides</a>

@@ -7,12 +7,10 @@ video: true
 explains the design of [Halogen](https://github.com/slamdata/purescript-halogen),
 a declarative, type-safe UI library.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="https://player.vimeo.com/external/132859139.hd.mp4?s=5cecdf40c05e5562be23e38fdc97021a"
-         poster="https://i.vimeocdn.com/video/525705269.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/525705269.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="https://player.vimeo.com/external/132859139.hd.mp4?s=5cecdf40c05e5562be23e38fdc97021a" type="video/mp4">
+</video>
 
 ### Summary
 

@@ -11,12 +11,10 @@ library.
 It allows you to write a front-end app in Haskell which you compile
 to JavaScript via Haste and render using React JS.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/116516127.hd.mp4?s=69cd6b66fe5bff69a43e1b4375482edc"
-         poster="https://i.vimeocdn.com/video/502970736.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/502970736.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/116516127.hd.mp4?s=69cd6b66fe5bff69a43e1b4375482edc" type="video/mp4">
+</video>
 
 Check out the code at [joelburget.com/react-haskell](http://joelburget.com/react-haskell/).
 

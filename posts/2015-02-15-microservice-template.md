@@ -10,12 +10,10 @@ microservices. The project contains preconfigured server definitions
 for common programs for collecting statistics, making a dashboard,
 and managing work queues.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="http://player.vimeo.com/external/119660173.hd.mp4?s=c01b34d9882a7a179c3b885b8d523e0e"
-         poster="https://i.vimeocdn.com/video/507185690.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/507185690.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="http://player.vimeo.com/external/119660173.hd.mp4?s=c01b34d9882a7a179c3b885b8d523e0e" type="video/mp4">
+</video>
 
 ### Summary
 

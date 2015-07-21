@@ -8,12 +8,10 @@ video: true
 deeper kinds of program modularity and suggests we embrace it for
 what it really is. [[slides](http://jelv.is/talks/thinking-with-laziness/#slide1)]
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="https://player.vimeo.com/external/130846004.hd.mp4?s=86274ac953fba73bbb7ecad0359a298d"
-         poster="https://i.vimeocdn.com/video/522904112.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/522904112.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="https://player.vimeo.com/external/130846004.hd.mp4?s=86274ac953fba73bbb7ecad0359a298d" type="video/mp4">
+</video>
 
 ### Summary
 

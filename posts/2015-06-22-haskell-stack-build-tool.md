@@ -13,12 +13,10 @@ support databases to choose packages known to build and coexist
 together.  Finally it reuses previously installed packages whenever
 possible to avoid unnecessary recompilation.
 
-<div class="flowplayer" data-embed="false">
-  <video type="video/mp4"
-         src="https://player.vimeo.com/external/131463587.hd.mp4?s=027fe40cde79f1e2b7ce47e6eed66a06"
-         poster="https://i.vimeocdn.com/video/523723567.jpg?mw=700"
-  ></video>
-</div>
+<video poster="https://i.vimeocdn.com/video/523723567.jpg?mw=700"
+       class="video-js vjs-default-skin" controls preload="auto">
+  <source src="https://player.vimeo.com/external/131463587.hd.mp4?s=027fe40cde79f1e2b7ce47e6eed66a06" type="video/mp4">
+</video>
 
 ### Summary
 
