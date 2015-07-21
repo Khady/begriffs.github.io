@@ -1,6 +1,8 @@
 ---
 title: From Haskell to Hardware
 video: true
+twitpic: https://i.vimeocdn.com/video/524462436.jpg?mw=700
+desc: Conal Elliott uses a reformulated interpretation of lambda calculus to transform Haskell programs into highly parallelized circuits.
 ---
 
 [Conal Elliott](http://conal.net/blog/) uses a reformulated
