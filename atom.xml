@@ -8,8 +8,57 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-07-10T00:00:00Z</updated>
+    <updated>2015-07-22T00:00:00Z</updated>
     <entry>
+    <title>The Essence of FRP</title>
+    <link href="http://begriffs.com/posts/2015-07-22-essence-of-frp.html" />
+    <id>http://begriffs.com/posts/2015-07-22-essence-of-frp.html</id>
+    <published>2015-07-22T00:00:00Z</published>
+    <updated>2015-07-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>The Essence of FRP</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">July 22, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="http://conal.net/blog/">Conal Elliott</a> proposed functional reactive programming twenty years ago with a clear denotational semantics. Over time the idea gained popularity but the original conception became blurred. In this video Conal explains FRP’s original formulation and its benefits.</p>
+<video poster="https://i.vimeocdn.com/video/527644244.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/134223272.hd.mp4?s=970e3b0ce3453570227910fa68302737" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>FRP is is receiving more interest now but has become misunderstood
+<ul>
+<li>The notion of FRP was very precisely defined 20 years ago</li>
+<li>It allows us to reason precisely and simply. It is misapplied by Elm, Bacon, and Reactive Extensions</li>
+</ul></li>
+<li>The true essence is shaped by two fundamental ideas
+<ul>
+<li>Continuous time (its non-strictness enables modularity, see Why Functional Programming Matters)</li>
+<li>Simple denotation allows dependable reasoning</li>
+</ul></li>
+<li>Reasons for continuous rather than discrete</li>
+<li>Approximations compose badly, so postpone until the end</li>
+<li>We don’t need to have an opinion about what FRP means! Use math.
+<ul>
+<li>There is one datatype: <code>Behavior a</code></li>
+<li>Then a meaning, or <code>m</code>, of a behavior maps a behavior to a function on time. <code>m :: Behavior a -&gt; (Reals -&gt; a)</code></li>
+<li>The original formulation of FRP from 1994 lacked the modern vocabulary.</li>
+</ul></li>
+<li>The modernized formulation
+<ul>
+<li>Behaviors are Functors, Applicatives, and Monoids</li>
+<li>If <code>a</code> is a Monoid then so is <code>Event a</code></li>
+<li>Comparing the original semantics of Behavior with typeclass instances</li>
+<li>Event is just Behavior composed with the list constructor</li>
+</ul></li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>The Design of Purescript Halogen</title>
     <link href="http://begriffs.com/posts/2015-07-10-design-of-purescript-halogen.html" />
     <id>http://begriffs.com/posts/2015-07-10-design-of-purescript-halogen.html</id>
@@ -499,35 +548,6 @@ Security Warning
 </blockquote>
 <p>That’s why there are degrees and types of gongfu. I am willing to weaken my memory in exchange for the richness of recorded history. The important point is to know the tradeoff.</p>
 <p>And that’s why I want to begin playing piano songs, to break through the <em>musique d’ameublement</em> and start filling my cabinet with scores and not just CDs.</p>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>To Stalk a Muni</title>
-    <link href="http://begriffs.com/posts/2015-04-22-to-stalk-a-muni.html" />
-    <id>http://begriffs.com/posts/2015-04-22-to-stalk-a-muni.html</id>
-    <published>2015-04-22T00:00:00Z</published>
-    <updated>2015-04-22T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>To Stalk a Muni</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">April 22, 2015</h5>
-</div>
-
-<div class="content">
-  <div class="figure">
-<img src="/images/bus-led.png" alt="Bus Prediction LED" />
-<p class="caption">Bus Prediction LED</p>
-</div>
-<p>You’re waiting for the bus. The prediction monitor at the stop says five minutes, four, three… then just as you’re getting excited it changes its estimation to half an hour. Perhaps it’s raining and dusk and everyone is getting angry. Why are you standing here, why did the prediction API tell everyone it was time to get out to the bus stop? Can predictions be improved?</p>
-<p>I’ve decided to find out. The first step to more accurate muni predictions is to accumulate historical data. With weeks’ worth of detailed bus position data we can find the patterns which cause errors in the traditional prediction algorithm.</p>
-<p>Happily the realtime position and prediction API is <a href="https://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf">available</a> for free and without so much as a consumer key. The historical information is not available but we can write some code to collect it.</p>
-<p>Here’s where Amazon EC2 is our friend. We can spin up a micro instance, set a cron task, and then relax as it does the work. An easy and reproducible way to build an EC2 machine for the job is to use <a href="https://packer.io/">Packer</a> and <a href="https://www.chef.io/chef/">Chef</a>. We want our machine to hit the Nextbus API on a cron and save the results to S3 for later processing. That means we have to install the aws command line tool for S3 uploading, include our script and set the cron. I’ve taken care of all this at <a href="https://github.com/begriffs/stalk27">begriffs/stalk27</a> and the repo includes instructions to deploy so you can try it yourself.</p>
-<p>My data collection philosophy is to save as much information as possible when sampling the API. Rather than picking relevant parts out of the XML document I’ve opted to save the whole thing. In fact I save the entire HTTP response header payload along with the document body. I think of data collection like a Mars mission – we can never go back in time with this data source so we should err on the side of over-collecting.</p>
-<p>The next consideration is to choose dumb reliable storage and decouple the storage from the worker machine. Rather than save into a fancy database I just create a suitably-named file for each response. Also I avoid the local filesystem. The output is independent from the lifespan of the worker. While the worker runs it collects, else the data merely persists.</p>
-<p>The only missing piece is monitoring and alerting. If this project were crucial and truly intolerant of missing data it should have some failover, redundancy and monitoring. For those kind of requirements I would choose <a href="https://github.com/begriffs/microservice-template">begriffs/microservice-template</a> and enable Amazon CloudWatch.</p>
-<p>After two weeks I will begin analysis and will share with you what the data reveals about bus delays. I am collecting data on route 27 because I’ve had bad experiences waiting for wildly late buses at Powell station. If the new prediction algorithm ends up working well then I’ll scale up the data collection to more routes and maybe create a web interface for other people to check accurate departure times.</p>
 </div>
 ]]></summary>
 </entry>
