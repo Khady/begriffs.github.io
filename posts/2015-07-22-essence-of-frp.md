@@ -15,6 +15,8 @@ and its benefits.
   <source src="https://player.vimeo.com/external/134223272.hd.mp4?s=970e3b0ce3453570227910fa68302737" type="video/mp4">
 </video>
 
+Slides are available [here](https://github.com/conal/talk-2015-essence-and-origins-of-frp).
+
 ### Summary
 
 - FRP is is receiving more interest now but has become misunderstood
