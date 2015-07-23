@@ -77,7 +77,7 @@ and want it to live at `myorg.io`.
     ```bash
     cabal sandbox init
     cabal run rebuild
-    cabal watch
+    cabal run watch
 
     # now load http://localhost:8000
     ```
