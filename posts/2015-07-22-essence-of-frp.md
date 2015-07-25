@@ -22,6 +22,7 @@ Slides are available [here](https://github.com/conal/talk-2015-essence-and-origi
 - FRP is is receiving more interest now but has become misunderstood
     - The notion of FRP was very precisely defined 20 years ago
     - It allows us to reason precisely and simply. It is misapplied by Elm, Bacon, and Reactive Extensions
+    - (Note from Erik Meijer: Reactive Extensions was designed to be a discrete collection library, and never claimed to be related to FRP)
 - The true essence is shaped by two fundamental ideas
     - Continuous time (its non-strictness enables modularity, see Why Functional Programming Matters)
     - Simple denotation allows dependable reasoning
