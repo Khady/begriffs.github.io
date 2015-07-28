@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@begriffs" />
+      <meta name="twitter:domain" content="begriffs.com" />
+      <meta name="twitter:title" content="Haskell Source Navigation" />
+      <meta name="twitter:description" content="Command-line tools to navigate and inspect Haskell source code" />
+      <meta name="twitter:image" content="https://i.vimeocdn.com/video/528283298.jpg?mw=700" />
+    
+    <title>Haskell Source Navigation</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="//vjs.zencdn.net/4.12/video-js.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Haskell Source Navigation</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">July 27, 2015</h5>
+</div>
+
+<div class="content">
+  <p>In this video I demonstrate the use of command-line tools to interactively explore Haskell source code. The tools provide a fluid development experience but can be tricky to configure. This talk covers their use, configuration, and integration with an editor.</p>
+<video poster="https://i.vimeocdn.com/video/528283298.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/134634569.hd.mp4?s=bca20c829e3a57bc54fd9f6b90210439" type="video/mp4">
+</video>
+<p><a class="embedly-card" href="http://www.slideshare.net/begriffs/haskell-code-tools">Haskell Source Navigation</a></p>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Types provide more than just safety</li>
+<li>Haskell has enough structure to support sophisticated tools
+<ul>
+<li>Jump to symbol definitions</li>
+<li>Find all uses of functions</li>
+<li>Get (good) linting suggestions</li>
+<li>Interactive error checking</li>
+<li>Finding docs by type or name</li>
+<li>Autocompletion from dependencies</li>
+<li>Code formatting</li>
+</ul></li>
+<li>Getting into the tools themselves, below the editor layer
+<ul>
+<li>hasktags</li>
+<li>codex</li>
+<li>hscope</li>
+<li>hoogle</li>
+<li>hoobuddy</li>
+<li>Alfred shortcuts</li>
+<li>ghc-mod</li>
+<li>hlint</li>
+<li>stylish-haskell</li>
+<li>hindent</li>
+</ul></li>
+<li>Putting them together into a <a href="https://github.com/begriffs/haskell-vim-now">vim config</a></li>
+</ul>
+<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
