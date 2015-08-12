@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@begriffs" />
+      <meta name="twitter:domain" content="begriffs.com" />
+      <meta name="twitter:title" content="Dev and Deploy Haskell on Docker" />
+      <meta name="twitter:description" content="An efficient workflow without troublesome optimizations" />
+      <meta name="twitter:image" content="https://i.vimeocdn.com/video/530093762.jpg?mw=700" />
+    
+    <title>Dev and Deploy Haskell on Docker</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="//vjs.zencdn.net/4.12/video-js.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Dev and Deploy Haskell on Docker</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 11, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="http://www.christopherbiscardi.com/">Christopher Biscardi</a> shares his Docker wisdom, showing how to package the whole Haskell dev environment inside a container and how to optimize it for production release.</p>
+<video poster="https://i.vimeocdn.com/video/530093762.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/135823847.hd.mp4?s=e7db2f1e096004d428858b69a3515415" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>How do we build Haskell code locally?</li>
+<li>Docker is one answer</li>
+<li>In the Dockerfile copy your source code into the image, then cabal update and cabal install</li>
+<li>This works but it is naive
+<ul>
+<li>Changing any file causes you to rebuild everything (the whole cabal sandbox!)</li>
+</ul></li>
+<li>So we could try to optimize the Dockerfile
+<ul>
+<li>Have to determine the individual pieces and where they will end up and how long that should take</li>
+</ul></li>
+<li>Heavily optimizing Dockerfiles takes work, and it’s more fun to build your application than burn time tweaking the Dockerfile</li>
+<li>A better solution is to use Docker as your development environment
+<ul>
+<li>Clone your project</li>
+<li>Docker run an interactive tty</li>
+<li>Mount the directory</li>
+<li>At that point you’re in the container and can install deps, build the sandbox, etc</li>
+<li>Container changes are persisted to a volume so you can kill it and resume work later</li>
+</ul></li>
+<li>This way you don’t need Haskell installed in the host system at all</li>
+<li>Easy to switch GHC version between projects</li>
+<li>How do we ship the dev work to production?
+<ul>
+<li>Building a new Docker image containing the binary built in dev results in shared library errors</li>
+<li>Solution: build a static binary</li>
+<li>Works, and plays well with Circle CI etc</li>
+</ul></li>
+<li>The production image unfortunately can be rather big, like 150mb
+<ul>
+<li>Solution: compile GHC with MUSL</li>
+<li>…or if you want to cheat, just use the <a href="https://github.com/nilcons/ghc-musl">nilcons/ghc-musl</a> image</li>
+<li>Chris’ production image (based on Alpine) shrank down to 36mb</li>
+</ul></li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
