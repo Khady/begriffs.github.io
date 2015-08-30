@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@begriffs" />
+      <meta name="twitter:domain" content="begriffs.com" />
+      <meta name="twitter:title" content="Applicatives in Math vs Code" />
+      <meta name="twitter:description" content="How a mathematician motivates applicatives" />
+      <meta name="twitter:image" content="https://i.vimeocdn.com/video/532751406.jpg?mw=700" />
+    
+    <title>Applicatives in Math vs Code</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="//vjs.zencdn.net/4.12/video-js.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>Applicatives in Math vs Code</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">August 30, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="https://twitter.com/deland">Matt DeLand</a> contrasts the mathematical and software ways of thinking about applicative functors. Coding in Haskell and reasoning in category theory are two routes that lead to the same concept, and Matt shows how someone in either discipline would arrive at applicatives. He provides examples of applicative functors and – interestingly – a counterexample.</p>
+<video poster="https://i.vimeocdn.com/video/532751406.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/137713584.hd.mp4?s=d6620b136f72d5d0c7ded459883b4096" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Haskell as category theory
+<ul>
+<li>The category Hask of types and functions between them</li>
+<li>This is called the “idealized” Haskell category because it ignores possibilities like functions blowing up (exceptions etc)</li>
+<li>Arrows in Hask agree only if they agree on all values</li>
+<li>Some extra structure: for any type T there is an arrow from T to unit <code>()</code>, i.e. unit is a terminal object</li>
+<li>Values of a type T can be identified as arrows from unit to <code>a</code>. Each arrow picks out an element as it were</li>
+<li>The category is also monoidal</li>
+<li>“Part of category theory is giving long names to ideas with no content. We’re going to follow in a long tradition!”</li>
+<li>How functors work</li>
+<li>Examples are Maybe, [], ( Int, _ )</li>
+<li>One counter-example is <code>a -&gt; (a -&gt; Int)</code></li>
+</ul></li>
+<li>How might a category theorist come to the notion of applicative functor?
+<ul>
+<li>Hask has some structure beyond the bare requirements of being a category</li>
+<li>It has a final object (unit) monoidal pairing.</li>
+<li>What functors behave nicely with respect to that relationship?</li>
+<li>In category land they would be called “lax monoidal” functors</li>
+</ul></li>
+<li>The programmer’s take
+<ul>
+<li>What applicative functors provide</li>
+<li>The standard typeclass definition is a bit overspecified (axiomatically the two standard properties imply the third)</li>
+</ul></li>
+<li>Proof that category theory version implies programmer version</li>
+<li>Proof that programmer’s version implies category theory version</li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
