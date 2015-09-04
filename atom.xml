@@ -8,8 +8,58 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-08-30T00:00:00Z</updated>
+    <updated>2015-09-04T00:00:00Z</updated>
     <entry>
+    <title>FP Graph Algorithms</title>
+    <link href="http://begriffs.com/posts/2015-09-04-pure-functional-graphs.html" />
+    <id>http://begriffs.com/posts/2015-09-04-pure-functional-graphs.html</id>
+    <published>2015-09-04T00:00:00Z</published>
+    <updated>2015-09-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>FP Graph Algorithms</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">September  4, 2015</h5>
+</div>
+
+<div class="content">
+  <p>Manipulating graphs has traditionally been seen as a place where imperative programming reigns supreme. <a href="http://jelv.is/">Tikhon Jelvis</a> begs to differ, and shows a trick where graph traversal can be expressed by a form of pattern matching. After explaining the approach he simulates how it works on a sample graph.</p>
+<video poster="https://i.vimeocdn.com/video/533642391.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/138339869.hd.mp4?s=e29a8ef4fa7370f4b2e13b753e4e9fd9" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Traditionally graph algorithms are seen as one of the things that are really hard in functional programming</li>
+<li>To some extent it is because the graph algorithms and representations you’ve learned have a very imperative bent</li>
+<li>One insight into making a graph algorithm functional is to find a way to use pattern matching on a graph structure
+<ul>
+<li>What does this even mean?</li>
+<li>Start with what we already know: pattern matching is easy on lists or trees</li>
+<li>Translates to any algebraic data type really</li>
+<li>But there is no algebraic data type for graphs</li>
+<li>Graphs are not inductive — there is more than one way to build them up or take them apart</li>
+</ul></li>
+<li>But we can pretend! We can treat graphs as if they were inductive</li>
+<li>So how do we break a graph apart in a pattern match?
+<ul>
+<li>We’ll use a a “view”</li>
+<li><code>match :: Node -&gt; Graph -&gt; Maybe View</code></li>
+</ul></li>
+<li>Depth first search
+<ul>
+<li>We don’t update flags on nodes to say which we have visited</li>
+<li>Our recursion just happens on a subgraph that does not re-visit nodes</li>
+<li>Example of the operation on a specific graph</li>
+</ul></li>
+<li>You can find the implementation in the <a href="http://hackage.haskell.org/package/fgl">Functional Graph Library</a></li>
+<li>Slides for this talk are available <a href="http://jelv.is/talks/inductive-graphs-at-wagon/#/sec-title-slide">here</a></li>
+<li>For an example of generating mazes using functional programming, check out this <a href="http://jelv.is/blog/Generating-Mazes-with-Inductive-Graphs/">blog post</a></li>
+<li>Q&amp;A</li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Applicatives in Math vs Code</title>
     <link href="http://begriffs.com/posts/2015-08-30-applicative-functors.html" />
     <id>http://begriffs.com/posts/2015-08-30-applicative-functors.html</id>
@@ -515,44 +565,6 @@
 </ul></li>
 <li>We saw four perspectives that turned out to be interrelated: modularity, control, precision, and memorization</li>
 <li>Q&amp;A</li>
-</ul>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Continuation Passing Style in Haskell</title>
-    <link href="http://begriffs.com/posts/2015-06-03-haskell-continuations.html" />
-    <id>http://begriffs.com/posts/2015-06-03-haskell-continuations.html</id>
-    <published>2015-06-03T00:00:00Z</published>
-    <updated>2015-06-03T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Continuation Passing Style in Haskell</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">June  3, 2015</h5>
-</div>
-
-<div class="content">
-  <p><a href="https://github.com/rdodesigns">Ryan Orendorff</a> presents a tutorial about using continuation passing style in Haskell. He starts with an introduction that looks a lot like how other functional languages do continuations, then refactors the example to use monads. The continuation monad has been called the “mother of all monads” because of its flexibility. See it in action in the video below.</p>
-<video poster="https://i.vimeocdn.com/video/520812183.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
-<source src="http://player.vimeo.com/external/129301223.hd.mp4?s=7d047e5e32eb41d71cfad82086ee188f" type="video/mp4">
-</video>
-<h3 id="summary">Summary</h3>
-<ul>
-<li>The basics of Continuation Passing Style (CPS)</li>
-<li>CPS can be made into a monad, and an operator, “call with current continuation”</li>
-<li>Motivating the style using the calculation of the area of a circle</li>
-<li>Creating a suspended computation with <code>cpsify</code></li>
-<li>Manual chaining of suspended computations is a pain</li>
-<li>The pattern can be seen as a monad, with <code>cpsify</code> as <code>return</code> and <code>chain</code> as <code>&gt;&gt;=</code></li>
-<li>The <code>do</code> notation provides nice sugar for CPS</li>
-<li>We can create suspended computations, chain them together, and use a type <code>Cont</code> to help prevent mistakes</li>
-<li>callCC
-<ul>
-<li>Allows exotic control structures, anything you can imagine: Exceptions, Coroutines, Generators, Iterators</li>
-<li>An example of an “eject button” that short-circuits computation</li>
-</ul></li>
-<li>Despite their promise, continuations are generally confusing and haven’t provided practical control structures</li>
 </ul>
 </div>
 ]]></summary>
