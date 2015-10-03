@@ -8,8 +8,48 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-09-04T00:00:00Z</updated>
+    <updated>2015-10-02T00:00:00Z</updated>
     <entry>
+    <title>PostgREST Workshop</title>
+    <link href="http://begriffs.com/posts/2015-10-02-postgrest-workshop.html" />
+    <id>http://begriffs.com/posts/2015-10-02-postgrest-workshop.html</id>
+    <published>2015-10-02T00:00:00Z</published>
+    <updated>2015-10-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>PostgREST Workshop</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October  2, 2015</h5>
+</div>
+
+<div class="content">
+  <p>This is a recording of an interactive workshop where we create an API with PostgREST. It is based on the example created by <a href="http://blog.jonharrington.org/tag/postgrest/">Jonathan Harrington</a>. It also contains discussions about various concerns, tradeoffs and implementation details. You can follow along with the <a href="https://begriffs.gitbooks.io/postgrest/content/">gitbook documentation</a>.</p>
+<p>A big thanks to <a href="https://twitter.com/jstoiko">Jonathan Stoikovitch</a> for organizing the event, <a href="http://www.orangesv.com/">Orange SV</a> for the space, <a href="https://www.mulesoft.com/">Mulesoft</a> for drinks, and to the attendees for insightful questions.</p>
+<video poster="https://i.vimeocdn.com/video/538091342.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/141122966.hd.mp4?s=be95a300fee0efc4a255d28734905bfa" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>The video begins after the class has allready installed PostgreSQL and PostgREST, both of which are documented in the gitbook.</li>
+<li>Explanation of most basic command line arguments</li>
+<li>Overview of Postman rest client</li>
+<li>Querying schema information</li>
+<li>Bulk inserting test data</li>
+<li>Creating new endpoints with views</li>
+<li>Discussion of API description languages</li>
+<li>Pagination conventions and tradeoffs</li>
+<li>Client side libraries for PostgREST access</li>
+<li>Example of providing a new version of an endpoint</li>
+<li>Digression on auto-updatable views</li>
+<li>Heroku deployment</li>
+<li>Auth details</li>
+<li>Usage in the wild</li>
+<li>Speed and scalability</li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>FP Graph Algorithms</title>
     <link href="http://begriffs.com/posts/2015-09-04-pure-functional-graphs.html" />
     <id>http://begriffs.com/posts/2015-09-04-pure-functional-graphs.html</id>
@@ -504,66 +544,6 @@
 <ul>
 <li>it will also install other tools as needed like alex, happy and cpphs</li>
 </ul></li>
-<li>Q&amp;A</li>
-</ul>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Thinking with Laziness</title>
-    <link href="http://begriffs.com/posts/2015-06-17-thinking-with-laziness.html" />
-    <id>http://begriffs.com/posts/2015-06-17-thinking-with-laziness.html</id>
-    <published>2015-06-17T00:00:00Z</published>
-    <updated>2015-06-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>Thinking with Laziness</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">June 17, 2015</h5>
-</div>
-
-<div class="content">
-  <p><a href="http://jelv.is/">Tikhon Jelvis</a> gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. He describes how lazy evaluation supports deeper kinds of program modularity and suggests we embrace it for what it really is. [<a href="http://jelv.is/talks/thinking-with-laziness/#slide1">slides</a>]</p>
-<video poster="https://i.vimeocdn.com/video/522904112.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
-<source src="https://player.vimeo.com/external/130846004.hd.mp4?s=86274ac953fba73bbb7ecad0359a298d" type="video/mp4">
-</video>
-<h3 id="summary">Summary</h3>
-<ul>
-<li>Stop thinking of Haskell like a strict language which happens to be lazy</li>
-<li>Laziness ia a new sort of modularity that we’re not used to from other languages</li>
-<li>It separates the definition of something from how it gets evaluated</li>
-<li>It lets us think of control flow the way we would think of data structures</li>
-<li>Deal with arbitrary precision (like vector graphics vs raster graphics)</li>
-<li>Shortcuts for free — <code>take 5 $ sort xs</code> actually stops the sorting after five elements are found. No break statement needed inside the sort function.</li>
-<li>Another example: alpha beta pruning game trees. We can use a simple tree structure and just choose not to evaluate branches and that does pruning.</li>
-<li>In Haskell lists stand in for loops. Control flow can be manipulated as data.</li>
-<li>Lazy structures don’t necessarily need to fully exist in memory.</li>
-<li>Convenient nondeterministic programming
-<ul>
-<li>variables can take many combinations of values from which we can later choose</li>
-<li>map coloring example</li>
-</ul></li>
-<li>Lazy data structures is like precision on demand
-<ul>
-<li>it’s like the advantage of vector graphics over raster</li>
-<li>exact real arithmetic</li>
-<li>infinite quadtrees</li>
-</ul></li>
-<li>Laziness allows memoization below the level of abstraction
-<ul>
-<li>we can rely on it without having to do it ourselves</li>
-<li>similar to garbage collection in this way, improves modularity</li>
-</ul></li>
-<li>Some people mistakenly believe Haskell does memoization automatically everywhere
-<ul>
-<li>that’s actually not feasible but there are packages to help: <a href="https://hackage.haskell.org/package/data-memocombinators">data-memocombinators</a> and <a href="https://hackage.haskell.org/package/MemoTrie">MemoTrie</a></li>
-</ul></li>
-<li>Dynamic programming
-<ul>
-<li>no need to initialize everything or worry about reading one subproblem too early</li>
-<li>just declare your array as containing all subproblems and the fact that it’s lazy ensures everything is evaluated in the correct order and at most once</li>
-</ul></li>
-<li>We saw four perspectives that turned out to be interrelated: modularity, control, precision, and memorization</li>
 <li>Q&amp;A</li>
 </ul>
 </div>
