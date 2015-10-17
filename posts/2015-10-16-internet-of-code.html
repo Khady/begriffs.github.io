@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@begriffs" />
+      <meta name="twitter:domain" content="begriffs.com" />
+      <meta name="twitter:title" content="The Internet of Code" />
+      <meta name="twitter:description" content="Distributing typed program fragments over the network" />
+      <meta name="twitter:image" content="https://i.vimeocdn.com/video/539948884.jpg?mw=700" />
+    
+    <title>The Internet of Code</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-readable.min.css" />
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    <link rel="stylesheet" type="text/css" href="//vjs.zencdn.net/4.12/video-js.css" />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header row">
+        <h3><a class="text-muted col-sm-8" href="../">begriffs</a></h3>
+
+        <ul class="col-sm-4 list-inline">
+          <li><a class="text-muted" href="../about.html"><i class="fa fa-info-circle"></i></a></li>
+          <li><a class="text-muted" href="http://github.com/begriffs"><i class="fa fa-github"></i></a></li>
+          <li><a class="text-muted" href="http://twitter.com/begriffs"><i class="fa fa-twitter"></i></a></li>
+          <li><a class="text-muted" href="../atom.xml"><i class="fa fa-rss"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="post-header">
+  <h3>The Internet of Code</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right" data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 16, 2015</h5>
+</div>
+
+<div class="content">
+  <p><a href="http://www.haskellforall.com/">Gabriel Gonzalez</a> explains how to compile a subset of Haskell into typed lambda calculus and share the pieces safely online. He believes that rather than distributing packages or modules we can distibute typed program fragments. This allows programs to be built safely and flexibly. Watch him give an actual demo of building programs from this code ocean.</p>
+<video poster="https://i.vimeocdn.com/video/539948884.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/142572841.hd.mp4?s=97d89c76d0e85b440a909f4c1044e701" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Key idea: we can make it much easier to share code fragments and lower the barrier to entry in coding</li>
+<li>Background of the project
+<ul>
+<li>it did not begin with the goal of distributing code over the internet</li>
+<li>it began as an optimization project</li>
+<li>Gabriel’s [pipes] library was in a performance war with other streaming libraries</li>
+<li>One common theme of fast Haskell research: the GHC compiler is ridiculously good at optimizing non-recursive code</li>
+<li>But using recursion hits the “20ns” barrier</li>
+<li>You can write algorithms non-recursively for a very very large class of problems</li>
+</ul></li>
+<li>Examples of non-recursive Haskell
+<ul>
+<li>Lists and map</li>
+<li>Typically done with both a recursive data type and recursive function</li>
+</ul></li>
+<li>How to take advantage of the non-recursive property?
+<ul>
+<li>you can optimize things you couldn’t otherwise</li>
+<li>ghc cannot try certain optimizations in recursive code because it could hang</li>
+<li>Gabriel wanted a compiler that could always beta- and eta-reduce lambda calculus expressions for optimization</li>
+</ul></li>
+<li>He created a simple compiler called Morte
+<ul>
+<li>it is very limited: it has Pi types, and function application. That is IT.</li>
+<li>No strings, datatypes, no recursion</li>
+<li>But you can transform normal Haskell programs into this lower level lambda calculus</li>
+</ul></li>
+<li>Annah is an intermediate language which compiles to Morte</li>
+<li>A digression on universally quantified types</li>
+<li>Now for the INTERESTING PART!
+<ul>
+<li>At this point we have that nothing is recursive, everything is explicitly typed and self contained (aka closed, aka no free variables)</li>
+<li>These expressions are easy to distribute, in fact the smallest granularity possible</li>
+<li>You can reference expression by network endpoints</li>
+<li>Demo of bools and if statements</li>
+<li>Assembling code from the network</li>
+<li>IO in Annah</li>
+</ul></li>
+<li>Morte is the perfect sandbox for distributed code
+<ul>
+<li>The lambda calculus leaves no possibility for unsafe actions</li>
+<li>IO is encoded as a list of things to be done</li>
+<li>If you trust the interpreter then you trust the program</li>
+</ul></li>
+<li>In the future Gabriel predicts we will be distributing typed program fragments rather than packages or modules</li>
+</ul>
+</div>
+
+    </div>
+
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+    <!-- Aww yiss, obsessively watching my numbers! -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49573102-1', 'begriffs.com');
+      ga('send', 'pageview');
+    </script>
+
+    <footer class="container">
+      <p>I'm begriffs, journeying from web ephemera to the timeless world of data. <a href="mailto:joe@begriffs.com" role="button">Contact me.</a></p>
+    </footer>
+  </body>
+</html>
