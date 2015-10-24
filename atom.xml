@@ -8,8 +8,57 @@
         <name>Joe Nelson</name>
         <email>cred+blog@begriffs.com</email>
     </author>
-    <updated>2015-10-16T00:00:00Z</updated>
+    <updated>2015-10-24T00:00:00Z</updated>
     <entry>
+    <title>Learning Real Haskell Incrementally</title>
+    <link href="http://begriffs.com/posts/2015-10-24-learning-haskell-incrementally.html" />
+    <id>http://begriffs.com/posts/2015-10-24-learning-haskell-incrementally.html</id>
+    <published>2015-10-24T00:00:00Z</published>
+    <updated>2015-10-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="post-header">
+  <h3>Learning Real Haskell Incrementally</h3>
+  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
+     data-via="begriffs" data-count="none">Tweet</a>
+  <h5 class="text-muted">October 24, 2015</h5>
+</div>
+
+<div class="content">
+  <p>The audience laughs appreciatively as <a href="https://mfine.github.io/">Mark Fine</a> talks about the standard books used by new Haskellers: LYAH, Real World Haskell, etc. Oftentimes these books contain code that no longer compiles, or reference obsolete libraries. Mark suggests another way to learn: pick small but <em>real</em> projects, and iterate on them.</p>
+<p>In this video he shares tricks to keep the compiler happy and to get yourself unstuck while developing Haskell projects.</p>
+<video poster="https://i.vimeocdn.com/video/541079128.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
+<source src="https://player.vimeo.com/external/143409955.hd.mp4?s=803b248bd3d7f433853264e255d7b74f" type="video/mp4">
+</video>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>It’s difficult getting your first real thing done in Haskell</li>
+<li>Some background about Mark’s involvement at Swift Navigation</li>
+<li>Things you have probably already tried
+<ul>
+<li>The big stack o’ Haskell books only gets you so far</li>
+<li>Github code search for examples</li>
+<li>Stack Overflow</li>
+<li>Hoogle</li>
+</ul></li>
+<li>Approaches to working and learning incrementally
+<ul>
+<li>Coding “wishfully” is a powerful way to learn Haskell</li>
+<li>Growing programs forward from inputs as well as backwards from outputs</li>
+<li>Make minimum viable changes to keep compiler happy</li>
+<li>Compile early often and always!</li>
+<li>One great tool is punting on a function definition with <code>undefined</code></li>
+</ul></li>
+<li>Real example of working iteratively
+<ul>
+<li><a href="https://github.com/mfine/nfl-divisions-power-rankings">mfine/nfl-divisions-power-rankings</a></li>
+<li>It’s a project in twelve steps</li>
+<li>Tries to answer which NFL teams are best</li>
+<li>Notice this project is a problem that Mark enjoys, hence easier to stick with</li>
+</ul></li>
+</ul>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>The Internet of Code</title>
     <link href="http://begriffs.com/posts/2015-10-16-internet-of-code.html" />
     <id>http://begriffs.com/posts/2015-10-16-internet-of-code.html</id>
@@ -485,66 +534,6 @@
 <li>External input</li>
 <li>Third-party code</li>
 <li>Canvas, SVG, WebGL</li>
-</ul></li>
-</ul>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>From Haskell to Hardware</title>
-    <link href="http://begriffs.com/posts/2015-06-28-haskell-to-hardware.html" />
-    <id>http://begriffs.com/posts/2015-06-28-haskell-to-hardware.html</id>
-    <published>2015-06-28T00:00:00Z</published>
-    <updated>2015-06-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="post-header">
-  <h3>From Haskell to Hardware</h3>
-  <a href="https://twitter.com/share" class="twitter-share-button pull-right"
-     data-via="begriffs" data-count="none">Tweet</a>
-  <h5 class="text-muted">June 28, 2015</h5>
-</div>
-
-<div class="content">
-  <p><a href="http://conal.net/blog/">Conal Elliott</a> uses a reformulated interpretation of lambda calculus to transform Haskell programs into highly parallelized circuits. He gave this talk at <a href="http://bayhac.org/">Bayhac 2015</a>. His approach allows him to structure parallel programming using a richer set of data structures than the usual array-based thinking. (<a href="https://github.com/conal/talk-2015-haskell-to-hardware">slides</a>)</p>
-<video poster="https://i.vimeocdn.com/video/524462436.jpg?mw=700" class="video-js vjs-default-skin" controls preload="auto">
-<source src="https://player.vimeo.com/external/131952196.hd.mp4?s=7038f182348196c3cc0e87bf7d4170bf" type="video/mp4">
-</video>
-<h3 id="summary">Summary</h3>
-<ul>
-<li>We turn Haskell into a tree structure of operations and thence to Verilog</li>
-<li>The same code generates different circuits depending on which types we specify for the polymorphism</li>
-<li>Guiding intuition: overloading lambda and application by using type classes</li>
-<li>The technical steps
-<ul>
-<li>Compile Haskell to the Core language</li>
-<li>Monomorphize</li>
-<li>Convert to abstract vocabulary</li>
-<li>Interpret as circuits</li>
-<li>Synthesize with existing HDL machinery</li>
-</ul></li>
-<li>It is within the abstract vocabulary that lambdas are overloaded</li>
-<li>The abstract form is not combinatory logic, it is cartesian closed categories</li>
-<li>The idea comes from J. Lambek who showed that there are interpretations of the lambda calculus other than the standard one of functions</li>
-<li>Examples of Haskell programs and the circuits they generate</li>
-<li>Going beyond arrays for parallel programming
-<ul>
-<li>uniform pairs</li>
-<li>vectors of known length</li>
-<li>depth-typed trees, bottom-up and top-down</li>
-</ul></li>
-<li>Implementing dot products and matrix multiplication</li>
-<li>Generalizing them by relaxing type constraints
-<ul>
-<li>Generates more parallelism, log depth trees rather than linear depth</li>
-</ul></li>
-<li>Implementing bitonic sort
-<ul>
-<li>Generates fantastically complicated circuits but ones which are certainly correct</li>
-</ul></li>
-<li>Implementing parallel scan</li>
-<li>Implementing polynomial evaluation in log time</li>
-<li>Combinational circuits have no state, but we can generate stateful ones too
-<ul>
-<li>Using a data type that models a Mealy machine</li>
 </ul></li>
 </ul>
 </div>
